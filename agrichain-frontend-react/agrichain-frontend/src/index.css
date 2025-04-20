@@ -1,0 +1,172 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: 46 125 50;
+    --color-primary-light: 102 187 106;
+    --color-primary-dark: 27 94 32;
+
+    --color-secondary: 121 85 72;
+    --color-secondary-light: 158 120 101;
+    --color-secondary-dark: 78 52 46;
+
+    --color-accent: 21 101 192;
+    --color-accent-light: 66 165 245;
+    --color-accent-dark: 13 71 161;
+
+    --color-success: 76 175 80;
+    --color-warning: 255 152 0;
+    --color-error: 244 67 54;
+
+    --color-neutral-50: 250 250 250;
+    --color-neutral-100: 245 245 245;
+    --color-neutral-200: 238 238 238;
+    --color-neutral-300: 224 224 224;
+    --color-neutral-400: 189 189 189;
+    --color-neutral-500: 158 158 158;
+    --color-neutral-600: 117 117 117;
+    --color-neutral-700: 97 97 97;
+    --color-neutral-800: 66 66 66;
+    --color-neutral-900: 33 33 33;
+  }
+
+  body {
+    @apply bg-neutral-50 text-neutral-800 font-sans leading-relaxed;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold leading-tight mb-4;
+  }
+
+  h1 {
+    @apply text-3xl md:text-4xl;
+  }
+
+  h2 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  h3 {
+    @apply text-xl md:text-2xl;
+  }
+
+  p {
+    @apply mb-4;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-lg shadow-md p-6 transition-all duration-300;
+  }
+
+  .card-hover {
+    @apply hover:shadow-lg hover:scale-[1.01];
+  }
+
+  .btn {
+    @apply px-4 py-2 rounded-md font-medium transition-all duration-200 inline-flex items-center justify-center gap-2;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-primary-dark focus:ring-2 focus:ring-primary-light focus:ring-opacity-50;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-white hover:bg-secondary-dark focus:ring-2 focus:ring-secondary-light focus:ring-opacity-50;
+  }
+
+  .btn-accent {
+    @apply bg-accent text-white hover:bg-accent-dark focus:ring-2 focus:ring-accent-light focus:ring-opacity-50;
+  }
+
+  .btn-outline {
+    @apply border-2 border-primary text-primary hover:bg-primary hover:text-white focus:ring-2 focus:ring-primary-light focus:ring-opacity-50;
+  }
+
+  .input {
+    @apply w-full px-4 py-2 rounded-md border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
+  }
+
+  .badge {
+    @apply px-2 py-1 text-xs font-medium rounded-full;
+  }
+
+  .badge-primary {
+    @apply bg-primary-light text-white;
+  }
+
+  .badge-secondary {
+    @apply bg-secondary-light text-white;
+  }
+
+  .badge-success {
+    @apply bg-success text-white;
+  }
+
+  .badge-warning {
+    @apply bg-warning text-white;
+  }
+
+  .badge-error {
+    @apply bg-error text-white;
+  }
+}
+
+.product-timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 18px;
+  width: 2px;
+  background-color: rgb(var(--color-primary-light));
+  z-index: 1;
+}
+
+.timeline-dot {
+  @apply h-9 w-9 flex items-center justify-center rounded-full z-10 relative;
+}
+
+.verified-badge {
+  @apply flex items-center gap-1 text-success font-medium;
+}
+
+.supply-chain-stage {
+  @apply relative pb-8;
+}
+
+.supply-chain-stage:last-child {
+  @apply pb-0;
+}
+
+.stage-connector {
+  @apply absolute top-9 left-4 bottom-0 w-0.5 bg-primary-light;
+}
+
+.qr-scanner-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50;
+}
+
+.scanner-frame {
+  @apply border-2 border-white w-64 h-64 relative flex items-center justify-center;
+}
+
+.scanner-line {
+  @apply absolute top-0 left-0 right-0 h-0.5 bg-accent-light animate-scan;
+}
+
+@keyframes scan {
+  0% {
+    top: 0;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+.animate-scan {
+  animation: scan 1.5s linear infinite;
+}

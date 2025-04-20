@@ -1,6 +1,8 @@
 # Blockchain for product tracking
 Designing blockchain model for agriculture product tracking involves using the inherent characteristics of blockchain - decentralisation, immutability and transparency - to track agricultural products through every stage of their lifecycle. This can include everything from production, processing, transportation, and distribution, to retail. Below are the essential details for building such a blockchain system.
 
+![AgrichainHomepage](./assets/agrichain-homepage.png)
+
 # Table of content
 - [Prérequis / Prerequisite](#prérequis--prerequisite)
 - [Installation](#installation)
@@ -39,3 +41,6 @@ Smart contracts will automate the key processes in the supply chain. For example
 - **Smart contract for certification** : Automatically trigger product certifications once certain conditions are met (e.g. product tested for pesticide levels).
 - **Payment automation** : Automatically release payments between parties when products pass checkpoints in the suppply chain.
 - **Product verification** : Confirm that the right agricultural product is moving through the supply chain in compliance with predefined standards.
+
+
+--> For now using mock data only
