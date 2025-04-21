@@ -1,5 +1,5 @@
-# Blockchain for product tracking
-Designing blockchain model for agriculture product tracking involves using the inherent characteristics of blockchain - decentralisation, immutability and transparency - to track agricultural products through every stage of their lifecycle. This can include everything from production, processing, transportation, and distribution, to retail. Below are the essential details for building such a blockchain system.
+# *AgriChain* : Blockchain for product tracking
+Designing blockchain model for agriculture product tracking involves using the inherent characteristics of blockchain - decentralisation, immutability and transparency - to track agricultural products through every stage of their lifecycle. This include everything from production, processing, transportation, and distribution, to retail. Below are the essential details for building such a blockchain system.
 
 <h5 align="center"> Home page </h5>
 
