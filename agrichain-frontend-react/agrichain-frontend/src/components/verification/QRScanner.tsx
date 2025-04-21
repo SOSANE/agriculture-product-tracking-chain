@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { QrCode, X } from 'lucide-react';
+// import { QrReader } from 'react-qr-reader';
 
 interface QRScannerProps {
     onScan: (data: string) => void;
