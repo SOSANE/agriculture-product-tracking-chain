@@ -1,0 +1,23 @@
+# Environment
+.env
+
+# Node modules
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDE files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS files
+.DS_Store
