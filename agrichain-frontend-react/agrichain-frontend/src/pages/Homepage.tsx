@@ -1,5 +1,5 @@
 import React from 'react';
-import { QrCode, Shield, Leaf, Factory, Truck, ShoppingBag } from 'lucide-react';
+import { QrCode, Shield, Leaf, Factory, Truck, ShoppingBag, UserCog } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Homepage: React.FC = () => {
@@ -72,6 +72,13 @@ const Homepage: React.FC = () => {
                                 >
                                     <ShoppingBag className="h-5 w-5 mr-2" />
                                     Retailer Login
+                                </button>
+                                <button
+                                    onClick={() => navigate('/auth/admin')}
+                                    className="btn btn-outline w-full justify-start"
+                                >
+                                    <UserCog className="h-5 w-5 mr-2" />
+                                    Administrator Login
                                 </button>
                             </div>
                         </div>

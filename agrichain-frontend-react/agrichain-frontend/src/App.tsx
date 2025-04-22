@@ -8,6 +8,7 @@ import FarmerDashboard from './pages/FarmerDashboard';
 import ProcessorDashboard from './pages/ProcessorDashboard';
 import DistributorDashboard from './pages/DistributorDashboard';
 import RetailerDashboard from './pages/RetailerDashboard';
+import AdministratorDashboard from "./pages/AdministratorDashboard.tsx";
 import Auth from './pages/Auth';
 import { UserRole } from './types';
 
@@ -32,6 +33,8 @@ function App() {
                 return <DistributorDashboard />;
             case 'retailer':
                 return <RetailerDashboard />;
+            case 'admin':
+                return <AdministratorDashboard />;
             default:
                 return <Navigate to="/" />;
         }
