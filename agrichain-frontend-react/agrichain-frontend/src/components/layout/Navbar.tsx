@@ -87,7 +87,7 @@ const Navbar: React.FC<NavbarProps> = ({ user }) => {
                                 )}
                             </div>
                         ) : (
-                            <Link to="/login" className="btn btn-primary">Sign in</Link>
+                            <Link to="/" className="btn btn-primary">Sign in</Link>
                         )}
                     </div>
 

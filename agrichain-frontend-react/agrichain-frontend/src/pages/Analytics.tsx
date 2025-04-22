@@ -190,7 +190,7 @@ const mockUser = {
     role: 'farmer'
 };
 
-const Dashboard: React.FC = () => {
+const Analytics: React.FC = () => {
     return (
         <Layout user={mockUser}>
             <div className="container mx-auto px-4 py-8">
@@ -332,4 +332,4 @@ const Dashboard: React.FC = () => {
     );
 };
 
-export default Dashboard;
+export default Analytics;

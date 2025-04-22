@@ -11,7 +11,7 @@ const mockUser = {
     role: 'consumer'
 };
 
-// Mock product data (would come from API in real implementation)
+// (DEMO) Mock product data
 const mockProduct: Product = {
     id: '1',
     name: 'Organic Coffee Beans',
@@ -66,10 +66,9 @@ const VerifyProduct: React.FC = () => {
             setLoading(false);
 
             // For demo purposes, always use the mock product data
-            // In a real implementation, this would match the productId
             setVerifiedProduct(mockProduct);
 
-            // Update verification count (would be done on the server in real implementation)
+            // (DEMO) Update verification count
             mockProduct.verificationCount += 1;
             mockProduct.lastVerified = new Date().toISOString();
         }, 1500);
@@ -94,7 +93,7 @@ const VerifyProduct: React.FC = () => {
             if (searchInput === 'BATCH-CF-2023-001' || searchInput === '1') {
                 setVerifiedProduct(mockProduct);
 
-                // Update verification count (would be done on the server in real implementation)
+                // (DEMO) Update verification count
                 mockProduct.verificationCount += 1;
                 mockProduct.lastVerified = new Date().toISOString();
             } else {

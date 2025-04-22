@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useState } from 'react';
 import ProductDetail from './pages/ProductDetail';
 import VerifyProduct from './pages/VerifyProduct';
+import Analytics from "./pages/Analytics.tsx";
 import Homepage from './pages/Homepage';
 import RegulatorDashboard from './pages/RegulatorDashboard';
 import FarmerDashboard from './pages/FarmerDashboard';
@@ -59,6 +60,7 @@ function App() {
                     element={isLoggedIn ? getDashboardForRole() : <Navigate to="/" />}
                 />
                 <Route path="/verify" element={<VerifyProduct />} />
+                <Route path="/analytics" element={<Analytics />} />
                 <Route path="/products/:id" element={<ProductDetail />} />
             </Routes>
         </BrowserRouter>
