@@ -18,6 +18,10 @@ Designing blockchain model for agriculture product tracking involves using the i
 
 ![AgrichainAuthentification](./assets/agrichain-authentication.png)
 
+<h5 align="center"> Analytics page </h5>
+
+![AgrichainAnalytics](./assets/agrichain-analytics.png)
+
 ## Table of Contents
 - [Features](#features)
 - [Project Structure](#project-structure)
