@@ -4,14 +4,16 @@ import ProductDetail from './pages/ProductDetail';
 import VerifyProduct from './pages/VerifyProduct';
 import Analytics from "./pages/Analytics.tsx";
 import Homepage from './pages/Homepage';
-import RegulatorDashboard from './pages/RegulatorDashboard';
-import FarmerDashboard from './pages/FarmerDashboard';
-import ProcessorDashboard from './pages/ProcessorDashboard';
-import DistributorDashboard from './pages/DistributorDashboard';
-import RetailerDashboard from './pages/RetailerDashboard';
-import AdministratorDashboard from "./pages/AdministratorDashboard.tsx";
+import RegulatorDashboard from './pages/dashboards/RegulatorDashboard.tsx';
+import FarmerDashboard from './pages/dashboards/FarmerDashboard.tsx';
+import ProcessorDashboard from './pages/dashboards/ProcessorDashboard.tsx';
+import DistributorDashboard from './pages/dashboards/DistributorDashboard.tsx';
+import RetailerDashboard from './pages/dashboards/RetailerDashboard.tsx';
+import AdministratorDashboard from "./pages/dashboards/AdministratorDashboard.tsx";
 import Auth from './pages/Auth';
 import { UserRole } from './types';
+import AddAccount from "./pages/admin/AddAccount.tsx";
+import CertificationRequest from "./pages/regulator/CertificationRequests.tsx";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -59,6 +61,8 @@ function App() {
                     path="/dashboard"
                     element={isLoggedIn ? getDashboardForRole() : <Navigate to="/" />}
                 />
+                <Route path="/admin/add-account" element={<AddAccount />} />
+                <Route path="/regulator/certification-request" element={<CertificationRequest />} />
                 <Route path="/verify" element={<VerifyProduct />} />
                 <Route path="/analytics" element={<Analytics />} />
                 <Route path="/products/:id" element={<ProductDetail />} />

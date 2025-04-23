@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { DashboardMetric, Product } from '../types';
 
 // Mock data
-const mockMetrics: DashboardMetric[] = [
+export const mockMetrics: DashboardMetric[] = [
     {
         id: '1',
         title: 'Total Products',
@@ -42,7 +42,7 @@ const mockMetrics: DashboardMetric[] = [
     }
 ];
 
-const mockRecentProducts: Product[] = [
+export const mockRecentProducts: Product[] = [
     {
         id: '1',
         name: 'Organic Coffee Beans',
