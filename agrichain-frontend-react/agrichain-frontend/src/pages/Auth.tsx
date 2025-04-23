@@ -113,7 +113,7 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
                 <div className="flex w-full items-stretch">
                     {/* Login Form */}
                     <div className={`transition-all duration-500 ease-in-out ${showWallet ? 'w-1/2 pr-2' : 'w-full'}`}>
-                        <div className={`card ${showWallet ? 'p-4' : 'p-6'}`}>
+                        <div className={`card h-full ${showWallet ? 'p-4' : 'p-6'} shadow-md`}>
                             <h3 className={`${showWallet ? 'text-lg' : 'text-xl'} font-semibold mb-4 text-center md:text-left`}>
                                 Enter Login Credentials
                             </h3>
@@ -165,8 +165,8 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
                     </div>
 
                     {/* Wallet Connection */}
-                    <div className={`transition-all duration-500 ease-in-out overflow-hidden ${showWallet ? 'w-1/2 pl-2 opacity-100' : 'w-0 pl-0 opacity-0'}`}>
-                        <div className="card h-full p-4">
+                    <div className={`transition-all duration-500 ease-in-out ${showWallet ? 'w-1/2 pl-2 opacity-100' : 'w-0 pl-0 opacity-0'}`}>
+                        <div className="card h-full p-4 shadow-md" style={{ minHeight: '100%' }}>
                             <div className="text-center mb-4">
                                 <Wallet className="h-10 w-10 text-primary mx-auto mb-3" />
                                 <h2 className="text-lg font-semibold mb-2">Connect Wallet</h2>
