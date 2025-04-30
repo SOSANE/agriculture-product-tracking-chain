@@ -1,0 +1,2 @@
+DROP DATABASE IF EXISTS agrichain;
+CREATE DATABASE agrichain;

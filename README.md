@@ -79,24 +79,19 @@ SESSION_SECRET=your_session_secret
 
 ### 3. Database Setup
 1. Initialize the database:
-```bash
-createdb agrichain
-psql -U postgres -d agrichain -f agrichain-database/commands/init.sql
-```
 
-Hash the passwords (run once):
+First, run ``agrichain-database/init.sql`` file to create database
+
+Then run the following line in project folder:
 ```bash
-cd agrichain-backend
-node hash-passwords.js
+psql -U postgres -d agrichain -f ./agrichain-database/commands/schema.sql
 ```
 
 ### 4. Frontend Setup
 ```bash
 cd ../agrichain-frontend-react/agrichain-frontend
 npm install
-
-# Create environment file
-echo "VITE_API_URL=http://localhost:5000" > .env
+npm run build
 ```
 
 ## Running the System
@@ -120,7 +115,9 @@ Access: http://localhost:5173
 | Farmer      | farmer1      | password123   |
 | Regulator   | regulator1   | securepass    |
 | Processor   | processor1   | process123    |
+| Processor   | processor2   | process321    |
 | Distributor | distributor1 | distribute123 |
+| Distributor | distributor2 | distribute321 |
 | Retailer    | retailer1    | retail123     |
 
 ## Licence

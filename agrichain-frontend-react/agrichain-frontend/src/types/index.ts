@@ -2,6 +2,7 @@ export type UserRole = 'farmer' | 'processor' | 'distributor' | 'retailer' | 'co
 
 export interface User {
     id: string;
+    username: string;
     name: string;
     email: string;
     role: UserRole;
