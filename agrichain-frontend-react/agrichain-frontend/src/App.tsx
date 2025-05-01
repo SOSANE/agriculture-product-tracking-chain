@@ -15,6 +15,7 @@ import CertificationRequest from "./pages/regulator/CertificationRequests.tsx";
 import Spinner from "react-bootstrap/Spinner";
 import {useUserProfile} from "./hooks/useUserProfile.ts";
 import {useEffect} from "react";
+import {UserRole} from "./types";
 
 const AuthWrapper = () => {
     const { user, loading } = useUserProfile();
@@ -24,9 +25,17 @@ const AuthWrapper = () => {
     return user ? <Outlet /> : <Navigate to="/" />;
 };
 
-const RoleRoute = ({ allowedRoles }: { allowedRoles: string[] }) => {
-    const { user } = useUserProfile();
+const RoleRoute = ({ allowedRoles }: { allowedRoles: UserRole[] }) => {
+    const { user, loading } = useUserProfile();
+    const navigate = useNavigate();
 
+    useEffect(() => {
+        if (!loading && !user) {
+            navigate('/');
+        }
+    }, [user, loading, navigate]);
+
+    if (loading) return <Spinner animation="border" />;
     if (!user) return <Navigate to="/" />;
     return allowedRoles.includes(user.role) ? <Outlet /> : <Navigate to="/dashboard" />;
 };

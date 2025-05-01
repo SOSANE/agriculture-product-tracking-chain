@@ -57,12 +57,12 @@ const ProcessorDashboard: React.FC = () => {
                                     Scan New Product
                                 </Link>
 
-                                <Link to="/processor/products-details" className="btn btn-accent w-full justify-start">
+                                <Link to="/products-details" className="btn btn-accent w-full justify-start">
                                     <Package className="h-5 w-5 mr-2" />
                                     Update Product Details
                                 </Link>
 
-                                <Link to="/processor/send-request" className="btn btn-secondary w-full justify-start">
+                                <Link to="/send-request" className="btn btn-secondary w-full justify-start">
                                     <ShieldCheck className="h-5 w-5 mr-2" />
                                     Send Certification Request
                                 </Link>
