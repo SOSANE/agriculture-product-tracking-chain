@@ -160,6 +160,30 @@ app.get('/auth/verify-session', async (req, res) => {
     }
 });
 
+// Get products (farmers)
+app.get('/api/products', async (req, res) => {
+    if (!req.session.user) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    try {
+        const { farmer } = req.query;
+
+        // Only show their own products
+        const query = farmer ?
+            'SELECT * FROM supplychain.product WHERE farmer_username = $1 ORDER BY created_at DESC' :
+            'SELECT * FROM supplychain.product ORDER BY created_at DESC';
+
+        const params = farmer ? [farmer] : [];
+
+        const result = await pool.query(query, params);
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error fetching products:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok' });

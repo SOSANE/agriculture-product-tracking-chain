@@ -39,9 +39,9 @@ const mockProduct: Product = {
         }
     ],
     supplyChain: [],
-    status: 'shipping',
+    status: 'shipped',
     farmer: {
-        id: 'farm1',
+        username: 'farm1',
         name: 'Highland Coffee Co-op',
         organization: 'Highland Farmers Association'
     },

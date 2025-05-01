@@ -71,9 +71,9 @@ export const mockRecentProducts: Product[] = [
             }
         ],
         supplyChain: [],
-        status: 'shipping',
+        status: 'shipped',
         farmer: {
-            id: 'farm1',
+            username: 'farm1',
             name: 'Highland Coffee Co-op',
             organization: 'Highland Farmers Association'
         },
@@ -108,9 +108,9 @@ export const mockRecentProducts: Product[] = [
             }
         ],
         supplyChain: [],
-        status: 'processing',
+        status: 'processed',
         farmer: {
-            id: 'farm2',
+            username: 'farm2',
             name: 'Valley Rice Growers',
             organization: 'Rice Producers Association'
         },
@@ -138,7 +138,7 @@ export const mockRecentProducts: Product[] = [
         supplyChain: [],
         status: 'delivered',
         farmer: {
-            id: 'farm3',
+            username: 'farm3',
             name: 'Green Valley Farms',
             organization: 'Arizona Growers Coalition'
         },
@@ -175,7 +175,7 @@ export const mockRecentProducts: Product[] = [
         supplyChain: [],
         status: 'packaged',
         farmer: {
-            id: 'farm4',
+            username: 'farm4',
             name: 'Sunny Meadows Apiary',
             organization: 'National Beekeepers Association'
         },

@@ -12,20 +12,24 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
     const getStatusColor = () => {
         switch (status) {
-            case 'cultivating':
+            case 'planted':
                 return 'bg-primary-light';
-            case 'harvested':
+            case 'growing':
                 return 'bg-success';
-            case 'processing':
+            case 'harvested':
                 return 'bg-warning';
-            case 'packaged':
+            case 'processed':
                 return 'bg-accent';
-            case 'shipping':
+            case 'packaged':
                 return 'bg-secondary';
-            case 'delivered':
+            case 'shipped':
                 return 'bg-primary';
-            case 'sold':
+            case 'delivered':
                 return 'bg-accent-dark';
+            case 'received':
+                return 'bg-warning';
+            case 'sold':
+                return 'bg-accent';
             default:
                 return 'bg-neutral-500';
         }

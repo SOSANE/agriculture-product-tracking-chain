@@ -63,7 +63,7 @@ export interface Product {
     currentLocation: Location;
     certificates: Certificate[];
     supplyChain: SupplyChainStep[];
-    status: 'cultivating' | 'harvested' | 'processing' | 'packaged' | 'shipping' | 'delivered' | 'sold';
+    status: ProductStatus;
     farmer: {
         username: string;
         name: string;
