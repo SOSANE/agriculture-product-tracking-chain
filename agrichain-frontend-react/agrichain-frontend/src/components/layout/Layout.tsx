@@ -1,13 +1,11 @@
 import React from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import { User } from '../../types'
 
 interface LayoutProps {
     children: React.ReactNode;
-    user?: {
-        name: string;
-        role: string;
-    };
+    user: User
 }
 
 const Layout: React.FC<LayoutProps> = ({ children, user }) => {

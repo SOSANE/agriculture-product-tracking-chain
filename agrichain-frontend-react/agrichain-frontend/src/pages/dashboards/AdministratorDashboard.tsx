@@ -1,18 +1,29 @@
 import React from 'react';
-import Layout from '../../components/layout/Layout.tsx';
 import { Leaf, Package, PackagePlus, QrCode, Shield, ShieldCheck, ShoppingBag, Truck, UserCog, UserPlus, Users } from 'lucide-react';
 import MetricsRow from "../../components/dashboard/MetricsRow.tsx";
 import { mockMetrics } from "../Analytics.tsx"
 import {Link} from "react-router-dom";
+import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
+import {useUserProfile} from "../../hooks/useUserProfile.ts";
 
 // Using mock data (temporary)
 const AdministratorDashboard: React.FC = () => {
+    const { user } = useUserProfile();
     return (
-        <Layout user={{ name: 'Administrator', role: 'administrator' }}>
+        <DashboardLayout>
             <div className="container mx-auto px-4 py-8">
                 <header className="mb-8">
-                    <h1 className="text-3xl font-semibold mb-2">Administrator Dashboard</h1>
-                    <p className="text-neutral-600">Manage products or accounts</p>
+                    <h1 className="text-3xl font-semibold mb-2">
+                        {user ? `${user.name}'s Dashboard` : 'Administrator Dashboard'}
+                    </h1>
+                    <p className="text-neutral-600">
+                        {user ? `Welcome back, ${user.name}! Manage products or accounts as an administrator` : 'Manage products or accounts'}
+                    </p>
+                    {user && (
+                        <div className="mt-2 text-sm text-neutral-500">
+                            Logged in as {user.role} ({user.email || 'no email'})
+                        </div>
+                    )}
                 </header>
 
                 <section className="mb-10">
@@ -85,27 +96,27 @@ const AdministratorDashboard: React.FC = () => {
                             </div>
 
                             <div className="space-y-4">
-                                <Link to="/admin/manage-users" className="btn btn-primary w-full justify-start">
+                                <Link to="/manage-users" className="btn btn-primary w-full justify-start">
                                     <Users className="h-5 w-5 mr-2" />
                                     Manage Users
                                 </Link>
 
-                                <Link to="/admin/manage-products" className="btn btn-accent w-full justify-start">
+                                <Link to="/manage-products" className="btn btn-accent w-full justify-start">
                                     <Package className="h-5 w-5 mr-2" />
                                     Manage Products
                                 </Link>
 
-                                <Link to="/admin/manage-certificates" className="btn btn-secondary w-full justify-start">
+                                <Link to="/manage-certificates" className="btn btn-secondary w-full justify-start">
                                     <ShieldCheck className="h-5 w-5 mr-2" />
                                     Manage Certificates
                                 </Link>
 
-                                <Link to="/admin/add-account" className="btn btn-outline w-full justify-start">
+                                <Link to="/add-account" className="btn btn-outline w-full justify-start">
                                     <UserPlus className="h-5 w-5 mr-2" />
                                     Add New Account
                                 </Link>
 
-                                <Link to="/admin/add-product" className="btn btn-outline w-full justify-start">
+                                <Link to="/add-product" className="btn btn-outline w-full justify-start">
                                     <PackagePlus className="h-5 w-5 mr-2" />
                                     Add New Product
                                 </Link>
@@ -122,7 +133,7 @@ const AdministratorDashboard: React.FC = () => {
                     <p className="text-neutral-600">All recent certified products</p>
                 </div>
             </div>
-        </Layout>
+        </DashboardLayout>
     );
 };
 

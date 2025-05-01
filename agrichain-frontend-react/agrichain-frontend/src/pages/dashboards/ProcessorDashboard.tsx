@@ -1,19 +1,32 @@
 import React from 'react';
-import Layout from '../../components/layout/Layout.tsx';
 import {ClipboardList, Factory, Package, QrCode, ShieldCheck } from 'lucide-react';
 import MetricsRow from "../../components/dashboard/MetricsRow.tsx";
 import {mockMetrics, mockRecentProducts} from "../Analytics.tsx";
 import {Link} from "react-router-dom";
 import ProductCard from "../../components/product/ProductCard.tsx";
+import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
+import {useUserProfile} from "../../hooks/useUserProfile.ts";
 
 // Using mock data (temporary)
 const ProcessorDashboard: React.FC = () => {
+    const { user } = useUserProfile();
     return (
-        <Layout user={{ name: 'Processor', role: 'processor' }}>
+        <DashboardLayout>
             <div className="container mx-auto px-4 py-8">
                 <header className="mb-8">
-                    <h1 className="text-3xl font-semibold mb-2">Processor Dashboard</h1>
-                    <p className="text-neutral-600">Track processing operations</p>
+                    <h1 className="text-3xl font-semibold mb-2">
+                        {/*Processor Dashboard*/}
+                        {user ? `${user.name}'s Dashboard` : 'Processor Dashboard'}
+                    </h1>
+                    <p className="text-neutral-600">
+                        {/*Track processing operations*/}
+                        {user ? `Welcome back, ${user.name}! Track processing operations as a processor` : 'Track processing operations'}
+                    </p>
+                    {user && (
+                        <div className="mt-2 text-sm text-neutral-500">
+                            Logged in as {user.role} ({user.email || 'no email'})
+                        </div>
+                    )}
                 </header>
 
                 <section className="mb-10">
@@ -71,7 +84,7 @@ const ProcessorDashboard: React.FC = () => {
                     </div>
                 </section>
             </div>
-        </Layout>
+        </DashboardLayout>
     );
 };
 

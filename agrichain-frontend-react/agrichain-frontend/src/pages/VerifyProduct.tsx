@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { QrCode, Search } from 'lucide-react';
-import Layout from '../components/layout/Layout';
 import QRScanner from '../components/verification/QRScanner';
 import VerificationResult from '../components/verification/VerificationResult';
 import { Product } from '../types';
+import {DashboardLayout} from "../components/layout/DashboardLayout.tsx";
 
 // Mock user for testing
-const mockUser = {
-    name: 'John Consumer',
-    role: 'consumer'
-};
+// const mockUser = {
+//     name: 'John Consumer',
+//     role: 'consumer'
+// };
 
 // (DEMO) Mock product data
 const mockProduct: Product = {
@@ -57,7 +57,7 @@ const VerifyProduct: React.FC = () => {
     const [error, setError] = useState<string | undefined>(undefined);
     const [loading, setLoading] = useState(false);
 
-    const handleScan = (productId: string) => {
+    const handleScan = () => {
         setIsScanning(false);
         setLoading(true);
 
@@ -104,7 +104,7 @@ const VerifyProduct: React.FC = () => {
     };
 
     return (
-        <Layout user={mockUser}>
+        <DashboardLayout>
             <div className="container mx-auto px-4 py-8">
                 <div className="max-w-3xl mx-auto">
                     <header className="text-center mb-10">
@@ -256,7 +256,7 @@ const VerifyProduct: React.FC = () => {
                     onClose={() => setIsScanning(false)}
                 />
             )}
-        </Layout>
+        </DashboardLayout>
     );
 };
 

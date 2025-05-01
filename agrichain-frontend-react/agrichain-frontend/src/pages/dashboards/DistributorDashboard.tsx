@@ -1,19 +1,32 @@
 import React from 'react';
-import Layout from '../../components/layout/Layout.tsx';
 import {ClipboardList, Package, QrCode, ShieldCheck, Truck} from 'lucide-react';
 import MetricsRow from "../../components/dashboard/MetricsRow.tsx";
 import {mockMetrics, mockRecentProducts} from "../Analytics.tsx";
 import {Link} from "react-router-dom";
 import ProductCard from "../../components/product/ProductCard.tsx";
+import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
+import {useUserProfile} from "../../hooks/useUserProfile.ts";
 
 // Using mock data (temporary)
 const DistributorDashboard: React.FC = () => {
+    const { user } = useUserProfile();
     return (
-        <Layout user={{ name: 'Distributor', role: 'distributor' }}>
+        <DashboardLayout >
             <div className="container mx-auto px-4 py-8">
                 <header className="mb-8">
-                    <h1 className="text-3xl font-semibold mb-2">Distributor Dashboard</h1>
-                    <p className="text-neutral-600">Manage product distribution</p>
+                    <h1 className="text-3xl font-semibold mb-2">
+                        {/*Distributor Dashboard*/}
+                        {user ? `${user.name}'s Dashboard` : 'Distributor Dashboard'}
+                    </h1>
+                    <p className="text-neutral-600">
+                        {/*Manage product distribution*/}
+                        {user ? `Welcome back, ${user.name}! Manage product distribution as a distributor` : 'Manage product distribution'}
+                    </p>
+                    {user && (
+                        <div className="mt-2 text-sm text-neutral-500">
+                            Logged in as {user.role} ({user.email || 'no email'})
+                        </div>
+                    )}
                 </header>
 
                 <section className="mb-10">
@@ -71,7 +84,7 @@ const DistributorDashboard: React.FC = () => {
                     </div>
                 </section>
             </div>
-        </Layout>
+        </DashboardLayout>
     );
 };
 

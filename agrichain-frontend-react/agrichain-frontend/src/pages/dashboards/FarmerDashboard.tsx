@@ -1,19 +1,40 @@
-import React from 'react';
-import Layout from '../../components/layout/Layout.tsx';
+import React, {useEffect} from 'react';
 import {ClipboardList, Leaf, Package, PackagePlus, ShieldCheck} from 'lucide-react';
 import MetricsRow from "../../components/dashboard/MetricsRow.tsx";
 import {mockMetrics, mockRecentProducts} from "../Analytics.tsx";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import ProductCard from "../../components/product/ProductCard.tsx";
+import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
+import {useUserProfile} from "../../hooks/useUserProfile.ts";
 
 // Using mock data (temporary)
 const FarmerDashboard: React.FC = () => {
+    const { user, loading } = useUserProfile();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!loading && !user) {
+            navigate('/');
+        }
+    }, [user, loading, navigate]);
+
     return (
-        <Layout user={{ name: 'Farmer', role: 'farmer' }}>
+        <DashboardLayout>
             <div className="container mx-auto px-4 py-8">
                 <header className="mb-8">
-                    <h1 className="text-3xl font-semibold mb-2">Farmer Dashboard</h1>
-                    <p className="text-neutral-600">Manage your agricultural products</p>
+                    <h1 className="text-3xl font-semibold mb-2">
+                        {/*Farmer Dashboard*/}
+                        {user ? `${user.name}'s Dashboard` : 'Farmer Dashboard'}
+                    </h1>
+                    <p className="text-neutral-600">
+                        {/*Manage your agricultural products*/}
+                        {user ? `Welcome back, ${user.name}! Manage your agricultural products as a farmer` : 'Manage your agricultural products'}
+                    </p>
+                    {user && (
+                        <div className="mt-2 text-sm text-neutral-500">
+                            Logged in as {user.role} ({user.email || 'no email'})
+                        </div>
+                    )}
                 </header>
 
                 <section className="mb-10">
@@ -71,7 +92,7 @@ const FarmerDashboard: React.FC = () => {
                     </div>
                 </section>
             </div>
-        </Layout>
+        </DashboardLayout>
     );
 };
 

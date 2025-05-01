@@ -1,13 +1,15 @@
 export type UserRole = 'farmer' | 'processor' | 'distributor' | 'retailer' | 'consumer' | 'certifier' | 'admin' | 'regulator';
+export type ProductStatus = 'planted' | 'growing' | 'harvested' | 'processed'| 'packaged'| 'shipped'| 'delivered'| 'received'| 'sold'
 
 export interface User {
-    id: string;
     username: string;
     name: string;
-    email: string;
+    email?: string;
     role: UserRole;
-    organization: string;
-    verified: boolean;
+    organization?: string;
+    phone?: string;
+    address?: string;
+    verified?: boolean;
 }
 
 export interface Certificate {
@@ -63,7 +65,7 @@ export interface Product {
     supplyChain: SupplyChainStep[];
     status: 'cultivating' | 'harvested' | 'processing' | 'packaged' | 'shipping' | 'delivered' | 'sold';
     farmer: {
-        id: string;
+        username: string;
         name: string;
         organization: string;
     };

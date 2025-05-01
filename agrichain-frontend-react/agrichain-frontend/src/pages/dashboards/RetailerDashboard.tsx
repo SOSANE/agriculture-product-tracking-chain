@@ -1,19 +1,32 @@
 import React from 'react';
-import Layout from '../../components/layout/Layout.tsx';
 import {ClipboardList, Package, PackagePlus, ShoppingBag} from 'lucide-react';
 import MetricsRow from "../../components/dashboard/MetricsRow.tsx";
 import {mockMetrics, mockRecentProducts} from "../Analytics.tsx";
 import {Link} from "react-router-dom";
 import ProductCard from "../../components/product/ProductCard.tsx";
+import {useUserProfile} from "../../hooks/useUserProfile.ts";
+import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
 
 // Using mock data (temporary)
 const RetailerDashboard: React.FC = () => {
+    const { user } = useUserProfile();
     return (
-        <Layout user={{ name: 'Retailer', role: 'retailer' }}>
+        <DashboardLayout>
             <div className="container mx-auto px-4 py-8">
                 <header className="mb-8">
-                    <h1 className="text-3xl font-semibold mb-2">Retailer Dashboard</h1>
-                    <p className="text-neutral-600">Manage store inventory</p>
+                    <h1 className="text-3xl font-semibold mb-2">
+                        {/*Retailer Dashboard*/}
+                        {user ? `${user.name}'s Dashboard` : 'Retailer Dashboard'}
+                    </h1>
+                    <p className="text-neutral-600">
+                        {/*Manage store inventory*/}
+                        {user ? `Welcome back, ${user.name}! Manage store inventory as a retailer` : 'Manage store inventory'}
+                    </p>
+                    {user && (
+                        <div className="mt-2 text-sm text-neutral-500">
+                            Logged in as {user.role} ({user.email || 'no email'})
+                        </div>
+                    )}
                 </header>
 
                 <section className="mb-10">
@@ -39,12 +52,12 @@ const RetailerDashboard: React.FC = () => {
                             </div>
 
                             <div className="space-y-4">
-                                <Link to="/farmer/add-product" className="btn btn-primary w-full justify-start">
+                                <Link to="/add-product" className="btn btn-primary w-full justify-start">
                                     <PackagePlus className="h-5 w-5 mr-2" />
                                     Add New Product
                                 </Link>
 
-                                <Link to="/farmer/manage-products" className="btn btn-accent w-full justify-start">
+                                <Link to="/manage-products" className="btn btn-accent w-full justify-start">
                                     <Package className="h-5 w-5 mr-2" />
                                     Manage My Products
                                 </Link>
@@ -66,7 +79,7 @@ const RetailerDashboard: React.FC = () => {
                     </div>
                 </section>
             </div>
-        </Layout>
+        </DashboardLayout>
     );
 };
 

@@ -4,11 +4,9 @@ import { Wallet, AlertCircle, UserLock, SquareAsterisk } from 'lucide-react';
 import { UserRole } from '../types';
 import { authenticateWithCredentials } from '../services/authService';
 
-interface AuthProps {
-    onLogin: (role: UserRole) => void;
-}
+type AuthProps = object
 
-const Auth: React.FC<AuthProps> = ({ onLogin }) => {
+const Auth: React.FC<AuthProps> = () => {
     const { role } = useParams<{ role: string }>();
     const navigate = useNavigate();
     const [isConnecting, setIsConnecting] = useState(false);
@@ -42,6 +40,13 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
             );
 
             if (response.success) {
+                const verifyResponse = await fetch('http://localhost:5000/auth/verify-session', {
+                    credentials: 'include'
+                });
+
+                if (!verifyResponse.ok) {
+                    throw new Error('Session verification failed');
+                }
                 setShowWallet(true);
             } else {
                 throw new Error(response.message || 'Authentication failed');
@@ -60,14 +65,27 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
         setError(null);
 
         try {
+            // TODO: Implement actual connection, only a placeholder here
             await new Promise(resolve => setTimeout(resolve, 1000));
+            const verifyResponse = await fetch('http://localhost:5000/auth/verify-session', {
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            });
 
-            if (role && isValidRole(role)) {
-                onLogin(role as UserRole);
-                navigate('/dashboard');
-            } else {
-                throw new Error('Invalid role specified');
+            if (!verifyResponse.ok) {
+                throw new Error('Session verification failed');
             }
+
+            const verifyData = await verifyResponse.json();
+
+            if (!verifyData.success) {
+                throw new Error(verifyData.message || 'Session invalid');
+            }
+
+            navigate('/dashboard');
         } catch (err) {
             setError('Failed to connect to MetaMask. Please try again. Error: ' + err);
             setShouldShake(true);

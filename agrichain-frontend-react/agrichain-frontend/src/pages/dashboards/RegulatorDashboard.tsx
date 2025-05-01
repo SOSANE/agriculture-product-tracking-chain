@@ -1,18 +1,31 @@
 import React from 'react';
-import Layout from '../../components/layout/Layout.tsx';
 import { ArrowRight, Leaf, QrCode, Shield, ShieldCheck, ShoppingBag, Truck } from 'lucide-react';
 import MetricsRow from "../../components/dashboard/MetricsRow.tsx";
 import {mockMetrics} from "../Analytics.tsx";
 import {Link} from "react-router-dom";
+import {useUserProfile} from "../../hooks/useUserProfile.ts";
+import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
 
 // Using mock data (temporary)
 const RegulatorDashboard: React.FC = () => {
+    const { user } = useUserProfile();
     return (
-        <Layout user={{ name: 'Regulator', role: 'regulator' }}>
+        <DashboardLayout>
             <div className="container mx-auto px-4 py-8">
                 <header className="mb-8">
-                    <h1 className="text-3xl font-semibold mb-2">Regulator Dashboard</h1>
-                    <p className="text-neutral-600">Manage and oversee agricultural certifications</p>
+                    <h1 className="text-3xl font-semibold mb-2">
+                        {/*Regulator Dashboard*/}
+                        {user ? `${user.name}'s Dashboard` : 'Regulator Dashboard'}
+                    </h1>
+                    <p className="text-neutral-600">
+                        {/*Manage and oversee agricultural certifications*/}
+                        {user ? `Welcome back, ${user.name}! Manage and oversee agricultural certifications as a regulator` : 'Manage and oversee agricultural certifications'}
+                    </p>
+                    {user && (
+                        <div className="mt-2 text-sm text-neutral-500">
+                            Logged in as {user.role} ({user.email || 'no email'})
+                        </div>
+                    )}
                 </header>
 
                 <section className="mb-10">
@@ -127,7 +140,7 @@ const RegulatorDashboard: React.FC = () => {
                             </div>
                         </div>
                         <div className="mt-auto pt-3 border-t border-neutral-100">
-                            <Link to="/regulator/certification-request" className="btn btn-outline group relative flex items-center justify-between w-full px-4 py-2 rounded-lg border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-200 focus:ring-2 focus:ring-primary-light focus:ring-opacity-50">
+                            <Link to="/certification-request" className="btn btn-outline group relative flex items-center justify-between w-full px-4 py-2 rounded-lg border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-200 focus:ring-2 focus:ring-primary-light focus:ring-opacity-50">
                                 <div className="flex items-center">
                                     <span>See My Certification Requests</span>
                                 </div>
@@ -147,7 +160,7 @@ const RegulatorDashboard: React.FC = () => {
                     <p className="text-neutral-600">All recent certified products</p>
                 </div>
             </div>
-        </Layout>
+        </DashboardLayout>
     );
 };
 

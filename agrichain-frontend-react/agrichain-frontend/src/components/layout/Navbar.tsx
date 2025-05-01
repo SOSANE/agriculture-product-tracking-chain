@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { Menu, X, Bell, Search, User, LogOut, Home, BarChart2, QrCode, Box, Shield, Settings } from 'lucide-react';
+import { Menu, X, Bell, Search, User as UserIcon, LogOut, Home, BarChart2, QrCode, Box, Shield, Settings } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { User } from '../../types'
 
 interface NavbarProps {
-    user?: {
-        name: string;
-        role: string;
-    };
+    user: User
 }
 
 const Navbar: React.FC<NavbarProps> = ({ user }) => {
@@ -72,7 +70,7 @@ const Navbar: React.FC<NavbarProps> = ({ user }) => {
                                             <p className="text-xs text-neutral-500 capitalize">{user.role}</p>
                                         </div>
                                         <Link to="/profile" className="flex items-center px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100">
-                                            <User className="h-4 w-4 mr-2" />
+                                            <UserIcon className="h-4 w-4 mr-2" />
                                             Profile
                                         </Link>
                                         <Link to="/settings" className="flex items-center px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100">
@@ -156,7 +154,7 @@ const Navbar: React.FC<NavbarProps> = ({ user }) => {
                             <div className="mt-3 px-2 space-y-1">
                                 <Link to="/profile" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-neutral-100">
                                     <div className="flex items-center">
-                                        <User className="mr-3 h-5 w-5" />
+                                        <UserIcon className="mr-3 h-5 w-5" />
                                         Profile
                                     </div>
                                 </Link>

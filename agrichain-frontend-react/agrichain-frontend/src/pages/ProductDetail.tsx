@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { CheckCircle, Info, Download, Share2, ArrowLeft, MapPin, Calendar, User, DollarSign } from 'lucide-react';
-import Layout from '../components/layout/Layout';
 import { Link } from 'react-router-dom';
 import SupplyChainTimeline from '../components/product/SupplyChainTimeline';
 import { Product } from '../types';
+import {DashboardLayout} from "../components/layout/DashboardLayout.tsx";
 
 // Mock data
 const mockProduct: Product = {
@@ -206,16 +206,15 @@ const mockProduct: Product = {
 };
 
 // Mock user for testing
-const mockUser = {
-    name: 'John Farmer',
-    role: 'farmer'
-};
+// const mockUser = {
+//     name: 'John Farmer',
+//     role: 'farmer'
+// };
 
 const ProductDetail: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'timeline' | 'certificates' | 'details'>('timeline');
-
     return (
-        <Layout user={mockUser}>
+        <DashboardLayout>
             <div className="container mx-auto px-4 py-8">
                 <div className="mb-8">
                     <Link to="/products" className="inline-flex items-center text-accent hover:underline">
@@ -511,7 +510,7 @@ const ProductDetail: React.FC = () => {
                     </div>
                 </div>
             </div>
-        </Layout>
+        </DashboardLayout>
     );
 };
 

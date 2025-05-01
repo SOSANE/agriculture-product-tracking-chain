@@ -1,10 +1,12 @@
 import React from "react";
-import Layout from '../../components/layout/Layout.tsx';
 import {Shield} from "lucide-react";
+import {useUserProfile} from "../../hooks/useUserProfile.ts";
+import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
 
 const CertificationRequest: React.FC = () => {
+    const { user } = useUserProfile();
     return (
-        <Layout user={{ name: 'Regulator', role: 'regulator' }}>
+        <DashboardLayout>
             <div className="container mx-auto px-4 py-8">
                 <div className="card">
                     <div className="flex items-center justify-between mb-6">
@@ -12,9 +14,14 @@ const CertificationRequest: React.FC = () => {
                         <Shield className="h-6 w-6 text-primary" />
                     </div>
                     <p className="text-neutral-600">No pending certifications to review</p>
+                    {user && (
+                        <div className="mt-2 text-sm text-neutral-500">
+                            Logged in as {user.role} ({user.email || 'no email'})
+                        </div>
+                    )}
                 </div>
             </div>
-        </Layout>
+        </DashboardLayout>
     );
 };
 

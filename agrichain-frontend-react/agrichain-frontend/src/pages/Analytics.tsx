@@ -1,10 +1,11 @@
 import React from 'react';
 import { BarChart2, Leaf, ShoppingBag, TrendingUp, Users, QrCode, Map, Truck } from 'lucide-react';
-import Layout from '../components/layout/Layout';
 import MetricsRow from '../components/dashboard/MetricsRow';
 import ProductCard from '../components/product/ProductCard';
 import { Link } from 'react-router-dom';
 import { DashboardMetric, Product } from '../types';
+import {useUserProfile} from "../hooks/useUserProfile.ts";
+import {DashboardLayout} from "../components/layout/DashboardLayout.tsx";
 
 // Mock data
 export const mockMetrics: DashboardMetric[] = [
@@ -185,18 +186,22 @@ export const mockRecentProducts: Product[] = [
 ];
 
 // Mock user for testing
-const mockUser = {
-    name: 'John Farmer',
-    role: 'farmer'
-};
+// const mockUser = {
+//     name: 'John Farmer',
+//     role: 'farmer'
+// };
 
 const Analytics: React.FC = () => {
+    const { user } = useUserProfile();
     return (
-        <Layout user={mockUser}>
+        <DashboardLayout>
             <div className="container mx-auto px-4 py-8">
                 <header className="mb-8">
                     <h1 className="text-3xl font-semibold mb-2">Dashboard</h1>
-                    <p className="text-neutral-600">Track and manage your agricultural products in the supply chain</p>
+                    <p className="text-neutral-600">
+                        Track and manage your agricultural products in the supply chain
+                        {user ? `Welcome back, ${user.name}! Manage your agricultural products as a farmer` : 'Manage your agricultural products'}
+                    </p>
                 </header>
 
                 <section className="mb-10">
@@ -328,7 +333,7 @@ const Analytics: React.FC = () => {
                     </div>
                 </section>
             </div>
-        </Layout>
+        </DashboardLayout>
     );
 };
 

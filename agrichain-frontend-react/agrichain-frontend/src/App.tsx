@@ -1,5 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { useState } from 'react';
+import {BrowserRouter, Routes, Route, Navigate, Outlet, useNavigate} from 'react-router-dom';
 import ProductDetail from './pages/ProductDetail';
 import VerifyProduct from './pages/VerifyProduct';
 import Analytics from "./pages/Analytics.tsx";
@@ -11,61 +10,86 @@ import DistributorDashboard from './pages/dashboards/DistributorDashboard.tsx';
 import RetailerDashboard from './pages/dashboards/RetailerDashboard.tsx';
 import AdministratorDashboard from "./pages/dashboards/AdministratorDashboard.tsx";
 import Auth from './pages/Auth';
-import { UserRole } from './types';
 import AddAccount from "./pages/admin/AddAccount.tsx";
 import CertificationRequest from "./pages/regulator/CertificationRequests.tsx";
+import Spinner from "react-bootstrap/Spinner";
+import {useUserProfile} from "./hooks/useUserProfile.ts";
+import {useEffect} from "react";
+
+const AuthWrapper = () => {
+    const { user, loading } = useUserProfile();
+
+    if (loading) return <Spinner animation="border" />;
+
+    return user ? <Outlet /> : <Navigate to="/" />;
+};
+
+const RoleRoute = ({ allowedRoles }: { allowedRoles: string[] }) => {
+    const { user } = useUserProfile();
+
+    if (!user) return <Navigate to="/" />;
+    return allowedRoles.includes(user.role) ? <Outlet /> : <Navigate to="/dashboard" />;
+};
+
+const DashboardRedirect = () => {
+    const { user, loading } = useUserProfile();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!loading && !user) {
+            navigate('/');
+        }
+    }, [user, loading, navigate]);
+
+    if (loading) return <Spinner animation="border" />;
+    if (!user) return <Navigate to="/" />;
+
+    switch (user.role) {
+        case 'admin':
+            return <AdministratorDashboard />;
+        case 'regulator':
+            return <RegulatorDashboard />;
+        case 'farmer':
+            return <FarmerDashboard />;
+        case 'processor':
+            return <ProcessorDashboard />;
+        case 'distributor':
+            return <DistributorDashboard />;
+        case 'retailer':
+            return <RetailerDashboard />;
+        default:
+            return <Navigate to="/" />;
+    }
+};
 
 function App() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [userRole, setUserRole] = useState<UserRole | null>(null);
-
-    const handleLogin = (role: UserRole) => {
-        setIsLoggedIn(true);
-        setUserRole(role);
-    };
-
-    const getDashboardForRole = () => {
-        switch (userRole) {
-            case 'regulator':
-                return <RegulatorDashboard />;
-            case 'farmer':
-                return <FarmerDashboard />;
-            case 'processor':
-                return <ProcessorDashboard />;
-            case 'distributor':
-                return <DistributorDashboard />;
-            case 'retailer':
-                return <RetailerDashboard />;
-            case 'admin':
-                return <AdministratorDashboard />;
-            default:
-                return <Navigate to="/" />;
-        }
-    };
 
     return (
         <BrowserRouter>
             <Routes>
+                {/* Public Routes */}
                 <Route path="/" element={<Homepage />} />
-                <Route
-                    path="/auth/:role"
-                    element={
-                        !isLoggedIn ? (
-                            <Auth onLogin={handleLogin} />
-                        ) : (
-                            <Navigate to="/dashboard" />
-                        )
-                    }
-                />
-                <Route
-                    path="/dashboard"
-                    element={isLoggedIn ? getDashboardForRole() : <Navigate to="/" />}
-                />
-                <Route path="/admin/add-account" element={<AddAccount />} />
-                <Route path="/regulator/certification-request" element={<CertificationRequest />} />
+                <Route path="/auth/:role" element={<Auth />} />
                 <Route path="/verify" element={<VerifyProduct />} />
-                <Route path="/analytics" element={<Analytics />} />
                 <Route path="/products/:id" element={<ProductDetail />} />
+
+                {/* Protected Routes */}
+                <Route element={<AuthWrapper />}>
+                    {/* Main Dashboard (based on role) */}
+                    <Route path="/dashboard" element={<DashboardRedirect />} />
+
+                    {/* Role-Specific Routes */}
+                    <Route element={<RoleRoute allowedRoles={['admin']} />}>
+                        <Route path="/add-account" element={<AddAccount />} />
+                    </Route>
+
+                    <Route element={<RoleRoute allowedRoles={['regulator']} />}>
+                        <Route path="/certification-request" element={<CertificationRequest />} />
+                    </Route>
+
+                    {/* Analytics currently available to all logged-in users */}
+                    <Route path="/analytics" element={<Analytics />} />
+                </Route>
             </Routes>
         </BrowserRouter>
     );
