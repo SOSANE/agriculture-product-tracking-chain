@@ -1,5 +1,6 @@
 export type UserRole = 'farmer' | 'processor' | 'distributor' | 'retailer' | 'consumer' | 'certifier' | 'admin' | 'regulator';
 export type ProductStatus = 'planted' | 'growing' | 'harvested' | 'processed'| 'packaged'| 'shipped'| 'delivered'| 'received'| 'sold'
+export type CertificateStatus = 'valid' | 'expired' | 'revoked';
 
 export interface User {
     username: string;
@@ -18,7 +19,7 @@ export interface Certificate {
     issuedBy: string;
     issuedDate: string;
     expiryDate: string;
-    status: 'valid' | 'expired' | 'revoked';
+    status: CertificateStatus;
     documentUrl?: string;
 }
 

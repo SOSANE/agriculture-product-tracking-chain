@@ -80,7 +80,7 @@ function App() {
                 <Route path="/" element={<Homepage />} />
                 <Route path="/auth/:role" element={<Auth />} />
                 <Route path="/verify" element={<VerifyProduct />} />
-                <Route path="/products/:id" element={<ProductDetail />} />
+                <Route path="/products/:id" element={<ProductDetail />}/> {/* TODO: wrap route */}
 
                 {/* Protected Routes */}
                 <Route element={<AuthWrapper />}>

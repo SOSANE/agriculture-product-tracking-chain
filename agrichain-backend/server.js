@@ -184,6 +184,180 @@ app.get('/api/products', async (req, res) => {
     }
 });
 
+// Get specific products for ProductDetails.tsx (unauthorized use from others not implemented yet)
+app.get('/api/products/:id', async (req, res) => {
+    if (!req.session.user) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    try {
+        const productId = req.params.id;
+
+        // Get product details
+        const productQuery = `
+            SELECT
+                p.*,
+                l.id as current_location_id,
+                l.name as current_location_name,
+                l.latitude as current_location_latitude,
+                l.longitude as current_location_longitude,
+                l.address as current_location_address,
+                pr.name as farmer_name,
+                pr.organization as farmer_organization
+            FROM supplychain.product p
+                     LEFT JOIN supplychain.location l ON p.current_location_id = l.id
+                     LEFT JOIN supplychain.profile pr ON p.farmer_username = pr.username
+            WHERE p.id = $1
+        `;
+        const productResult = await pool.query(productQuery, [productId]);
+
+        if (productResult.rows.length === 0) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        const product = productResult.rows[0];
+
+        // Get certificates for this product
+        const certsQuery = `
+            SELECT
+                c.id,
+                c.name,
+                p.name as issued_by,
+                c.issued_date,
+                c.expiry_date,
+                c.status
+            FROM supplychain.certificate c
+                     JOIN supplychain.profile p ON c.issued_by = p.username
+                     JOIN supplychain.product_certificate pc ON c.id = pc.certificate_id
+            WHERE pc.product_id = $1
+        `;
+        const certsResult = await pool.query(certsQuery, [productId]);
+
+        // Get supply chain steps for this product
+        const supplyChainQuery = `
+            SELECT
+                sc.id,
+                sc.product_id,
+                sc.timestamp,
+                sc.action,
+                sc.description,
+                sc.performed_by_id,
+                sc.performed_by_name,
+                sc.performed_by_role,
+                sc.performed_by_organization,
+                sc.location_id,
+                sc.temperature,
+                sc.humidity,
+                sc.metadata,
+                sc.verified,
+                sc.transaction_hash,
+                l.name as location_name,
+                l.latitude as location_latitude,
+                l.longitude as location_longitude,
+                l.address as location_address
+            FROM supplychain.supply_chain sc
+                     LEFT JOIN supplychain.location l ON sc.location_id = l.id
+            WHERE sc.product_id = $1
+            ORDER BY sc.timestamp ASC
+        `;
+        const supplyChainResult = await pool.query(supplyChainQuery, [productId]);
+
+        // Get certificates for each supply chain step
+        const stepsWithCerts = await Promise.all(
+            supplyChainResult.rows.map(async (step) => {
+                try {
+                    const certsQuery = `
+                        SELECT 
+                            c.id, 
+                            c.name, 
+                            p.name as issued_by,
+                            c.issued_date, 
+                            c.expiry_date, 
+                            c.status
+                        FROM supplychain.certificate c
+                            JOIN supplychain.profile p ON c.issued_by = p.username
+                            JOIN supplychain.supply_chain_certificate scc ON c.id = scc.certificate_id
+                        WHERE scc.supply_chain_id = $1 AND scc.product_id = $2
+                    `;
+                    const certsResult = await pool.query(certsQuery, [step.id, productId]);
+
+                    return {
+                        ...step,
+                        performedBy: step.performed_by_id ? {
+                            id: step.performed_by_id,
+                            name: step.performed_by_name,
+                            role: step.performed_by_role,
+                            organization: step.performed_by_organization,
+                        } : null,
+                        location: step.location_id ? {
+                            id: step.location_id,
+                            name: step.location_name,
+                            latitude: step.location_latitude,
+                            longitude: step.location_longitude,
+                            address: step.location_address,
+                        } : null,
+                        // certificates: certsResult.rows, --> mapping instead
+                        certificates: certsResult.rows.map(cert => ({
+                            id: cert.id,
+                            name: cert.name,
+                            issuedBy: cert.issued_by,
+                            issuedDate: cert.issued_date,
+                            expiryDate: cert.expiry_date,
+                            status: cert.status
+                        }))
+                    };
+                } catch (err) {
+                    console.error('Error processing step:', step.id, err);
+                    return null;
+                }
+            })
+        ).then(results => results.filter(Boolean));
+
+
+        const response = {
+            id: product.id,
+            name: product.name,
+            description: product.description,
+            type: product.type,
+            imageUrl: product.image_url,
+            batchId: product.batch_id,
+            qrCode: product.qr_code,
+            createdAt: product.created_at,
+            currentLocation: product.current_location_id ? {
+                id: product.current_location_id,
+                name: product.current_location_name,
+                latitude: product.current_location_latitude,
+                longitude: product.current_location_longitude,
+                address: product.current_location_address
+            } : null,
+            // certificates: certsResult.rows, --> mapping instead
+            certificates: certsResult.rows.map(cert => ({
+                id: cert.id,
+                name: cert.name,
+                issuedBy: cert.issued_by,
+                issuedDate: cert.issued_date,
+                expiryDate: cert.expiry_date,
+                status: cert.status
+            })),
+            supplyChain: stepsWithCerts,
+            status: product.status,
+            farmer: {
+                username: product.farmer_username,
+                name: product.farmer_name,
+                organization: product.farmer_organization
+            },
+            retailPrice: product.retail_price,
+            verificationCount: product.verification_count,
+            lastVerified: product.last_verified
+        };
+
+        res.json(response);
+    } catch (err) {
+        console.error('Error fetching product details:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok' });

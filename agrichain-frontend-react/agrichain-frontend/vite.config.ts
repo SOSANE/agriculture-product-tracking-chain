@@ -10,9 +10,18 @@ export default defineConfig({
         target: 'http://localhost:5000',
         changeOrigin: true,
         secure: false,
+        ws: true,
       },
-      '/auth': 'http://localhost:5000',
-      '/profile': 'http://localhost:5000'
+      '/auth': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/profile': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        secure: false,
+      }
     }
   }
 })
