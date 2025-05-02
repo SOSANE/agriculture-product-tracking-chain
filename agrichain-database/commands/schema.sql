@@ -135,7 +135,7 @@ INSERT INTO supplychain.auth (username, password, role) VALUES
     ('regulator1', '$2b$10$grG6fDHWVJ6HUk9XxJ.IYeewm2JX2XfRPqVzOhuct6IxI3dRBF9p2', 'regulator'), -- securepass
     ('regulator2', '$2b$10$grG6fDHWVJ6HUk9XxJ.IYeewm2JX2XfRPqVzOhuct6IxI3dRBF9p2', 'regulator'), -- securepass
     ('regulator3', '$2b$10$grG6fDHWVJ6HUk9XxJ.IYeewm2JX2XfRPqVzOhuct6IxI3dRBF9p2', 'regulator'), -- securepass
-    ('processor1', '$2b$10$namjlQ9gXD6avzlCABfMIeEakEDpc4DkTIDerz9yhsGVPUFa4rdE', 'processor'), -- process123
+    ('processor1', '$2b$10$m1y0TVQnOfBRrhH2ueCLXeoM0FICaLkDC2DFpP9kyt.psWtMe5HOO', 'processor'), -- process123
     ('processor2', '$2b$10$yOHD3YawG9ZkSLnQ6rM1/u/sG4dCuRcGiVbVR/SEjDrfoS3BO9Kwa', 'processor'), -- process321
     ('distributor1', '$2b$10$1tuwh8FNeBSEu3UoohXbxu4M6DVACioGtLNRbl9hfuqkyP.shxCKO', 'distributor'), -- distribute123
     ('distributor2', '$2b$10$2vZ/ScGUoqmvyChZXlAkceh5rv3fFNYe/Y.pBxh7bnxbQFyD0Kb.2', 'distributor'), -- distribute321
