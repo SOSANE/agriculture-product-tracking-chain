@@ -8,7 +8,8 @@ Designing blockchain model for agriculture product tracking involves using the i
 
 **May 2025**
 - mock data in analytics, products card pages (for now)
-- implement next : smart contracts, more protected routing, role-specific functionalities, qr scanner
+- fix analytics page
+- implement next : smart contracts, fix routing + more protected routing, role-specific functionalities, qr scanner
 
 <h5 align="center"> Home page </h5>
 
