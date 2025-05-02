@@ -6,9 +6,9 @@ A decentralized solution for tracking agricultural products through their lifecy
 
 Designing blockchain model for agriculture product tracking involves using the inherent characteristics of blockchain - decentralisation, immutability and transparency - to track agricultural products through every stage of their lifecycle. This include everything from production, processing, transportation, and distribution, to retail. Below are the essential details for building such a blockchain system.
 
-**April 2025**
-- mock data (for now)
-- implement next : smart contracts, role-specific functionalities, qr scanner
+**May 2025**
+- mock data in analytics, products card pages (for now)
+- implement next : smart contracts, more protected routing, role-specific functionalities, qr scanner
 
 <h5 align="center"> Home page </h5>
 
@@ -21,6 +21,10 @@ Designing blockchain model for agriculture product tracking involves using the i
 <h5 align="center"> Dashboard </h5>
 
 ![AgrichainAnalytics](./assets/agrichain-farmer-dashboard.png)
+
+<h5 align="center"> Product details (ProductID: 1) </h5>
+
+![AgrichainAnalytics](./assets/agrichain-farmer-productdetail.png)
 
 ## Table of Contents
 - [Features](#features)
@@ -113,7 +117,12 @@ Access: http://localhost:5173
 |-------------|--------------|---------------|
 | Admin       | admin        | admin123      |
 | Farmer      | farmer1      | password123   |
+| Farmer      | farmer2      | password123   |
+| Farmer      | farmer3      | password123   |
+| Farmer      | farmer4      | password123   |
 | Regulator   | regulator1   | securepass    |
+| Regulator   | regulator2   | securepass    |
+| Regulator   | regulator3   | securepass    |
 | Processor   | processor1   | process123    |
 | Processor   | processor2   | process321    |
 | Distributor | distributor1 | distribute123 |
