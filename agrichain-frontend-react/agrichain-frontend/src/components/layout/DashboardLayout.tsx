@@ -1,21 +1,66 @@
-import React from "react";
-import { useUserProfile } from '../../hooks/useUserProfile.ts';
+import React, { useEffect, useState } from "react";
+import { useUserProfile } from '../../hooks/useUserProfile';
 import Layout from '../layout/Layout';
 import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
-import {Navigate} from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Product } from "../../types";
+import ProductCard from "../product/ProductCard";
 
 interface DashboardLayoutProps {
     children?: React.ReactNode;
+    showProducts?: boolean;
+    showRecentProducts?: boolean;
+    customProductView?: (products: Product[]) => React.ReactNode;
 }
 
-export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
+export const DashboardLayout = ({ children, showProducts = true, showRecentProducts = true, customProductView }: DashboardLayoutProps) => {
     const { user, loading, error } = useUserProfile();
+    const navigate = useNavigate();
+    const [products, setProducts] = useState<Product[]>([]);
+    const [productsLoading, setProductsLoading] = useState(true);
+    const [productsError, setProductsError] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (!loading && !user) {
+            navigate('/');
+        } else if (user && showProducts) {
+            fetchProducts();
+        }
+    }, [user, loading, navigate, showProducts]);
+
+    const fetchProducts = async () => {
+        try {
+            setProductsLoading(true);
+            setProductsError(null);
+
+            const url = user?.role === 'farmer'
+                ? `/api/products?farmer=${user.username}`
+                : '/api/products';
+
+            const response = await fetch(url, {
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch products: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            setProducts(data);
+        } catch (error) {
+            console.error('Error fetching products:', error);
+            setProductsError(error instanceof Error ? error.message : 'Failed to fetch products');
+            setProducts([]);
+        } finally {
+            setProductsLoading(false);
+        }
+    };
 
     if (loading) {
         return (
             <div className="d-flex justify-content-center mt-5">
-                <Spinner animation="border" role="output">
+                <Spinner animation="border" role="status">
                     <span className="visually-hidden">Loading...</span>
                 </Spinner>
             </div>
@@ -36,9 +81,67 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
     if (!user) return <Navigate to="/" />;
 
+    const renderProducts = () => {
+        if (productsLoading) {
+            return (
+                <div className="d-flex justify-content-center mt-5">
+                    <Spinner animation="border" role="status">
+                        <span className="visually-hidden">Loading products...</span>
+                    </Spinner>
+                </div>
+            );
+        }
+
+        if (productsError) {
+            return (
+                <Alert variant="danger" className="mb-4">
+                    {productsError}
+                </Alert>
+            );
+        }
+
+        if (products.length === 0) {
+            return (
+                <div className="text-center py-5">
+                    <p>No products found</p>
+                    {user?.role === 'farmer' && (
+                        <Link to="/products/new" className="btn btn-primary">
+                            Add Your First Product
+                        </Link>
+                    )}
+                </div>
+            );
+        }
+
+        if (customProductView) {
+            return customProductView(products);
+        }
+
+        return (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {products.map(product => (
+                    <ProductCard key={product.id} product={product} />
+                ))}
+            </div>
+        );
+    };
+
     return (
         <Layout user={user}>
             {children}
+            {showProducts && (
+                <div className="container mx-auto px-4 py-8">
+                    <section className="mb-10">
+                        {showRecentProducts && (
+                            <div className="flex justify-between items-center mb-6">
+                                <h2 className="text-xl font-semibold">Recent Products</h2>
+                                <Link to="/products" className="text-accent hover:underline">View All Products</Link>
+                            </div>
+                        )}
+                        {renderProducts()}
+                    </section>
+                </div>
+            )}
         </Layout>
     );
 };

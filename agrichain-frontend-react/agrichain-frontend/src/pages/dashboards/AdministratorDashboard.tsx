@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
 import {useUserProfile} from "../../hooks/useUserProfile.ts";
 
-// Using mock data (temporary)
+// Using mock metrics data (temporary)
 const AdministratorDashboard: React.FC = () => {
     const { user } = useUserProfile();
     return (

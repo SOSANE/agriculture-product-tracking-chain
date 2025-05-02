@@ -1,9 +1,8 @@
 import React from 'react';
 import {ClipboardList, Package, QrCode, ShieldCheck, Truck} from 'lucide-react';
 import MetricsRow from "../../components/dashboard/MetricsRow.tsx";
-import {mockMetrics, mockRecentProducts} from "../Analytics.tsx";
+import {mockMetrics} from "../Analytics.tsx";
 import {Link} from "react-router-dom";
-import ProductCard from "../../components/product/ProductCard.tsx";
 import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
 import {useUserProfile} from "../../hooks/useUserProfile.ts";
 
@@ -68,19 +67,6 @@ const DistributorDashboard: React.FC = () => {
                                 </Link>
                             </div>
                         </div>
-                    </div>
-                </section>
-
-                <section className="mb-10">
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-xl font-semibold">Recent Activities</h2>
-                        <Link to="/products" className="text-accent hover:underline">View All Products</Link>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {mockRecentProducts.map(product => (
-                            <ProductCard key={product.id} product={product} />
-                        ))}
                     </div>
                 </section>
             </div>

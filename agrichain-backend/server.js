@@ -160,7 +160,7 @@ app.get('/auth/verify-session', async (req, res) => {
     }
 });
 
-// Get products (farmers)
+// Get products (productcards and dashboardlayout)
 app.get('/api/products', async (req, res) => {
     if (!req.session.user) {
         return res.status(401).json({ error: 'Unauthorized' });
@@ -168,16 +168,248 @@ app.get('/api/products', async (req, res) => {
 
     try {
         const { farmer } = req.query;
+        const user = req.session.user;
 
-        // Only show their own products
-        const query = farmer ?
-            'SELECT * FROM supplychain.product WHERE farmer_username = $1 ORDER BY created_at DESC' :
-            'SELECT * FROM supplychain.product ORDER BY created_at DESC';
+        // Base product query
+        let productQuery = `
+            SELECT
+                p.id,
+                p.name,
+                p.description,
+                p.type,
+                p.image_url,
+                p.batch_id,
+                p.qr_code,
+                p.created_at,
+                p.status,
+                p.retail_price,
+                p.verification_count,
+                p.last_verified,
+                p.farmer_username,
+                l.id as current_location_id,
+                l.name as current_location_name,
+                l.latitude as current_location_latitude,
+                l.longitude as current_location_longitude,
+                l.address as current_location_address,
+                pr.name as farmer_name,
+                pr.organization as farmer_organization
+            FROM supplychain.product p
+            LEFT JOIN supplychain.location l ON p.current_location_id = l.id
+            LEFT JOIN supplychain.profile pr ON p.farmer_username = pr.username
+        `;
 
-        const params = farmer ? [farmer] : [];
+        let params = [];
+        let whereClause = '';
 
-        const result = await pool.query(query, params);
-        res.json(result.rows);
+        // admin sees all products
+        if (user.role === 'admin') {
+            // no filters
+        }
+        // Farmer sees their own products when farmer query param is present
+        else if (user.role === 'farmer' && farmer) {
+            if (farmer !== user.username) {
+                return res.status(403).json({ error: 'Forbidden' });
+            }
+            whereClause = ' WHERE p.farmer_username = $1';
+            params = [farmer];
+        }
+        // Other roles see products they're involved with
+        else {
+            whereClause = `
+                WHERE p.farmer_username = $1 
+                OR EXISTS (
+                    SELECT 1 FROM supplychain.supply_chain sc
+                    WHERE sc.product_id = p.id AND sc.performed_by_id = $1
+                )
+                OR EXISTS (
+                    SELECT 1 FROM supplychain.supply_chain_certificate scc
+                    JOIN supplychain.certificate c ON scc.certificate_id = c.id
+                    JOIN supplychain.supply_chain sc ON scc.supply_chain_id = sc.id AND scc.product_id = sc.product_id
+                    WHERE sc.product_id = p.id AND c.issued_by = $1
+                )
+            `;
+            params = [user.username];
+        }
+
+        productQuery += whereClause + ' ORDER BY p.created_at DESC';
+        const productResult = await pool.query(productQuery, params);
+
+        // Get certificates for all products in one query
+        const productIds = productResult.rows.map(p => p.id);
+        let certsResult = { rows: [] };
+        if (productIds.length > 0) {
+            const certsQuery = `
+                SELECT
+                    pc.product_id,
+                    c.id,
+                    c.name,
+                    p.name as issued_by,
+                    c.issued_date,
+                    c.expiry_date,
+                    c.status
+                FROM supplychain.certificate c
+                JOIN supplychain.profile p ON c.issued_by = p.username
+                JOIN supplychain.product_certificate pc ON c.id = pc.certificate_id
+                WHERE pc.product_id = ANY($1)
+            `;
+            certsResult = await pool.query(certsQuery, [productIds]);
+        }
+
+        // Group certificates by product ID
+        const certsByProduct = certsResult.rows.reduce((acc, cert) => {
+            if (!acc[cert.product_id]) {
+                acc[cert.product_id] = [];
+            }
+            acc[cert.product_id].push({
+                id: cert.id,
+                name: cert.name,
+                issuedBy: cert.issued_by,
+                issuedDate: cert.issued_date,
+                expiryDate: cert.expiry_date,
+                status: cert.status
+            });
+            return acc;
+        }, {});
+
+        // Get supply chain steps for all products in one query
+        let supplyChainResult = { rows: [] };
+        if (productIds.length > 0) {
+            const supplyChainQuery = `
+                SELECT
+                    sc.id,
+                    sc.product_id,
+                    sc.timestamp,
+                    sc.action,
+                    sc.description,
+                    sc.performed_by_id,
+                    sc.performed_by_name,
+                    sc.performed_by_role,
+                    sc.performed_by_organization,
+                    sc.location_id,
+                    sc.temperature,
+                    sc.humidity,
+                    sc.metadata,
+                    sc.verified,
+                    sc.transaction_hash,
+                    l.name as location_name,
+                    l.latitude as location_latitude,
+                    l.longitude as location_longitude,
+                    l.address as location_address
+                FROM supplychain.supply_chain sc
+                LEFT JOIN supplychain.location l ON sc.location_id = l.id
+                WHERE sc.product_id = ANY($1)
+                ORDER BY sc.timestamp ASC
+            `;
+            supplyChainResult = await pool.query(supplyChainQuery, [productIds]);
+        }
+
+        // Group supply chain steps by product ID
+        const supplyChainByProduct = supplyChainResult.rows.reduce((acc, step) => {
+            if (!acc[step.product_id]) {
+                acc[step.product_id] = [];
+            }
+            acc[step.product_id].push({
+                id: step.id,
+                productId: step.product_id,
+                timestamp: step.timestamp,
+                action: step.action,
+                description: step.description,
+                performedBy: step.performed_by_id ? {
+                    id: step.performed_by_id,
+                    name: step.performed_by_name,
+                    role: step.performed_by_role,
+                    organization: step.performed_by_organization,
+                } : null,
+                location: step.location_id ? {
+                    id: step.location_id,
+                    name: step.location_name,
+                    latitude: step.location_latitude,
+                    longitude: step.location_longitude,
+                    address: step.location_address,
+                } : null,
+                temperature: step.temperature,
+                humidity: step.humidity,
+                metadata: step.metadata,
+                verified: step.verified,
+                transactionHash: step.transaction_hash
+            });
+            return acc;
+        }, {});
+
+        // Get certificates for supply chain steps
+        const stepIds = supplyChainResult.rows.map(s => s.id);
+        let stepCertsResult = { rows: [] };
+        if (stepIds.length > 0) {
+            const stepCertsQuery = `
+                SELECT 
+                    scc.supply_chain_id,
+                    scc.product_id,
+                    c.id, 
+                    c.name, 
+                    p.name as issued_by,
+                    c.issued_date, 
+                    c.expiry_date, 
+                    c.status
+                FROM supplychain.certificate c
+                JOIN supplychain.profile p ON c.issued_by = p.username
+                JOIN supplychain.supply_chain_certificate scc ON c.id = scc.certificate_id
+                WHERE scc.supply_chain_id = ANY($1)
+            `;
+            stepCertsResult = await pool.query(stepCertsQuery, [stepIds]);
+        }
+
+        // Add certificates to supply chain steps
+        stepCertsResult.rows.forEach(cert => {
+            const productSteps = supplyChainByProduct[cert.product_id];
+            if (productSteps) {
+                const step = productSteps.find(s => s.id === cert.supply_chain_id);
+                if (step) {
+                    if (!step.certificates) {
+                        step.certificates = [];
+                    }
+                    step.certificates.push({
+                        id: cert.id,
+                        name: cert.name,
+                        issuedBy: cert.issued_by,
+                        issuedDate: cert.issued_date,
+                        expiryDate: cert.expiry_date,
+                        status: cert.status
+                    });
+                }
+            }
+        });
+
+        // Construct final response
+        const response = productResult.rows.map(product => ({
+            id: product.id,
+            name: product.name,
+            description: product.description,
+            type: product.type,
+            imageUrl: product.image_url,
+            batchId: product.batch_id,
+            qrCode: product.qr_code,
+            createdAt: product.created_at,
+            currentLocation: product.current_location_id ? {
+                id: product.current_location_id,
+                name: product.current_location_name,
+                latitude: product.current_location_latitude,
+                longitude: product.current_location_longitude,
+                address: product.current_location_address
+            } : null,
+            certificates: certsByProduct[product.id] || [],
+            supplyChain: supplyChainByProduct[product.id] || [],
+            status: product.status,
+            farmer: {
+                username: product.farmer_username,
+                name: product.farmer_name,
+                organization: product.farmer_organization
+            },
+            retailPrice: product.retail_price,
+            verificationCount: product.verification_count,
+            lastVerified: product.last_verified
+        }));
+
+        res.json(response);
     } catch (err) {
         console.error('Error fetching products:', err);
         res.status(500).json({ error: 'Server error' });

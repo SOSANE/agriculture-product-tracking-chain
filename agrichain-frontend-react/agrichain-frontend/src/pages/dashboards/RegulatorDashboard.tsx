@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 import {useUserProfile} from "../../hooks/useUserProfile.ts";
 import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
 
-// Using mock data (temporary)
+// Using mock metrics data (temporary)
 const RegulatorDashboard: React.FC = () => {
     const { user } = useUserProfile();
     return (
