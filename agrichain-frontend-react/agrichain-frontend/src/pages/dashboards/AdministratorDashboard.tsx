@@ -96,7 +96,7 @@ const AdministratorDashboard: React.FC = () => {
                             </div>
 
                             <div className="space-y-4">
-                                <Link to="/manage-users" className="btn btn-primary w-full justify-start">
+                                <Link to="/manage-accounts" className="btn btn-primary w-full justify-start">
                                     <Users className="h-5 w-5 mr-2" />
                                     Manage Users
                                 </Link>

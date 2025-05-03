@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
+const { body, check, validationResult, matchedData} = require('express-validator');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const { Pool } = require('pg');
@@ -13,16 +14,15 @@ const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+    origin: process.env.CORS_ORIGIN,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
     exposedHeaders: ['Content-Type', 'Authorization']
 }));
 
-
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'fallback-secret-key',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -103,6 +103,7 @@ app.post('/auth/:role', async (req, res) => {
     }
 });
 
+// Profile route
 app.get('/profile', async (req, res) => {
     if (!req.session.user) {
         return res.status(401).json({
@@ -589,6 +590,92 @@ app.get('/api/products/:id', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+
+// Add account route
+app.put('/api/add-account',
+    body('name', 'Name is required').notEmpty(),
+    body('username', 'Username is required').notEmpty(),
+    body('email', 'Email is required').notEmpty(),
+    body('phone', 'Phone is required').notEmpty(),
+    body('address', 'Address is required').notEmpty(),
+    body('organization', 'Organization is required').notEmpty(),
+    body('role', 'Role is required').notEmpty(),
+    body('password', 'Password is required').notEmpty(),
+    body('confirmPassword', 'Please confirm your password').notEmpty(),
+    async (req, res) => {
+
+    try {
+        const { name, username, email, phone, address, organization, role, password, confirmPassword } = matchedData(req);
+
+        if (password !== confirmPassword) {
+            console.log('Passwords do not match.'); // Debug log
+            return res.status(401).json({ success: false, message: 'Not matching.' });
+        }
+
+        if (password.length < 6) {
+            console.log('Password is too short.'); // Debug log
+            return res.status(401).json({ success: false, message: 'Short password.' });
+        }
+
+        // Check if a username is unique
+        const uniqueUserQuery = `SELECT username FROM supplychain.auth WHERE username = $1`
+
+        const uniqueUserResult = await pool.query(uniqueUserQuery, [username]);
+
+        if (uniqueUserResult.rows.length > 0) {
+            console.log('Username already exist'); // Debug log
+            return res.status(401).json({ success: false, message: 'Not a unique username.' });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Insert new user
+        const newProfileQuery = `
+        INSERT INTO supplychain.profile(username, name, organization, email, phone, address)
+        VALUES($1, $2, $3, $4, $5, $6);`
+
+        const newAuthQuery = `
+        INSERT INTO supplychain.auth(username, password, role)
+        VALUES ($1, $2, $3);`
+
+        await pool.query(newAuthQuery, [username, hashedPassword, role]);
+
+        await pool.query(newProfileQuery, [username, name, organization, email, phone, address]);
+
+        console.log(req.body);
+        res.json(req.body);
+    } catch(error) {
+        console.error('Error during when trying to create an account', error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error'
+        });
+    }
+})
+
+// Get users
+app.get('/api/users', async (req, res) => {
+    if (!req.session.user || req.session.user.role !== 'admin') {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    try {
+        const result = await pool.query(
+            'SELECT a.username, a.role, p.name, p.email, p.organization, p.phone, p.address FROM supplychain.auth a LEFT JOIN supplychain.profile p ON a.username = p.username'
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'No user found.'
+            });
+        }
+
+        res.json(result.rows);
+    } catch (err) {
+        res.status(500).json({ error: 'Unable to connect to the server.' });
+    }
+})
 
 // Health check
 app.get('/api/health', (req, res) => {

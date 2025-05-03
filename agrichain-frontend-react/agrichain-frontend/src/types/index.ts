@@ -5,7 +5,7 @@ export type CertificateStatus = 'valid' | 'expired' | 'revoked';
 export interface User {
     username: string;
     name: string;
-    email?: string;
+    email: string;
     role: UserRole;
     organization?: string;
     phone?: string;
