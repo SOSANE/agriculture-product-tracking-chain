@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useUserProfile } from '../../hooks/useUserProfile';
 import Layout from '../layout/Layout';
 import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { Product } from "../../types";
 import ProductCard from "../product/ProductCard";
 import {Leaf, QrCode, ShoppingBag, Truck} from "lucide-react";
+import {useProducts} from "../../hooks/useProducts.ts";
 
 interface DashboardLayoutProps {
     children?: React.ReactNode;
@@ -17,46 +18,7 @@ interface DashboardLayoutProps {
 
 export const DashboardLayout = ({ children, showProducts = true, showRecentProducts = true, customProductView }: DashboardLayoutProps) => {
     const { user, loading, error } = useUserProfile();
-    const navigate = useNavigate();
-    const [products, setProducts] = useState<Product[]>([]);
-    const [productsLoading, setProductsLoading] = useState(true);
-    const [productsError, setProductsError] = useState<string | null>(null);
-
-    useEffect(() => {
-        if (!loading && !user) {
-            navigate('/');
-        } else if (user && showProducts) {
-            fetchProducts();
-        }
-    }, [user, loading, navigate, showProducts]);
-
-    const fetchProducts = async () => {
-        try {
-            setProductsLoading(true);
-            setProductsError(null);
-
-            const url = user?.role === 'farmer'
-                ? `/api/products?farmer=${user.username}`
-                : '/api/products';
-
-            const response = await fetch(url, {
-                credentials: 'include'
-            });
-
-            if (!response.ok) {
-                throw new Error(`Failed to fetch products: ${response.statusText}`);
-            }
-
-            const data = await response.json();
-            setProducts(data);
-        } catch (error) {
-            console.error('Error fetching products:', error);
-            setProductsError(error instanceof Error ? error.message : 'Failed to fetch products');
-            setProducts([]);
-        } finally {
-            setProductsLoading(false);
-        }
-    };
+    const { products, productsLoading, productsError } = useProducts();
 
     if (loading) {
         return (

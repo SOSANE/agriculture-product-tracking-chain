@@ -1,41 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {ClipboardList, Leaf, Package, PackagePlus, ShieldCheck} from 'lucide-react';
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
 import {useUserProfile} from "../../hooks/useUserProfile.ts";
-import {Product} from "../../types";
+import {useProducts} from "../../hooks/useProducts.ts";
 
 const FarmerDashboard: React.FC = () => {
-    const { user, loading } = useUserProfile();
-    const navigate = useNavigate();
-    const [products, setProducts] = useState<Product[]>([]);
-    const [productsLoading, setProductsLoading] = useState(true);
-
-    useEffect(() => {
-        if (!loading && !user) {
-            navigate('/');
-        } else if (user) {
-            fetchFarmerProducts();
-        }
-    }, [user, loading, navigate]);
-
-    const fetchFarmerProducts = async () => {
-        try {
-            setProductsLoading(true);
-            const response = await fetch(`/api/products?farmer=${user?.username}`, {
-                credentials: 'include'
-            });
-
-            if (!response.ok) throw new Error('Failed to fetch products');
-
-            const data = await response.json();
-            setProducts(data);
-        } catch (error) {
-            console.error('Error fetching products:', error);
-        } finally {
-            setProductsLoading(false);
-        }
-    };
+    const { user } = useUserProfile();
+    const { products, productsLoading } = useProducts();
 
     return (
         <DashboardLayout>
@@ -66,15 +38,17 @@ const FarmerDashboard: React.FC = () => {
                                 <div className="flex justify-center py-8">
                                     <span className="loading loading-spinner text-primary"></span>
                                 </div>
-                            ) : products.length === 0 ? (
-                                <div className="text-center py-8">
-                                    <p className="text-neutral-600 mb-4">No products registered yet</p>
-                                    <Link to="/add-product" className="btn btn-primary">
-                                        <PackagePlus className="h-5 w-5 mr-2" />
-                                        Add Your First Product
-                                    </Link>
-                                </div>
-                            ) : (
+                            ) :
+                            //     products.length === 0 ? (
+                            //     <div className="text-center py-8">
+                            //         <p className="text-neutral-600 mb-4">No products registered yet</p>
+                            //         <Link to="/add-product" className="btn btn-primary">
+                            //             <PackagePlus className="h-5 w-5 mr-2" />
+                            //             Add Your First Product
+                            //         </Link>
+                            //     </div>
+                            // ) :
+                                (
                                 <div className="overflow-x-auto">
                                     <table className="table w-full">
                                         <thead>
