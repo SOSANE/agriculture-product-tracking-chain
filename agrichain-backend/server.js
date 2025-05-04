@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
-const { body, check, validationResult, matchedData} = require('express-validator');
+const { body, matchedData} = require('express-validator');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const { Pool } = require('pg');
@@ -673,6 +673,63 @@ app.get('/api/users', async (req, res) => {
 
         res.json(result.rows);
     } catch (err) {
+        res.status(500).json({ error: 'Unable to connect to the server.' });
+    }
+})
+
+// Get certificates for specific regulator
+app.get('/api/certificates', async (req, res) => {
+    if (!req.session.user) {
+        res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    try {
+        const { regulator } = req.query;
+        const user = req.session.user;
+
+        // Get certificates
+        let certsQuery = `
+            SELECT
+                c.id,
+                c.name,
+                p.name as issued_by,
+                c.issued_date,
+                c.expiry_date,
+                c.status
+            FROM supplychain.certificate c
+                     JOIN supplychain.profile p ON c.issued_by = p.username
+        `;
+
+        let params = [];
+
+        // admin sees all certificates
+        if (user.role === 'admin') {
+            // no filters
+        }
+        // Regulators sees their own certificates when regulator query param is present
+        else if (user.role === 'regulator' && regulator) {
+            if (regulator !== user.username) {
+                return res.status(403).json({ error: 'Forbidden' });
+            }
+            certsQuery += ' WHERE c.issued_by = $1';
+            params = [regulator];
+        }
+
+        certsQuery += ' ORDER BY c.issued_date DESC';
+
+        const certsResult = await pool.query(certsQuery, params);
+
+        const response = certsResult.rows.map(certificate => ({
+            id: certificate.id,
+            name: certificate.name,
+            issuedBy: certificate.issued_by,
+            issuedDate: certificate.issued_date,
+            expiryDate: certificate.expiry_date,
+            status: certificate.status
+        }));
+
+        res.json(response);
+    } catch(error) {
         res.status(500).json({ error: 'Unable to connect to the server.' });
     }
 })

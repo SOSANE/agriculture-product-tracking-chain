@@ -1,24 +1,50 @@
-import React from 'react';
-import { ArrowRight, Leaf, QrCode, Shield, ShieldCheck, ShoppingBag, Truck } from 'lucide-react';
-import MetricsRow from "../../components/dashboard/MetricsRow.tsx";
-import {mockMetrics} from "../Analytics.tsx";
-import {Link} from "react-router-dom";
+import React, {useEffect, useState} from 'react';
+import {ArrowRight, Shield} from 'lucide-react';
+import {Link, useNavigate} from "react-router-dom";
 import {useUserProfile} from "../../hooks/useUserProfile.ts";
 import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
+import {Certificate} from "../../types";
 
-// Using mock metrics data (temporary)
 const RegulatorDashboard: React.FC = () => {
-    const { user } = useUserProfile();
+    const { user, loading } = useUserProfile();
+    const navigate = useNavigate();
+    const [certificates, setCertificates] = useState<Certificate[]>([]);
+    const [certificatesLoading, setCertificatesLoading] = useState(true);
+
+    useEffect(() => {
+        if (!loading && !user) {
+            navigate('/');
+        } else if (user) {
+            loadCertificates();
+        }
+    }, [user, loading, navigate]);
+
+    const loadCertificates = async () => {
+        try {
+            setCertificatesLoading(true);
+            const response = await fetch(`/api/certificates?regulator=${user?.username}`, {
+                credentials: 'include'
+            });
+
+            if (!response.ok) throw new Error('Failed to fetch certificates.');
+
+            const data = await response.json();
+            setCertificates(data);
+        } catch (err) {
+            console.error('Error fetching certificates:', err);
+        } finally {
+            setCertificatesLoading(false);
+        }
+    };
+
     return (
         <DashboardLayout>
             <div className="container mx-auto px-4 py-8">
                 <header className="mb-8">
                     <h1 className="text-3xl font-semibold mb-2">
-                        {/*Regulator Dashboard*/}
                         {user ? `${user.name}'s Dashboard` : 'Regulator Dashboard'}
                     </h1>
                     <p className="text-neutral-600">
-                        {/*Manage and oversee agricultural certifications*/}
                         {user ? `Welcome back, ${user.name}! Manage and oversee agricultural certifications as a regulator` : 'Manage and oversee agricultural certifications'}
                     </p>
                     {user && (
@@ -28,117 +54,50 @@ const RegulatorDashboard: React.FC = () => {
                     )}
                 </header>
 
-                <section className="mb-10">
-                    <MetricsRow metrics={mockMetrics} />
-                </section>
-
-                <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-                    <div className="card h-full flex flex-col">
+                <section>
+                    <div className="card">
                         <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-xl font-semibold">Recent Activity</h2>
-                            <Link to="/activity" className="text-accent hover:underline">View All Activity</Link>
-                        </div>
-
-                        <div className="overflow-y-auto" style={{ maxHeight: '282px' }}>
-                            <div className="space-y-4 pr-2">
-                                <div className="flex items-start gap-4 p-3 rounded-lg hover:bg-neutral-50 transition-colors">
-                                    <div className="bg-primary bg-opacity-10 p-2 rounded-full">
-                                        <QrCode className="h-5 w-5 text-primary" />
-                                    </div>
-                                    <div>
-                                        <p className="font-medium">Product Verified</p>
-                                        <p className="text-sm text-neutral-600">Organic Coffee Beans was verified by Consumer</p>
-                                        <p className="text-xs text-neutral-500 mt-1">2 hours ago</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-start gap-4 p-3 rounded-lg hover:bg-neutral-50 transition-colors">
-                                    <div className="bg-success bg-opacity-10 p-2 rounded-full">
-                                        <ShoppingBag className="h-5 w-5 text-success" />
-                                    </div>
-                                    <div>
-                                        <p className="font-medium">New Product Added</p>
-                                        <p className="text-sm text-neutral-600">Premium Rice was added to the blockchain</p>
-                                        <p className="text-xs text-neutral-500 mt-1">5 hours ago</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-start gap-4 p-3 rounded-lg hover:bg-neutral-50 transition-colors">
-                                    <div className="bg-accent bg-opacity-10 p-2 rounded-full">
-                                        <Truck className="h-5 w-5 text-accent" />
-                                    </div>
-                                    <div>
-                                        <p className="font-medium">Status Updated</p>
-                                        <p className="text-sm text-neutral-600">Fresh Avocados status changed to Delivered</p>
-                                        <p className="text-xs text-neutral-500 mt-1">1 day ago</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-start gap-4 p-3 rounded-lg hover:bg-neutral-50 transition-colors">
-                                    <div className="bg-secondary bg-opacity-10 p-2 rounded-full">
-                                        <Leaf className="h-5 w-5 text-secondary" />
-                                    </div>
-                                    <div>
-                                        <p className="font-medium">Certificate Issued</p>
-                                        <p className="text-sm text-neutral-600">Wild Honey received Organic Certification</p>
-                                        <p className="text-xs text-neutral-500 mt-1">2 days ago</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="card h-full flex flex-col">
-                        <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-xl font-semibold">Products I've Certified</h2>
+                            <h3 className="text-lg font-semibold mb-4">Products I've Certified</h3>
                             <Shield className="h-6 w-6 text-primary" />
                         </div>
 
                         <div className="overflow-y-auto flex-grow pr-2" style={{ maxHeight: '282px' }}>
                             <div className="space-y-4 pr-2">
-                                <div className="flex items-start gap-4 p-3 rounded-lg hover:bg-neutral-50 transition-colors">
-                                    <div className="bg-secondary bg-opacity-10 p-2 rounded-full">
-                                        <ShieldCheck className="h-5 w-5 text-secondary" />
+                                {certificatesLoading ? (
+                                        <div className="flex justify-center py-8">
+                                            <span className="loading loading-spinner text-primary"></span>
+                                        </div>
+                                    ) : certificates.length === 0 ? (
+                                    <div className="text-center py-8">
+                                        <p className="text-neutral-600 mb-4">No certification issued yet</p>
                                     </div>
-                                    <div>
-                                        <p className="font-medium">Certificate Issued</p>
-                                        <p className="text-sm text-neutral-600">Wild Honey received Organic Certification</p>
-                                        <p className="text-xs text-neutral-500 mt-1">2 days ago</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-start gap-4 p-3 rounded-lg hover:bg-neutral-50 transition-colors">
-                                    <div className="bg-primary bg-opacity-10 p-2 rounded-full">
-                                        <ShieldCheck className="h-5 w-5 text-primary" />
-                                    </div>
-                                    <div>
-                                        <p className="font-medium">Certificate Issued</p>
-                                        <p className="text-sm text-neutral-600">Organic Coffee Beans received Organic Certification</p>
-                                        <p className="text-xs text-neutral-500 mt-1">3 days ago</p>
-                                    </div>
-                                </div>
+                                ) : (certificates.map((certificate) => (
+                                        <div key={certificate.id} className="border border-neutral-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                                            <div className="flex justify-between">
+                                                <div>
+                                                    <h4 className="font-semibold text-lg mb-1">{certificate.name}</h4>
+                                                </div>
+                                                <div className="bg-success bg-opacity-10 h-fit px-3 py-1 rounded-full text-success text-xs font-medium">
+                                                    {certificate.status}
+                                                </div>
+                                            </div>
 
-                                <div className="flex items-start gap-4 p-3 rounded-lg hover:bg-neutral-50 transition-colors">
-                                    <div className="bg-success bg-opacity-10 p-2 rounded-full">
-                                        <ShieldCheck className="h-5 w-5 text-success" />
-                                    </div>
-                                    <div>
-                                        <p className="font-medium">Certificate Issued</p>
-                                        <p className="text-sm text-neutral-600">Premium Rice received Organic Certification</p>
-                                        <p className="text-xs text-neutral-500 mt-1">3 days ago</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-start gap-4 p-3 rounded-lg hover:bg-neutral-50 transition-colors">
-                                    <div className="bg-accent bg-opacity-10 p-2 rounded-full">
-                                        <ShieldCheck className="h-5 w-5 text-accent" />
-                                    </div>
-                                    <div>
-                                        <p className="font-medium">Certificate Issued</p>
-                                        <p className="text-sm text-neutral-600">Fresh Avocados received Organic Certification</p>
-                                        <p className="text-xs text-neutral-500 mt-1">3 days ago</p>
-                                    </div>
-                                </div>
+                                            <div className="mt-4 flex flex-col sm:flex-row sm:justify-between">
+                                                <div className="mb-2 sm:mb-0">
+                                                    <p className="text-xs text-neutral-500">Issued Date</p>
+                                                    <p className="text-sm">{new Date(certificate.issuedDate).toLocaleDateString()}</p>
+                                                </div>
+                                                <div>
+                                                    <p className="text-xs text-neutral-500">Expiry Date</p>
+                                                    <p className="text-sm">{new Date(certificate.expiryDate).toLocaleDateString()}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        ))
+                                )}
                             </div>
                         </div>
+
                         <div className="mt-auto pt-3 border-t border-neutral-100">
                             <Link to="/certification-request" className="btn btn-outline group relative flex items-center justify-between w-full px-4 py-2 rounded-lg border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-200 focus:ring-2 focus:ring-primary-light focus:ring-opacity-50">
                                 <div className="flex items-center">
@@ -151,14 +110,6 @@ const RegulatorDashboard: React.FC = () => {
                         </div>
                     </div>
                 </section>
-
-                <div className="card">
-                    <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-xl font-semibold">Certified products</h2>
-                        <Shield className="h-6 w-6 text-primary" />
-                    </div>
-                    <p className="text-neutral-600">All recent certified products</p>
-                </div>
             </div>
         </DashboardLayout>
     );

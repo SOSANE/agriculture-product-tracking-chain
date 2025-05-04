@@ -7,8 +7,7 @@ A decentralized solution for tracking agricultural products through their lifecy
 Designing blockchain model for agriculture product tracking involves using the inherent characteristics of blockchain - decentralisation, immutability and transparency - to track agricultural products through every stage of their lifecycle. This include everything from production, processing, transportation, and distribution, to retail. Below are the essential details for building such a blockchain system.
 
 **May 2025**
-- mock data in analytics (for now)
-- lotss of re-used code especially with the dashboard : so need to generalize with common components (greetings, metrics, quickActions)
+- lots of re-used code especially with the dashboard : so need to generalize with common components (greetings, quickActions)
 - implement next : smart contracts, fix routing + more protected routing, role-specific functionalities, qr scanner, actual metamask wallet connection
 
 <h5 align="center"> Home page </h5>

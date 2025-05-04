@@ -1,12 +1,9 @@
 import React from 'react';
 import {ClipboardList, Package, PackagePlus, ShoppingBag} from 'lucide-react';
-import MetricsRow from "../../components/dashboard/MetricsRow.tsx";
-import {mockMetrics} from "../Analytics.tsx";
 import {Link} from "react-router-dom";
 import {useUserProfile} from "../../hooks/useUserProfile.ts";
 import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
 
-// Using mock metrics data (temporary)
 const RetailerDashboard: React.FC = () => {
     const { user } = useUserProfile();
     return (
@@ -14,11 +11,9 @@ const RetailerDashboard: React.FC = () => {
             <div className="container mx-auto px-4 py-8">
                 <header className="mb-8">
                     <h1 className="text-3xl font-semibold mb-2">
-                        {/*Retailer Dashboard*/}
                         {user ? `${user.name}'s Dashboard` : 'Retailer Dashboard'}
                     </h1>
                     <p className="text-neutral-600">
-                        {/*Manage store inventory*/}
                         {user ? `Welcome back, ${user.name}! Manage store inventory as a retailer` : 'Manage store inventory'}
                     </p>
                     {user && (
@@ -27,10 +22,6 @@ const RetailerDashboard: React.FC = () => {
                         </div>
                     )}
                 </header>
-
-                <section className="mb-10">
-                    <MetricsRow metrics={mockMetrics} />
-                </section>
 
                 <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
                     <div className="lg:col-span-2">

@@ -37,9 +37,6 @@ const Navbar: React.FC<NavbarProps> = ({ user }) => {
                         <Link to="/verify" className="text-neutral-700 hover:text-primary transition-colors">
                             Verify
                         </Link>
-                        <Link to="/analytics" className="text-neutral-700 hover:text-primary transition-colors">
-                            Analytics
-                        </Link>
                     </div>
 
                     {/* Right side - Search, Notifications, Profile */}

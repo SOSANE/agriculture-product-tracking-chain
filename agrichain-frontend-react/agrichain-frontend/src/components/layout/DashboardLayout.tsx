@@ -6,6 +6,7 @@ import Alert from 'react-bootstrap/Alert';
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Product } from "../../types";
 import ProductCard from "../product/ProductCard";
+import {Leaf, QrCode, ShoppingBag, Truck} from "lucide-react";
 
 interface DashboardLayoutProps {
     children?: React.ReactNode;
@@ -118,11 +119,13 @@ export const DashboardLayout = ({ children, showProducts = true, showRecentProdu
         }
 
         return (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {products.map(product => (
-                    <ProductCard key={product.id} product={product} />
-                ))}
-            </div>
+            <section className="mb-10">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {products.map(product => (
+                        <ProductCard key={product.id} product={product} />
+                    ))}
+                </div>
+            </section>
         );
     };
 
@@ -139,6 +142,61 @@ export const DashboardLayout = ({ children, showProducts = true, showRecentProdu
                             </div>
                         )}
                         {renderProducts()}
+
+                        <section>
+                            <div className="card h-full flex flex-col">
+                                <div className="flex justify-between items-center mb-6">
+                                    <h2 className="text-xl font-semibold">Recent Activity</h2>
+                                    <Link to="/activity" className="text-accent hover:underline">View All Activity</Link>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <div className="flex items-start gap-4 p-3 rounded-lg hover:bg-neutral-50 transition-colors">
+                                        <div className="bg-primary bg-opacity-10 p-2 rounded-full">
+                                            <QrCode className="h-5 w-5 text-primary" />
+                                        </div>
+                                        <div>
+                                            <p className="font-medium">Product Verified</p>
+                                            <p className="text-sm text-neutral-600">Organic Coffee Beans was verified by Consumer</p>
+                                            <p className="text-xs text-neutral-500 mt-1">2 hours ago</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-start gap-4 p-3 rounded-lg hover:bg-neutral-50 transition-colors">
+                                        <div className="bg-success bg-opacity-10 p-2 rounded-full">
+                                            <ShoppingBag className="h-5 w-5 text-success" />
+                                        </div>
+                                        <div>
+                                            <p className="font-medium">New Product Added</p>
+                                            <p className="text-sm text-neutral-600">Premium Rice was added to the blockchain</p>
+                                            <p className="text-xs text-neutral-500 mt-1">5 hours ago</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-start gap-4 p-3 rounded-lg hover:bg-neutral-50 transition-colors">
+                                        <div className="bg-accent bg-opacity-10 p-2 rounded-full">
+                                            <Truck className="h-5 w-5 text-accent" />
+                                        </div>
+                                        <div>
+                                            <p className="font-medium">Status Updated</p>
+                                            <p className="text-sm text-neutral-600">Fresh Avocados status changed to Delivered</p>
+                                            <p className="text-xs text-neutral-500 mt-1">1 day ago</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-start gap-4 p-3 rounded-lg hover:bg-neutral-50 transition-colors">
+                                        <div className="bg-secondary bg-opacity-10 p-2 rounded-full">
+                                            <Leaf className="h-5 w-5 text-secondary" />
+                                        </div>
+                                        <div>
+                                            <p className="font-medium">Certificate Issued</p>
+                                            <p className="text-sm text-neutral-600">Wild Honey received Organic Certification</p>
+                                            <p className="text-xs text-neutral-500 mt-1">2 days ago</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
                     </section>
                 </div>
             )}

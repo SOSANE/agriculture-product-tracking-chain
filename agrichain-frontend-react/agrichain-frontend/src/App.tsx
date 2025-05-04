@@ -1,7 +1,6 @@
 import {BrowserRouter, Routes, Route, Navigate, Outlet, useNavigate} from 'react-router-dom';
 import ProductDetail from './pages/ProductDetail';
 import VerifyProduct from './pages/VerifyProduct';
-import Analytics from "./pages/Analytics.tsx";
 import Homepage from './pages/Homepage';
 import RegulatorDashboard from './pages/dashboards/RegulatorDashboard.tsx';
 import FarmerDashboard from './pages/dashboards/FarmerDashboard.tsx';
@@ -98,8 +97,6 @@ function App() {
                         <Route path="/certification-request" element={<CertificationRequest />} />
                     </Route>
 
-                    {/* Analytics currently available to all logged-in users */}
-                    <Route path="/analytics" element={<Analytics />} />
                 </Route>
             </Routes>
         </BrowserRouter>

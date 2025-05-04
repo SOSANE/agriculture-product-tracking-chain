@@ -1,12 +1,9 @@
 import React from 'react';
 import {ClipboardList, Factory, Package, QrCode, ShieldCheck } from 'lucide-react';
-import MetricsRow from "../../components/dashboard/MetricsRow.tsx";
-import {mockMetrics} from "../Analytics.tsx";
 import {Link} from "react-router-dom";
 import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
 import {useUserProfile} from "../../hooks/useUserProfile.ts";
 
-// Using mock metrics data (temporary)
 const ProcessorDashboard: React.FC = () => {
     const { user } = useUserProfile();
     return (
@@ -14,11 +11,9 @@ const ProcessorDashboard: React.FC = () => {
             <div className="container mx-auto px-4 py-8">
                 <header className="mb-8">
                     <h1 className="text-3xl font-semibold mb-2">
-                        {/*Processor Dashboard*/}
                         {user ? `${user.name}'s Dashboard` : 'Processor Dashboard'}
                     </h1>
                     <p className="text-neutral-600">
-                        {/*Track processing operations*/}
                         {user ? `Welcome back, ${user.name}! Track processing operations as a processor` : 'Track processing operations'}
                     </p>
                     {user && (
@@ -27,10 +22,6 @@ const ProcessorDashboard: React.FC = () => {
                         </div>
                     )}
                 </header>
-
-                <section className="mb-10">
-                    <MetricsRow metrics={mockMetrics} />
-                </section>
 
                 <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
                     <div className="lg:col-span-2">

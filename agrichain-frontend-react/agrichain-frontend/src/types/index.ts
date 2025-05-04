@@ -74,22 +74,3 @@ export interface Product {
     verificationCount: number;
     lastVerified?: string;
 }
-
-export interface DashboardMetric {
-    id: string;
-    title: string;
-    value: number;
-    change: number;
-    changeType: 'positive' | 'negative' | 'neutral';
-    icon: string;
-}
-
-export interface Notification {
-    id: string;
-    title: string;
-    message: string;
-    timestamp: string;
-    read: boolean;
-    type: 'info' | 'warning' | 'error' | 'success';
-    link?: string;
-}
