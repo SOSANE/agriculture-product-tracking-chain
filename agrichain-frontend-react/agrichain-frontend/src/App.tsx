@@ -16,6 +16,7 @@ import {useUserProfile} from "./hooks/useUserProfile.ts";
 import {useEffect} from "react";
 import {UserRole} from "./types";
 import ManageAccount from "./pages/admin/ManageAccount.tsx";
+import AddProduct from "./pages/farmer/AddProduct.tsx";
 
 const AuthWrapper = () => {
     const { user, loading } = useUserProfile();
@@ -95,6 +96,10 @@ function App() {
 
                     <Route element={<RoleRoute allowedRoles={['regulator']} />}>
                         <Route path="/certification-request" element={<CertificationRequest />} />
+                    </Route>
+
+                    <Route element={<RoleRoute allowedRoles={['farmer']} />}>
+                        <Route path="/add-product" element={<AddProduct />} />
                     </Route>
 
                 </Route>

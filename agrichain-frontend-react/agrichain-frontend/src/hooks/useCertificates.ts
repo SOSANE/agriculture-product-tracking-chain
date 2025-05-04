@@ -3,7 +3,6 @@ import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {Certificate} from "../types";
 
-
 export const useCertificates = () => {
     const { user, loading } = useUserProfile();
     const navigate = useNavigate();

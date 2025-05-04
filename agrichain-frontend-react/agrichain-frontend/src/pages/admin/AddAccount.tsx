@@ -230,7 +230,7 @@ const AddAccount: React.FC = () => {
                     </div>
 
                     <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-4 border-t border-neutral-100">
-                        <Link to="/manage-accounts" className="btn btn-outline">
+                        <Link to="/dashboard" className="btn btn-outline">
                             Cancel
                         </Link>
                         <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
