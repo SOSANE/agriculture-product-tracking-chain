@@ -1,41 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {ArrowRight, Shield} from 'lucide-react';
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {useUserProfile} from "../../hooks/useUserProfile.ts";
 import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
-import {Certificate} from "../../types";
+import {useCertificates} from "../../hooks/useCertificates.ts";
 
 const RegulatorDashboard: React.FC = () => {
-    const { user, loading } = useUserProfile();
-    const navigate = useNavigate();
-    const [certificates, setCertificates] = useState<Certificate[]>([]);
-    const [certificatesLoading, setCertificatesLoading] = useState(true);
-
-    useEffect(() => {
-        if (!loading && !user) {
-            navigate('/');
-        } else if (user) {
-            loadCertificates();
-        }
-    }, [user, loading, navigate]);
-
-    const loadCertificates = async () => {
-        try {
-            setCertificatesLoading(true);
-            const response = await fetch(`/api/certificates?regulator=${user?.username}`, {
-                credentials: 'include'
-            });
-
-            if (!response.ok) throw new Error('Failed to fetch certificates.');
-
-            const data = await response.json();
-            setCertificates(data);
-        } catch (err) {
-            console.error('Error fetching certificates:', err);
-        } finally {
-            setCertificatesLoading(false);
-        }
-    };
+    const { user } = useUserProfile();
+    const { certificates, certificatesLoading } = useCertificates();
 
     return (
         <DashboardLayout>

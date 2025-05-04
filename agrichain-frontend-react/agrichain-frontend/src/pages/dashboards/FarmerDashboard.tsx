@@ -38,17 +38,7 @@ const FarmerDashboard: React.FC = () => {
                                 <div className="flex justify-center py-8">
                                     <span className="loading loading-spinner text-primary"></span>
                                 </div>
-                            ) :
-                            //     products.length === 0 ? (
-                            //     <div className="text-center py-8">
-                            //         <p className="text-neutral-600 mb-4">No products registered yet</p>
-                            //         <Link to="/add-product" className="btn btn-primary">
-                            //             <PackagePlus className="h-5 w-5 mr-2" />
-                            //             Add Your First Product
-                            //         </Link>
-                            //     </div>
-                            // ) :
-                                (
+                            ) : (
                                 <div className="overflow-x-auto">
                                     <table className="table w-full">
                                         <thead>
