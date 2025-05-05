@@ -104,7 +104,7 @@ app.post('/auth/:role', async (req, res) => {
 });
 
 // Profile route
-app.get('/profile', async (req, res) => {
+app.get('/api/profile', async (req, res) => {
     if (!req.session.user) {
         return res.status(401).json({
             success: false,
@@ -730,6 +730,31 @@ app.get('/api/certificates', async (req, res) => {
 
         res.json(response);
     } catch(error) {
+        res.status(500).json({ error: 'Unable to connect to the server.' });
+    }
+})
+
+// Manage account
+// TODO : write query
+app.post('/api/manage-profile', async (req, res) => {
+    if (!req.session.user) {
+        res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    try {
+        let saveProfileQuery = ``
+        const saveProfileResult = await pool.query(saveProfileQuery, [req.session.username]);
+
+        if (saveProfileResult.rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'No user found.'
+            });
+        }
+
+        console.log(saveProfileResult.rows);
+        res.json(saveProfileResult.rows);
+    } catch (err) {
         res.status(500).json({ error: 'Unable to connect to the server.' });
     }
 })

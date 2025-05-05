@@ -23,7 +23,7 @@ export const useUserProfile = () => {
                     throw new Error(verifyData.message || 'Session invalid');
                 }
 
-                const profileResponse = await fetch('http://localhost:5000/profile', {
+                const profileResponse = await fetch('http://localhost:5000/api/profile', {
                     credentials: 'include'
                 });
 

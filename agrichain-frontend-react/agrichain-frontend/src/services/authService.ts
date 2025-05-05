@@ -43,7 +43,7 @@ export const authenticateWithCredentials = async (
 
 export const fetchUserProfile = async (): Promise<User> => {
     try {
-        const response = await fetch(`http://localhost:5000/profile`, {
+        const response = await fetch(`http://localhost:5000/api/profile`, {
             method: 'GET',
             credentials: 'include',
             headers: {

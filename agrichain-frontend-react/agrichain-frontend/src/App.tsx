@@ -15,8 +15,9 @@ import Spinner from "react-bootstrap/Spinner";
 import {useUserProfile} from "./hooks/useUserProfile.ts";
 import {useEffect} from "react";
 import {UserRole} from "./types";
-import ManageAccount from "./pages/admin/ManageAccount.tsx";
+import ManageAccounts from "./pages/admin/ManageAccounts.tsx";
 import AddProduct from "./pages/farmer/AddProduct.tsx";
+import {Profile} from "./pages/shared/Profile.tsx";
 
 const AuthWrapper = () => {
     const { user, loading } = useUserProfile();
@@ -82,6 +83,7 @@ function App() {
                 <Route path="/auth/:role" element={<Auth />} />
                 <Route path="/verify" element={<VerifyProduct />} />
                 <Route path="/products/:id" element={<ProductDetail />}/> {/* TODO: wrap route */}
+                <Route path="/profile" element={<Profile />}/>
 
                 {/* Protected Routes */}
                 <Route element={<AuthWrapper />}>
@@ -91,7 +93,7 @@ function App() {
                     {/* Role-Specific Routes */}
                     <Route element={<RoleRoute allowedRoles={['admin']} />}>
                         <Route path="/add-account" element={<AddAccount />} />
-                        <Route path="/manage-accounts" element={<ManageAccount />} />
+                        <Route path="/manage-accounts" element={<ManageAccounts />} />
                     </Route>
 
                     <Route element={<RoleRoute allowedRoles={['regulator']} />}>

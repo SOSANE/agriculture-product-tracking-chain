@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Edit, Trash2, Plus, Search, ChevronDown, ChevronUp, MoveLeft, MoveRight } from 'lucide-react';
 import {User} from "../../types";
 
-const ManageAccount: React.FC = () => {
+const ManageAccounts: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortConfig, setSortConfig] = useState<{ key: keyof User; direction: 'ascending' | 'descending' } | null>(null);
     const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
@@ -312,4 +312,4 @@ const ManageAccount: React.FC = () => {
     );
 };
 
-export default ManageAccount;
+export default ManageAccounts;
