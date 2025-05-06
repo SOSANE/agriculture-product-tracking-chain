@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract AgriProduct {
+contract Agrichain {
     struct Product {
         string id;
         string name;

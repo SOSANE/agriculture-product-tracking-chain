@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Wallet, AlertCircle, UserLock, SquareAsterisk } from 'lucide-react';
 import { UserRole } from '../types';
 import { authenticateWithCredentials } from '../services/authService';
+// import {BrowserProvider, Contract} from "ethers";
 
 type AuthProps = object
 
@@ -66,6 +67,16 @@ const Auth: React.FC<AuthProps> = () => {
 
         try {
             // TODO: Implement actual connection, only a placeholder here
+
+            if(!window.ethereum) {
+                console.error('MetaMask not Connected');
+                throw new Error('Please insure you have MetaMask installed.');
+            }
+
+            // let provider = new BrowserProvider(window.ethereum);
+            // let signer = provider.getSigner();
+            // let contract = new Contract(CONTRACT_ADDRESS, contractABI, signer);
+
             await new Promise(resolve => setTimeout(resolve, 1000));
             const verifyResponse = await fetch('http://localhost:5000/auth/verify-session', {
                 credentials: 'include',

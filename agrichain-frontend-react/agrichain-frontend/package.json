@@ -10,8 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@metamask/providers": "^22.1.0",
     "axios": "^1.8.4",
-    "ethers": "^6.13.5",
+    "ethers": "^6.13.7",
     "express-validator": "^7.2.1",
     "lucide-react": "^0.501.0",
     "qrcode": "^1.5.4",
