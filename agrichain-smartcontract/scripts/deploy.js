@@ -3,7 +3,6 @@ const hre = require("hardhat");
 const main = async () => {
     const accounts = await hre.ethers.getSigners();
 
-
     const Contract = await hre.ethers.getContractFactory("Agrichain");
     const agrichainContract = await Contract.deploy();
 

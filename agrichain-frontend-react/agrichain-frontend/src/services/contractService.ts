@@ -13,9 +13,12 @@ export const initializeContract = async () => {
     } else {
         provider = new ethers.JsonRpcProvider(process.env.BLOCKCHAIN_PROVIDER_URL);
         signer = await provider.getSigner();
-        // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         contract = new ethers.Contract(process.env.CONTRACT_ADDRESS, abi, signer);
     }
+
+    return { provider, signer, contract };
 };
 
 initializeContract();
@@ -47,6 +50,16 @@ export const addSupplyChainStep = async (
     humidity: string
 )=> {
     const tx = await contract.addSupplyChainStep(productId, id, action, description, location, temperature, humidity);
+    await tx.wait();
+    return tx;
+}
+
+// Request a certificate function
+export const requestCertificate = async (
+    productId: string,
+    stepId: string
+)=> {
+    const tx = await contract.requestCertificate(productId, stepId);
     await tx.wait();
     return tx;
 }

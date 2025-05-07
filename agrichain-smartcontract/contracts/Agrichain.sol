@@ -63,7 +63,7 @@ contract Agrichain {
     event ProductStatusChanged(string indexed id, ProductStatus newStatus);
     event SupplyChainStepAdded(string indexed productId, string stepId, ProductStatus action);
     event OwnershipTransferred(string indexed productId, address from, address to);
-    event CertificateRequested(string indexed productId, string indexed stepId, address requester, string certType);
+    event CertificateRequested(string indexed productId, string indexed stepId, address requester);
     event CertificateIssued(string indexed certId, string indexed productId, string indexed stepId, address issuedBy, string metadata);
 
     constructor() {
@@ -152,10 +152,9 @@ contract Agrichain {
     // Certificate functions
     function requestCertificate(
         string memory productId,
-        string memory stepId,
-        string memory certType
+        string memory stepId
     ) external productExists(productId) {
-        emit CertificateRequested(productId, stepId, msg.sender, certType);
+        emit CertificateRequested(productId, stepId, msg.sender);
     }
 
     function issueCertificate(
