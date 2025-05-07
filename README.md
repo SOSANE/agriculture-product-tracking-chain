@@ -119,7 +119,7 @@ npm run dev
 ```
 ### 3. Start contract:
 ```bash
-cd cd agrichain-smartcontract
+cd agrichain-smartcontract
 npx hardhat compile
 npx hardhat run scripts/deploy.js --network localhost
 ```
