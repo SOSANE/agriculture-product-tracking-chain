@@ -73,12 +73,16 @@ cp .env.example .env
 **Edit .env**: 
 ```dotenv
 PORT=5000
-DB_USER=postgres
+DB_USER=your_postgres_username
 DB_HOST=localhost
 DB_NAME=agrichain
 DB_PASSWORD=your_postgres_password
 DB_PORT=5432
+CORS_ORIGIN=http://localhost:5173
 SESSION_SECRET=your_session_secret
+CONTRACT_ADDRESS=your_deployed_address
+ADMIN_PRIVATE_KEY=your_private_key_for_admin_operations
+BLOCKCHAIN_PROVIDER_URL=http://localhost:8545
 ```
 
 ### 3. Database Setup
@@ -92,6 +96,10 @@ psql -U postgres -d agrichain -f ./agrichain-database/commands/schema.sql
 ```
 
 ### 4. Frontend Setup
+**Edit .env**:
+```dotenv
+CONTRACT_ADDRESS=your_deployed_address
+```
 ```bash
 cd ../agrichain-frontend-react/agrichain-frontend
 npm install
@@ -109,7 +117,12 @@ npm start
 cd ../agrichain-frontend-react/agrichain-frontend
 npm run dev
 ```
-
+### 3. Start contract:
+```bash
+cd cd agrichain-smartcontract
+npx hardhat compile
+npx hardhat run scripts/deploy.js --network localhost
+```
 Access: http://localhost:5173
 
 ## Test Accounts

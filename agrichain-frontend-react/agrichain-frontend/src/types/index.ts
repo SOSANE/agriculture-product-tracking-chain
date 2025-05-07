@@ -1,4 +1,4 @@
-export type UserRole = 'farmer' | 'processor' | 'distributor' | 'retailer' | 'consumer' | 'certifier' | 'admin' | 'regulator';
+export type UserRole = 'farmer' | 'processor' | 'distributor' | 'retailer' | 'certifier' | 'admin' | 'regulator';
 export type ProductStatus = 'planted' | 'growing' | 'harvested' | 'processed'| 'packaged'| 'shipped'| 'delivered'| 'received'| 'sold'
 export type CertificateStatus = 'valid' | 'expired' | 'revoked';
 
