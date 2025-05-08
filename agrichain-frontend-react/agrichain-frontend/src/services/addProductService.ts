@@ -18,7 +18,7 @@ export const addProduct = async (
     farmerAddress: string
 ): Promise<AddProductResponse> => {
     try {
-        const response = await fetch("/api/add-product", {
+        const response = await fetch("/api/register-product", {
             method: "PUT",
             headers: {"Content-Type": "application/json"},
             credentials: "include",
@@ -51,7 +51,7 @@ export const addProduct = async (
         console.error('Full error context:', {
             err,
             timestamp: new Date().toISOString(),
-            endpoint: `/api/add-product`
+            endpoint: `/api/register-product`
         });
         return {
             success: false,

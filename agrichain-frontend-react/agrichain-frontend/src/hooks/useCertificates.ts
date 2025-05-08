@@ -21,9 +21,7 @@ export const useCertificates = () => {
         try {
             setCertificatesLoading(true);
 
-            const url = user?.role === 'regulator'
-                ? `/api/certificates?regulator=${user.username}`
-                : '/api/certificates';
+            const url = 'http://localhost:5000/api/certificates';
 
             const response = await fetch(url, {
                 credentials: 'include'

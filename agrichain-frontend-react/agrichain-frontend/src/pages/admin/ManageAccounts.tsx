@@ -239,7 +239,7 @@ const ManageAccounts: React.FC = () => {
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <div className="flex justify-end items-center gap-2">
                                             <Link
-                                                to={`/edit-account/${user.username}`}
+                                                to={`/users/${user.username}`}
                                                 className="text-primary hover:text-primary-dark"
                                             >
                                                 <Edit className="h-5 w-5" />

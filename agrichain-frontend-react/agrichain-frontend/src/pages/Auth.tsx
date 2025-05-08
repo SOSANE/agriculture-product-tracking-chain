@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+// useParams
 import { Wallet, AlertCircle, UserLock, SquareAsterisk } from 'lucide-react';
-import { UserRole } from '../types';
+// import { UserRole } from '../types';
 import { authenticateWithCredentials } from '../services/authService';
 // import {BrowserProvider, Contract} from "ethers";
 
 type AuthProps = object
 
 const Auth: React.FC<AuthProps> = () => {
-    const { role } = useParams<{ role: string }>();
     const navigate = useNavigate();
     const [isConnecting, setIsConnecting] = useState(false);
     const [isAuthenticating, setIsAuthenticating] = useState(false);
@@ -25,19 +25,10 @@ const Auth: React.FC<AuthProps> = () => {
         setIsAuthenticating(true);
         setError(null);
 
-        if (!role || !isValidRole(role)) {
-            setError('Invalid role specified');
-            setIsAuthenticating(false);
-            setShouldShake(true);
-            setTimeout(() => setShouldShake(false), 500);
-            return;
-        }
-
         try {
             const response = await authenticateWithCredentials(
                 formData.username,
-                formData.password,
-                role as UserRole
+                formData.password
             );
 
             if (response.success) {
@@ -73,10 +64,6 @@ const Auth: React.FC<AuthProps> = () => {
                 throw new Error('Please insure you have MetaMask installed.');
             }
 
-            // let provider = new BrowserProvider(window.ethereum);
-            // let signer = provider.getSigner();
-            // let contract = new Contract(CONTRACT_ADDRESS, contractABI, signer);
-
             await new Promise(resolve => setTimeout(resolve, 1000));
             const verifyResponse = await fetch('http://localhost:5000/auth/verify-session', {
                 credentials: 'include',
@@ -105,36 +92,6 @@ const Auth: React.FC<AuthProps> = () => {
             setIsConnecting(false);
         }
     };
-
-    const isValidRole = (role: string): role is UserRole => {
-        return ['admin','regulator', 'farmer', 'processor', 'distributor', 'retailer'].includes(role);
-    };
-
-    const getRoleDisplay = () => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        return role?.charAt(0).toUpperCase() + role?.slice(1);
-    };
-
-    if (!role || !isValidRole(role)) {
-        return (
-            <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-                <div className="card p-8 max-w-md w-full">
-                    <div className="text-center text-error">
-                        <AlertCircle className="h-12 w-12 mx-auto mb-4" />
-                        <h2 className="text-xl font-semibold mb-2">Invalid Role</h2>
-                        <p className="text-neutral-600 mb-6">The specified role is not valid.</p>
-                        <button
-                            onClick={() => navigate('/')}
-                            className="btn btn-primary w-full"
-                        >
-                            Return Home
-                        </button>
-                    </div>
-                </div>
-            </div>
-        );
-    }
 
     return (
         <div className="min-h-screen bg-neutral-50 flex items-center justify-center p-4 overflow-x-hidden">
@@ -200,7 +157,7 @@ const Auth: React.FC<AuthProps> = () => {
                                 <Wallet className="h-10 w-10 text-primary mx-auto mb-3" />
                                 <h2 className="text-lg font-semibold mb-2">Connect Wallet</h2>
                                 <p className="text-neutral-600 text-sm">
-                                    Connect as {getRoleDisplay()}
+                                    Connect your Metamask account
                                 </p>
                             </div>
 

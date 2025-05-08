@@ -48,7 +48,7 @@ const AddAccount: React.FC = () => {
             console.error('Full error context:', {
                 err,
                 timestamp: new Date().toISOString(),
-                endpoint: `/api/add-account`
+                endpoint: `/api/add-user`
             });
         }
     };
@@ -66,7 +66,7 @@ const AddAccount: React.FC = () => {
         <div className="max-w-3xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
             <div className="mb-8">
                 <Link
-                    to="/manage-accounts"
+                    to="/users"
                     className="btn btn-outline inline-flex items-center gap-2 mb-4"
                 >
                     <ArrowLeft className="h-5 w-5" />

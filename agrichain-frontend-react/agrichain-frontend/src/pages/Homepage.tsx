@@ -1,6 +1,6 @@
 import React from 'react';
-import { QrCode, Shield, Leaf, Factory, Truck, ShoppingBag, UserCog } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import {QrCode, LogIn} from 'lucide-react';
+import {Link, useNavigate} from 'react-router-dom';
 
 const Homepage: React.FC = () => {
     const navigate = useNavigate();
@@ -16,71 +16,39 @@ const Homepage: React.FC = () => {
                 </header>
 
                 <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
-                    <div className="grid md:grid-cols-2 gap-8 p-8">
-                        <div className="text-center md:text-left">
-                            <h2 className="text-2xl font-semibold mb-4">Verify a Product</h2>
-                            <p className="text-neutral-600 mb-8">
-                                Scan any product's QR code to instantly verify its authenticity and trace its journey
-                            </p>
+                    <div className="grid md:grid-cols-2 gap-8 p-8 items-center">
+                        <div className="text-center md:text-left flex flex-col h-full">
+                            <div className="flex-grow">
+                                <h2 className="text-2xl font-semibold mb-4">Verify a Product</h2>
+                                <p className="text-neutral-600 mb-8">
+                                    Scan any product's QR code to instantly verify its authenticity and trace its
+                                    journey
+                                </p>
+                            </div>
                             <Link
                                 to="/verify"
-                                className="btn btn-primary inline-flex items-center text-lg px-8 py-4"
+                                className="btn btn-primary inline-flex items-center justify-center text-lg px-8 py-4 min-w-[220px]"
                             >
-                                <QrCode className="h-6 w-6 mr-2" />
+                                <QrCode className="h-6 w-6 mr-2"/>
                                 Scan QR Code
                             </Link>
                         </div>
 
-                        <div className="border-t md:border-l md:border-t-0 pt-8 md:pt-0 md:pl-8">
-                            <h2 className="text-2xl font-semibold mb-4">Stakeholder Login</h2>
-                            <div className="space-y-4">
-                                <button
-                                    onClick={() => navigate('/auth/regulator')}
-                                    className="btn btn-outline w-full justify-start"
-                                >
-                                    <Shield className="h-5 w-5 mr-2" />
-                                    Regulator Login
-                                </button>
-
-                                <button
-                                    onClick={() => navigate('/auth/farmer')}
-                                    className="btn btn-outline w-full justify-start"
-                                >
-                                    <Leaf className="h-5 w-5 mr-2" />
-                                    Farmer Login
-                                </button>
-
-                                <button
-                                    onClick={() => navigate('/auth/processor')}
-                                    className="btn btn-outline w-full justify-start"
-                                >
-                                    <Factory className="h-5 w-5 mr-2" />
-                                    Processor Login
-                                </button>
-
-                                <button
-                                    onClick={() => navigate('/auth/distributor')}
-                                    className="btn btn-outline w-full justify-start"
-                                >
-                                    <Truck className="h-5 w-5 mr-2" />
-                                    Distributor Login
-                                </button>
-
-                                <button
-                                    onClick={() => navigate('/auth/retailer')}
-                                    className="btn btn-outline w-full justify-start"
-                                >
-                                    <ShoppingBag className="h-5 w-5 mr-2" />
-                                    Retailer Login
-                                </button>
-                                <button
-                                    onClick={() => navigate('/auth/admin')}
-                                    className="btn btn-outline w-full justify-start"
-                                >
-                                    <UserCog className="h-5 w-5 mr-2" />
-                                    Administrator Login
-                                </button>
+                        <div
+                            className="border-t md:border-l md:border-t-0 border-neutral-200 pt-8 md:pt-0 md:pl-8 flex flex-col h-full">
+                            <div className="flex-grow">
+                                <h2 className="text-2xl font-semibold mb-4">Stakeholder Login</h2>
+                                <p className="text-neutral-600 mb-8">
+                                    Sign in as a stakeholder
+                                </p>
                             </div>
+                            <button
+                                onClick={() => navigate('/login')}
+                                className="btn btn-outline border-primary text-primary hover:bg-primary hover:text-white inline-flex items-center justify-center text-lg px-8 py-4 min-w-[220px]"
+                            >
+                                <LogIn className="h-6 w-6 mr-2"/>
+                                Login
+                            </button>
                         </div>
                     </div>
                 </div>

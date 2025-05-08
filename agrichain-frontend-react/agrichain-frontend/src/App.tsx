@@ -80,7 +80,7 @@ function App() {
             <Routes>
                 {/* Public Routes */}
                 <Route path="/" element={<Homepage />} />
-                <Route path="/auth/:role" element={<Auth />} />
+                <Route path="/login" element={<Auth />} />
                 <Route path="/verify" element={<VerifyProduct />} />
                 <Route path="/products/:id" element={<ProductDetail />}/> {/* TODO: wrap route */}
                 <Route path="/profile" element={<Profile />}/>
@@ -93,7 +93,7 @@ function App() {
                     {/* Role-Specific Routes */}
                     <Route element={<RoleRoute allowedRoles={['admin']} />}>
                         <Route path="/add-account" element={<AddAccount />} />
-                        <Route path="/manage-accounts" element={<ManageAccounts />} />
+                        <Route path="/users" element={<ManageAccounts />} />
                     </Route>
 
                     <Route element={<RoleRoute allowedRoles={['regulator']} />}>

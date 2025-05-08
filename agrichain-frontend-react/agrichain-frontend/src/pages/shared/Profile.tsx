@@ -22,7 +22,7 @@ export const Profile: React.FC = () => {
         console.log('Form submitted:', formData);
 
         try {
-            const response = await fetch('http://localhost:5000/api/manage-profile', {
+            const response = await fetch('http://localhost:5000/api/profile/edit', {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 credentials: 'include',
@@ -42,7 +42,7 @@ export const Profile: React.FC = () => {
             console.error('Full error context:', {
                 err,
                 timestamp: new Date().toISOString(),
-                endpoint: `/api/add-account`
+                endpoint: `/api/profile/edit`
             });
         }
     };

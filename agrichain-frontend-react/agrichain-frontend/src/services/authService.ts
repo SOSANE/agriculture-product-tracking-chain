@@ -9,15 +9,16 @@ export interface AuthResponse {
 
 export const authenticateWithCredentials = async (
     username: string,
-    password: string,
-    role: UserRole
+    password: string
 ): Promise<AuthResponse> => {
     try {
-        const response = await fetch(`http://localhost:5000/auth/${role}`, {
+        const response = await fetch(`http://localhost:5000/api/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
-            body: JSON.stringify({ username, password }),
+            body: JSON.stringify({
+                username: username,
+                password: password }),
         });
 
         const data = await response.json();
@@ -32,7 +33,7 @@ export const authenticateWithCredentials = async (
         console.error('Full error context:', {
             error,
             timestamp: new Date().toISOString(),
-            endpoint: `/auth/${role}`
+            endpoint: `/api/login`
         });
         return {
             success: false,
@@ -60,4 +61,25 @@ export const fetchUserProfile = async (): Promise<User> => {
         console.error('Error fetching user profile', {error});
         throw error;
     }
-}
+};
+
+export const logoutUser = async () => {
+    try {
+        const response = await fetch('http://localhost:5000/api/logout', {
+            method: 'POST',
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error('Logout failed');
+        }
+
+        localStorage.clear();
+        sessionStorage.clear();
+
+        return await response.json();
+    } catch (error) {
+        console.error('Logout error:', error);
+        throw error;
+    }
+};

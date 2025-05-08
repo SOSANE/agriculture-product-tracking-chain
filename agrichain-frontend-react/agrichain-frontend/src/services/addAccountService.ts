@@ -18,7 +18,7 @@ export const registerAccount = async (
     role: UserRole
 ): Promise<AddAccountResponse> => {
     try {
-        const response = await fetch("/api/add-account", {
+        const response = await fetch("/api/add-user", {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -37,7 +37,7 @@ export const registerAccount = async (
         console.error('Full error context:', {
             err,
             timestamp: new Date().toISOString(),
-            endpoint: `/api/add-account`
+            endpoint: `/api/add-user`
         });
         return {
             success: false,

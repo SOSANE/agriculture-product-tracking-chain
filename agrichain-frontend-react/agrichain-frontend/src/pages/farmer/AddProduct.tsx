@@ -46,7 +46,7 @@ const AddProduct: React.FC = () => {
             console.error('Full error context:', {
                 err,
                 timestamp: new Date().toISOString(),
-                endpoint: `/api/add-account`
+                endpoint: `/api/register-product`
             });
         }
     };

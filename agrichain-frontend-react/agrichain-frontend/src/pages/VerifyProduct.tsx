@@ -5,12 +5,6 @@ import VerificationResult from '../components/verification/VerificationResult';
 import { Product } from '../types';
 import {DashboardLayout} from "../components/layout/DashboardLayout.tsx";
 
-// Mock user for testing
-// const mockUser = {
-//     name: 'John Consumer',
-//     role: 'consumer'
-// };
-
 // (DEMO) Mock product data
 const mockProduct: Product = {
     id: '1',
@@ -50,6 +44,7 @@ const mockProduct: Product = {
     lastVerified: '2023-11-20T14:22:10Z'
 };
 
+// TODO: Dynamic verify page and not use dashboard layout to allow anyone not connected to view it
 const VerifyProduct: React.FC = () => {
     const [isScanning, setIsScanning] = useState(false);
     const [searchInput, setSearchInput] = useState('');
