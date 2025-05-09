@@ -7,12 +7,16 @@ import {ArrowLeft} from "lucide-react";
 
 const AddProduct: React.FC = () => {
     const { user } = useUserProfile();
+    const [qrImage, setQrImage] = useState<string | null>(null);
+
     const [formData, setFormData] = useState({
         name: '',
         description: '',
         type: '',
-        image_url: '',
-        status: 'planted'
+        imageUrl: '',
+        status: 'planted',
+        temperature: '',
+        humidity: ''
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -20,16 +24,16 @@ const AddProduct: React.FC = () => {
         console.log('Form submitted:', formData);
 
         try {
+
             const response = await addProduct(
                 formData.name,
                 formData.description,
                 formData.type,
-                formData.image_url,
+                formData.imageUrl,
                 formData.status as ProductStatus,
                 user?.username as string,
-                user?.name as string,
-                user?.organization as string,
-                user?.address as string
+                formData.temperature,
+                formData.humidity
             );
 
             if (response.success) {
@@ -41,6 +45,14 @@ const AddProduct: React.FC = () => {
                     throw new Error('Session verification failed');
                 }
             }
+
+            setQrImage(await generateQrImage(response.data.qrData));
+
+            if(!qrImage) {
+                console.error('Failed to generate QR image'); // debug log
+                throw new Error('Failed to generate QR image');
+            }
+            downloadQrCode(response.data.productId, qrImage);
 
         } catch (err) {
             console.error('Full error context:', {
@@ -57,6 +69,25 @@ const AddProduct: React.FC = () => {
             ...prev,
             [name]: value
         }));
+    };
+
+    const generateQrImage = async (qrData: string) => {
+        const QRCode = await import('qrcode');
+        return new Promise<string>((resolve) => {
+            QRCode.toDataURL(qrData, (err, url) => {
+                if (err) throw err;
+                resolve(url);
+            });
+        });
+    };
+
+    const downloadQrCode = (productId: string, imageUrl: string) => {
+        const link = document.createElement('a');
+        link.href = imageUrl;
+        link.download = `QR_${productId}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     let isSubmitting;
@@ -80,7 +111,7 @@ const AddProduct: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                             <label htmlFor="name" className="block text-sm font-medium text-neutral-700">
-                                Name Your Product
+                                Name of your product
                             </label>
                             <input
                                 type="text"
@@ -96,7 +127,7 @@ const AddProduct: React.FC = () => {
 
                         <div className="space-y-2">
                             <label htmlFor="type" className="block text-sm font-medium text-neutral-700">
-                                Type of Your Product
+                                Type of your product
                             </label>
                             <input
                                 type="text"
@@ -110,9 +141,39 @@ const AddProduct: React.FC = () => {
                             />
                         </div>
 
+                        <div className="space-y-2">
+                            <label htmlFor="temperature" className="block text-sm font-medium text-neutral-700">
+                                Temperature
+                            </label>
+                            <input
+                                type="number"
+                                name="temperature"
+                                id="temperature"
+                                value={formData.temperature}
+                                onChange={handleChange}
+                                className="input"
+                                placeholder="Temperature measured for your product (not required)"
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <label htmlFor="humidity" className="block text-sm font-medium text-neutral-700">
+                                Humidity
+                            </label>
+                            <input
+                                type="number"
+                                name="humidity"
+                                id="humidity"
+                                value={formData.humidity}
+                                onChange={handleChange}
+                                className="input"
+                                placeholder="Humidity measured of your product (not required)"
+                            />
+                        </div>
+
                         <div className="md:col-span-2 space-y-2">
                             <label htmlFor="description" className="block text-sm font-medium text-neutral-700">
-                                Describe Your Product
+                                Describe your product
                             </label>
                             <input
                                 type="text"
@@ -134,7 +195,7 @@ const AddProduct: React.FC = () => {
                                 type="text"
                                 name="imageUrl"
                                 id="imageUrl"
-                                value={formData.image_url}
+                                value={formData.imageUrl}
                                 onChange={handleChange}
                                 className="input"
                                 required
@@ -144,7 +205,7 @@ const AddProduct: React.FC = () => {
 
                         <div className="md:col-span-2 space-y-2">
                             <label htmlFor="status" className="block text-sm font-medium text-neutral-700">
-                                Role
+                                Current status
                             </label>
                             <select
                                 id="status"

@@ -1,4 +1,6 @@
 require('dotenv').config();
+const { generateBatchId, generateProductId, generateQrData } = require('../../utils/generator');
+const { registerProduct } = require('../../services/contractServices');
 const ProductModel = require('./model');
 
 const ProductController = {
@@ -299,6 +301,60 @@ const ProductController = {
         } catch(err) {
             console.error('Error:', err.message);
             return res.status(401).json({ error: 'Cannot get certificate for this product.' });
+        }
+    },
+
+    // TODO: reflect changes in .sol
+    async registerProduct(req, res) {
+        if (!req.session.user) {
+            return res.status(401).json({error: 'Unauthorized'});
+        }
+
+        try {
+            const productId = generateProductId();
+            const batchId = generateBatchId(req.body.name, req.body.type);
+            const qrCode = generateQrData(process.env.CONTRACT_ADDRESS, productId);
+
+            const productData = {
+                productId,
+                batchId,
+                qrCode,
+                name: req.body.name,
+                description: req.body.description,
+                type: req.body.type,
+                imageUrl: req.body.imageUrl,
+                status: req.body.status,
+                farmerUsername: req.session.user.username,
+                temperature: req.body.temperature,
+                humidity: req.body.humidity
+            };
+
+            const product = await ProductModel.registerProduct(productData);
+
+            const address = await ProductModel.getCurrentLocation(req.session.user.username);
+
+            const registerTransaction = await registerProduct({
+                id: productId,
+                name: product.name,
+                description: product.description,
+                productType: product.productType,
+                imageUrl: product.imageUrl,
+                batchId: batchId,
+                qrCode: qrCode,
+                initialLocation: address
+            });
+
+            if (!registerTransaction) {
+                return res.status(400).json({error: 'Could not register this product in the blockchain.'});
+            }
+
+            res.status(201).json({
+                ...product,
+                qrData: product.qrData
+            });
+        } catch(err) {
+            console.error('Error:', err.message);
+            return res.status(401).json({error: 'Cannot register product.'});
         }
     }
 }

@@ -271,7 +271,86 @@ const ProductModel = {
         return rows[0];
     },
 
-    // TODO: Add registerProduct (put) query
+    // TODO: fix varying(50) from qrData
+
+    // Register product function
+    async registerProduct(productData) {
+        const {
+            productId,
+            batchId,
+            qrCode,
+            name,
+            description,
+            type,
+            imageUrl,
+            status,
+            farmerUsername,
+            temperature = null,
+            humidity = null
+        } = productData;
+
+        // Query
+        const query = `
+            WITH profile_info AS (
+            SELECT 
+                p.username,
+                p.name,
+                p.organization,
+                l.id as location_id
+            FROM supplychain.profile p
+            JOIN supplychain.location l ON p.address = l.address
+            WHERE p.username = $6
+        ),
+        product_insert AS (
+            INSERT INTO supplychain.product(
+                id, name, description, type, image_url, batch_id, qr_code,
+                created_at, current_location_id, status, farmer_username,
+                farmer_name, farmer_organization, retail_price,
+                verification_count, last_verified
+            )
+            SELECT 
+                $1, $2, $3, $4, $5, $7, $8,
+                CURRENT_TIMESTAMP, pi.location_id, $9, pi.username,
+                pi.name, pi.organization, NULL,
+                0, NULL
+            FROM profile_info pi
+            RETURNING *
+        ),
+        supplychain_insert AS (
+            INSERT INTO supplychain.supply_chain(
+                id, product_id, timestamp, action, description,
+                performed_by_id, performed_by_name,
+                performed_by_role, performed_by_organization,
+                location_id, temperature, humidity, verified
+            )
+            SELECT 
+                'step1', $1, CURRENT_TIMESTAMP, $9::product_status, $3,
+                pi.username, pi.name, 'farmer', pi.organization,
+                pi.location_id, NULLIF($10, '')::DECIMAL(5, 2), NULLIF($11, '')::DECIMAL(5, 2), TRUE
+            FROM profile_info pi
+            RETURNING *
+        )
+        SELECT * FROM product_insert;
+        `;
+
+        const { rows } = await db.query(query, [productId, name, description, type, imageUrl, farmerUsername, batchId, qrCode, status, temperature, humidity]);
+
+        return {
+            ...rows[0],
+            qrData: qrCode
+        };
+    },
+
+    async getCurrentLocation(username) {
+        const query = `
+            SELECT l.*
+            FROM supplychain.location l
+                     JOIN supplychain.profile p ON l.address = p.address
+            WHERE p.username = $1
+        `;
+        const {rows} = await db.query(query, [username]);
+        return rows.length > 0 ? rows[0] : null;
+    }
 }
 
 module.exports = ProductModel;
