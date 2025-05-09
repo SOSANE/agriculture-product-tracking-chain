@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { QrCode, X } from 'lucide-react';
+// import {ethers} from "ethers";
 // import { QrReader } from 'react-qr-reader';
 
 interface QRScannerProps {
@@ -22,6 +23,11 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onClose }) => {
             onScan(mockProductId);
         }, 2000);
     };
+
+    // function validateQrData(qrData) { // Validate function
+    //     const [address, productId] = qrData.split('|');
+    //     return ethers.isAddress(address) && productId.match(/^PROD-[A-Z0-9]+$/);
+    // }
 
     return (
         <div className="qr-scanner-overlay">
