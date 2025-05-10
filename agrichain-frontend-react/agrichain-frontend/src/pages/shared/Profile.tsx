@@ -2,24 +2,45 @@ import {useUserProfile} from "../../hooks/useUserProfile.ts";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 import {Link, Navigate} from "react-router-dom";
-import React, {useState} from "react";
-import {ArrowLeft} from "lucide-react";
+import React, {useState, useEffect} from "react";
+import {ArrowLeft, Edit, Save, X} from "lucide-react";
+import {ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const Profile: React.FC = () => {
     const {user, loading, error} = useUserProfile();
     const [formData, setFormData] = useState({
-        username: user?.username,
-        name: user?.name,
-        organization: user?.organization,
-        email: user?.email,
-        phone: user?.phone,
-        address: user?.address,
-        role: user?.role,
+        username: '',
+        name: '',
+        organization: '',
+        email: '',
+        phone: '',
+        address: '',
+        role: '',
     });
+    const [isEditing, setIsEditing] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [originalData, setOriginalData] = useState({...formData});
+
+    useEffect(() => {
+        if (user) {
+            const userData = {
+                username: user.username || '',
+                name: user.name || '',
+                organization: user.organization || '',
+                email: user.email || '',
+                phone: user.phone || '',
+                address: user.address || '',
+                role: user.role || '',
+            };
+            setFormData(userData);
+            setOriginalData(userData);
+        }
+    }, [user]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Form submitted:', formData);
+        setIsSubmitting(true);
 
         try {
             const response = await fetch('http://localhost:5000/api/profile/edit', {
@@ -36,14 +57,34 @@ export const Profile: React.FC = () => {
                 throw new Error(data.message || `HTTP error! status: ${response.status}`);
             }
 
-            return data;
+            setOriginalData({...formData});
+            setIsEditing(false);
+            toast.success('Profile updated successfully!', {
+                position: "bottom-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
 
+            return data;
         } catch (err) {
             console.error('Full error context:', {
                 err,
                 timestamp: new Date().toISOString(),
                 endpoint: `/api/profile/edit`
             });
+            toast.error('Failed to update profile. Please try again.', {
+                position: "bottom-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -53,6 +94,13 @@ export const Profile: React.FC = () => {
             ...prev,
             [name]: value
         }));
+    };
+
+    const toggleEditMode = () => {
+        if (isEditing) {
+            setFormData({...originalData});
+        }
+        setIsEditing(!isEditing);
     };
 
     if (loading) {
@@ -79,9 +127,9 @@ export const Profile: React.FC = () => {
 
     if (!user) return <Navigate to="/"/>;
 
-    let isSubmitting;
     return (
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <ToastContainer/>
             <Link
                 to="/dashboard"
                 className="btn btn-outline inline-flex items-center gap-2 mb-4"
@@ -89,9 +137,27 @@ export const Profile: React.FC = () => {
                 <ArrowLeft className="h-5 w-5"/>
                 Back to Dashboard
             </Link>
-            <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900">My Profile</h1>
-                <p className="text-neutral-600 mt-2">Hello {user.name}! Manage and edit your profile</p>
+            <div className="flex justify-between items-center mb-8">
+                <div>
+                    <h1 className="text-3xl font-bold text-gray-900">My Profile</h1>
+                    <p className="text-neutral-600 mt-2">Hello {user.name}! Manage and edit your profile</p>
+                </div>
+                <button
+                    onClick={toggleEditMode}
+                    className={`btn ${isEditing ? 'btn-outline' : 'btn-primary'} inline-flex items-center gap-2`}
+                >
+                    {isEditing ? (
+                        <>
+                            <X className="h-4 w-4"/>
+                            Cancel
+                        </>
+                    ) : (
+                        <>
+                            <Edit className="h-4 w-4"/>
+                            Edit Profile
+                        </>
+                    )}
+                </button>
             </div>
 
             <div className="card">
@@ -111,7 +177,7 @@ export const Profile: React.FC = () => {
                                     onChange={handleChange}
                                     className="input"
                                     required
-                                    placeholder={user?.name}
+                                    disabled={!isEditing}
                                 />
                             </div>
                             <div className="space-y-2">
@@ -122,11 +188,11 @@ export const Profile: React.FC = () => {
                                     type="text"
                                     name="username"
                                     id="username"
-                                    value={formData.name}
+                                    value={formData.username}
                                     onChange={handleChange}
                                     className="input"
                                     required
-                                    placeholder={user?.username}
+                                    disabled={!isEditing}
                                 />
                             </div>
                             <div className="space-y-2">
@@ -141,10 +207,9 @@ export const Profile: React.FC = () => {
                                     onChange={handleChange}
                                     className="input"
                                     required
-                                    placeholder={user?.phone}
+                                    disabled={!isEditing}
                                 />
                             </div>
-
                             <div className="space-y-2">
                                 <label htmlFor="email" className="block text-sm font-medium text-neutral-700">
                                     Your Email
@@ -157,7 +222,7 @@ export const Profile: React.FC = () => {
                                     onChange={handleChange}
                                     className="input"
                                     required
-                                    placeholder={user?.email}
+                                    disabled={!isEditing}
                                 />
                             </div>
                             <div className="space-y-2">
@@ -172,7 +237,7 @@ export const Profile: React.FC = () => {
                                     onChange={handleChange}
                                     className="input"
                                     required
-                                    placeholder={user?.address}
+                                    disabled={!isEditing}
                                 />
                             </div>
                         </div>
@@ -190,10 +255,9 @@ export const Profile: React.FC = () => {
                                     onChange={handleChange}
                                     className="input"
                                     required
-                                    placeholder={user?.organization}
+                                    disabled={!isEditing}
                                 />
                             </div>
-
                             <div className="md:col-span-2 space-y-2">
                                 <label htmlFor="role" className="block text-sm font-medium text-neutral-700">
                                     Your Role
@@ -204,6 +268,7 @@ export const Profile: React.FC = () => {
                                     value={formData.role}
                                     onChange={handleChange}
                                     className="input"
+                                    disabled={!isEditing}
                                 >
                                     <option value="">Select your desired role</option>
                                     <option value="farmer">Farmer</option>
@@ -216,24 +281,42 @@ export const Profile: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-4 border-t border-neutral-100">
-                        <Link to="/dashboard" className="btn btn-outline">
-                            Cancel
-                        </Link>
-                        <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
-                            {isSubmitting ? (
-                                <>
-                                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
-                                    Creating...
-                                </>
-                            ) : (
-                                'Save changes'
-                            )}
-                        </button>
-                    </div>
+
+                    {isEditing && (
+                        <div
+                            className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-4 border-t border-neutral-100">
+                            <button
+                                type="button"
+                                onClick={toggleEditMode}
+                                className="btn btn-outline"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                className="btn btn-primary"
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? (
+                                    <>
+                                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                                    strokeWidth="4"></circle>
+                                            <path className="opacity-75" fill="currentColor"
+                                                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        Saving...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Save className="h-4 w-4 mr-2"/>
+                                        Save changes
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                    )}
                 </form>
             </div>
         </div>
