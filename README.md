@@ -9,6 +9,7 @@ Designing blockchain model for agriculture product tracking involves using the i
 **May 2025**
 - implement next : smart contracts services and functions, qr scanner + verify function
 
+--> fix register product query and reflect changes in contract
 <h5 align="center"> Home page </h5>
 
 ![AgrichainHomepage](./assets/agrichain-homepage.png)
