@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { CheckCircle, Info, Download, Share2, ArrowLeft, MapPin, Calendar, User, DollarSign } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import SupplyChainTimeline from '../components/product/SupplyChainTimeline';
 import { Product } from '../types';
 import { DashboardLayout } from "../components/layout/DashboardLayout";

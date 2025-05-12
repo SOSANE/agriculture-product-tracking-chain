@@ -4,73 +4,49 @@ import QRScanner from '../components/verification/QRScanner';
 import VerificationResult from '../components/verification/VerificationResult';
 import {Product} from '../types';
 import Footer from "../components/layout/Footer.tsx";
-// import {DashboardLayout} from "../components/layout/DashboardLayout.tsx";
+import {getProductById} from "../services/productService.ts";
 
-// (DEMO) Mock product data
-const mockProduct: Product = {
-    id: '1',
-    name: 'Organic Coffee Beans',
-    description: 'Premium Arabica coffee beans grown using sustainable farming practices',
-    type: 'Coffee',
-    imageUrl: 'https://images.pexels.com/photos/4919737/pexels-photo-4919737.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750',
-    batchId: 'BATCH-CF-2023-001',
-    qrCode: 'QR-001',
-    createdAt: '2023-10-15T08:30:00Z',
-    currentLocation: {
-        id: 'loc1',
-        name: 'Distributor Warehouse',
-        latitude: 40.7128,
-        longitude: -74.0060,
-        address: '123 Distribution Way, New York, NY'
-    },
-    certificates: [
-        {
-            id: 'cert1',
-            name: 'Organic Certified',
-            issuedBy: 'Organic Farmers Association',
-            issuedDate: '2023-09-12T10:00:00Z',
-            expiryDate: '2024-09-12T10:00:00Z',
-            status: 'valid'
-        }
-    ],
-    supplyChain: [],
-    status: 'shipped',
-    farmer: {
-        username: 'farm1',
-        name: 'Highland Coffee Co-op',
-        organization: 'Highland Farmers Association'
-    },
-    retailPrice: 12.99,
-    verificationCount: 367,
-    lastVerified: '2023-11-20T14:22:10Z'
-};
-
-// TODO: Dynamic verify page and not use dashboard layout to allow anyone not connected to view it
 const VerifyProduct: React.FC = () => {
     const [isScanning, setIsScanning] = useState(false);
     const [searchInput, setSearchInput] = useState('');
     const [verifiedProduct, setVerifiedProduct] = useState<Product | null>(null);
     const [error, setError] = useState<string | undefined>(undefined);
     const [loading, setLoading] = useState(false);
+    const [product, setProduct] = useState<Product | null>(null);
 
-    const handleScan = () => {
+    const handleScan = async (qrData: string) => {
         setIsScanning(false);
         setLoading(true);
 
-        // Simulate API call to verify product
-        setTimeout(() => {
-            setLoading(false);
+        try {
+            if (qrData) {
+                const data = qrData.split('|');
+                const contractAddress = data[0];
 
-            // For demo purposes, always use the mock product data
-            setVerifiedProduct(mockProduct);
-
-            // (DEMO) Update verification count
-            mockProduct.verificationCount += 1;
-            mockProduct.lastVerified = new Date().toISOString();
-        }, 1500);
+                if (contractAddress === import.meta.env.VITE_CONTRACT_ADDRESS) {
+                    setLoading(false);
+                    const response = await getProductById(qrData[1]);
+                    if (!response) {
+                        console.error('Failed to fetch product');
+                        throw Error('Failed to fetch product');
+                    }
+                    setProduct(response);
+                    if (!product?.id) {
+                        setError('No product found with this ID. Please check and try again.');
+                        setVerifiedProduct(null);
+                        throw new Error('Failed to fetch product');
+                    }
+                    setVerifiedProduct(product);
+                    product.verificationCount += 1;
+                    product.lastVerified = new Date().toISOString();
+                }
+            }
+        } catch (err) {
+            console.error(err);
+        }
     };
 
-    const handleSearch = (e: React.FormEvent) => {
+    const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!searchInput.trim()) {
@@ -81,22 +57,27 @@ const VerifyProduct: React.FC = () => {
         setLoading(true);
         setError(undefined);
 
-        // Simulate API call to verify product
-        setTimeout(() => {
+        try {
+
             setLoading(false);
-
-            // For demo purposes, only accept a specific ID
-            if (searchInput === 'BATCH-CF-2023-001' || searchInput === '1') {
-                setVerifiedProduct(mockProduct);
-
-                // (DEMO) Update verification count
-                mockProduct.verificationCount += 1;
-                mockProduct.lastVerified = new Date().toISOString();
-            } else {
+            const response = await getProductById(searchInput);
+            if (!response) {
+                console.error('Failed to fetch product.');
+                throw Error('Failed to fetch product.');
+            }
+            setProduct(response);
+            if (!product?.id) {
                 setError('No product found with this ID. Please check and try again.');
                 setVerifiedProduct(null);
+                throw new Error('Failed to fetch product');
             }
-        }, 1500);
+            setVerifiedProduct(product);
+            product.verificationCount += 1;
+            product.lastVerified = new Date().toISOString();
+
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     return (

@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {useUserProfile} from "../../hooks/useUserProfile.ts";
 import {Link} from "react-router-dom";
 import {ProductStatus} from "../../types";
-import {addProduct} from "../../services/addProductService.ts";
+import {addProduct} from "../../services/productService.ts";
 import {ArrowLeft} from "lucide-react";
 
 const AddProduct: React.FC = () => {

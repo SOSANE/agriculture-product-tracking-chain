@@ -57,7 +57,6 @@ const Auth: React.FC<AuthProps> = () => {
         setError(null);
 
         try {
-            // TODO: Implement actual connection, only a placeholder here
 
             if(!window.ethereum) {
                 console.error('MetaMask not Connected');

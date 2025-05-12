@@ -1,33 +1,13 @@
-import React, { useState } from 'react';
-import { QrCode, X } from 'lucide-react';
-// import {ethers} from "ethers";
-// import { QrReader } from 'react-qr-reader';
+import React from 'react';
+import { X } from 'lucide-react';
+import { Scanner  } from '@yudiel/react-qr-scanner';
 
 interface QRScannerProps {
-    onScan: (data: string) => void;
+    onScan: (data: string | any) => void;
     onClose: () => void;
 }
 
 const QRScanner: React.FC<QRScannerProps> = ({ onScan, onClose }) => {
-    const [isScanning, setIsScanning] = useState(false);
-
-    // For demo purposes
-    const startScanning = () => {
-        setIsScanning(true);
-
-        // DEMO : Simulate a successful scan after 2 seconds
-        setTimeout(() => {
-            setIsScanning(false);
-            // DEMO : Generate a random product ID for demo purposes
-            const mockProductId = `PROD-${Math.floor(Math.random() * 1000)}-${Math.floor(Math.random() * 1000)}`;
-            onScan(mockProductId);
-        }, 2000);
-    };
-
-    // function validateQrData(qrData) { // Validate function
-    //     const [address, productId] = qrData.split('|');
-    //     return ethers.isAddress(address) && productId.match(/^PROD-[A-Z0-9]+$/);
-    // }
 
     return (
         <div className="qr-scanner-overlay">
@@ -42,24 +22,18 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan, onClose }) => {
                 <h2 className="text-xl font-semibold mb-4 text-center">Scan Product QR Code</h2>
 
                 <div className="flex flex-col items-center">
-                    <div className="scanner-frame mb-4">
-                        {isScanning && <div className="scanner-line"></div>}
-                        <QrCode className="h-20 w-20 text-neutral-300" />
+                    <div style={{width:'100%', height:'100%'}}>
+                    <Scanner
+                        onScan={(result) => {
+                            onScan(result);
+                            onClose();
+                        }}
+                        onError={(error) => {
+                            console.error('QR Scanner Error:', error);
+                        }}
+                        constraints={{ facingMode: 'environment' }}
+                        />
                     </div>
-
-                    <p className="text-center text-neutral-600 mb-6">
-                        {isScanning
-                            ? "Scanning... Hold your device steady"
-                            : "Position the QR code inside the frame to scan"}
-                    </p>
-
-                    <button
-                        onClick={startScanning}
-                        disabled={isScanning}
-                        className="btn btn-primary w-full"
-                    >
-                        {isScanning ? "Scanning..." : "Start Scanning"}
-                    </button>
 
                     <div className="mt-4 text-center text-sm text-neutral-500">
                         You can also enter the product ID manually below

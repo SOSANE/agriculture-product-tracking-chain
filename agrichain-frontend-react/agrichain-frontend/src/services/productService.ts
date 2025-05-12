@@ -50,3 +50,29 @@ export const addProduct = async (
         };
     }
 };
+
+export const getProductById  = async (productId: string): Promise<any> => {
+    try {
+        const response = await fetch(`/api/products/${productId}`, {
+            credentials: "include"
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+            console.error('Backend error details:', data);
+            throw new Error(data.message);
+        }
+
+        return {data};
+    } catch (err) {
+        console.error('Full error context:', {
+            err,
+            timestamp: new Date().toISOString(),
+            endpoint: `/api/products/${productId}`
+        });
+        return {
+            success: false,
+            message: err instanceof Error ? err.message : 'Network request failed'
+        }
+    }
+}

@@ -1,7 +1,7 @@
 import React from 'react';
-import { CheckCircle, X, AlertTriangle, Shield } from 'lucide-react';
-import { Product } from '../../types';
-import { Link } from 'react-router-dom';
+import {CheckCircle, X, AlertTriangle, Shield} from 'lucide-react';
+import {Product} from '../../types';
+import {Link} from 'react-router-dom';
 
 interface VerificationResultProps {
     product: Product | null;
@@ -9,11 +9,7 @@ interface VerificationResultProps {
     loading?: boolean;
 }
 
-const VerificationResult: React.FC<VerificationResultProps> = ({
-                                                                   product,
-                                                                   error,
-                                                                   loading = false
-                                                               }) => {
+const VerificationResult: React.FC<VerificationResultProps> = ({product, error, loading = false}) => {
     if (loading) {
         return (
             <div className="card text-center py-8">
@@ -29,8 +25,9 @@ const VerificationResult: React.FC<VerificationResultProps> = ({
         return (
             <div className="card border border-error">
                 <div className="text-center">
-                    <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-error bg-opacity-10 text-error mb-4">
-                        <X className="h-8 w-8" />
+                    <div
+                        className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-error bg-opacity-10 text-error mb-4">
+                        <X className="h-8 w-8"/>
                     </div>
                     <h3 className="text-xl font-semibold mb-2">Verification Failed</h3>
                     <p className="text-neutral-600 mb-4">{error}</p>
@@ -46,8 +43,9 @@ const VerificationResult: React.FC<VerificationResultProps> = ({
         return (
             <div className="card border border-warning">
                 <div className="text-center">
-                    <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-warning bg-opacity-10 text-warning mb-4">
-                        <AlertTriangle className="h-8 w-8" />
+                    <div
+                        className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-warning bg-opacity-10 text-warning mb-4">
+                        <AlertTriangle className="h-8 w-8"/>
                     </div>
                     <h3 className="text-xl font-semibold mb-2">No Product Found</h3>
                     <p className="text-neutral-600 mb-4">
@@ -64,8 +62,9 @@ const VerificationResult: React.FC<VerificationResultProps> = ({
     return (
         <div className="card border border-success animate-fade-in">
             <div className="text-center mb-6">
-                <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-success bg-opacity-10 text-success mb-4">
-                    <CheckCircle className="h-8 w-8" />
+                <div
+                    className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-success bg-opacity-10 text-success mb-4">
+                    <CheckCircle className="h-8 w-8"/>
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Product Verified</h3>
                 <p className="text-neutral-600">
@@ -101,7 +100,7 @@ const VerificationResult: React.FC<VerificationResultProps> = ({
                                 key={cert.id}
                                 className="flex items-center gap-1 px-3 py-2 rounded-full bg-neutral-100"
                             >
-                                <Shield className="h-4 w-4 text-success" />
+                                <Shield className="h-4 w-4 text-success"/>
                                 <span className="text-sm font-medium">{cert.name}</span>
                             </div>
                         ))}
@@ -114,8 +113,8 @@ const VerificationResult: React.FC<VerificationResultProps> = ({
                     View Full Details
                 </Link>
                 <span className="text-sm text-neutral-500 self-center">
-          Verified {product.verificationCount} times
-        </span>
+                    Verified {product.verificationCount} times
+                </span>
             </div>
         </div>
     );
