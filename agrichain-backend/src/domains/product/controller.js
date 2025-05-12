@@ -356,6 +356,54 @@ const ProductController = {
             console.error('Error:', err.message);
             return res.status(401).json({error: 'Cannot register product.'});
         }
+    },
+
+    // Access to all products in product page
+    async getAllProductsForProductPage(req, res) {
+        if (!req.session.user) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+
+        try {
+            const products = await ProductModel.getAllProducts();
+
+            if(!products){
+                return res.status(401).json({error: 'No products found.'});
+            }
+
+            // Construct final response
+            const response = products.map(product => ({
+                id: product.id,
+                name: product.name,
+                description: product.description,
+                type: product.type,
+                imageUrl: product.image_url,
+                batchId: product.batch_id,
+                qrCode: product.qr_code,
+                createdAt: product.created_at,
+                currentLocation: product.current_location_id ? {
+                    id: product.current_location_id,
+                    name: product.current_location_name,
+                    latitude: product.current_location_latitude,
+                    longitude: product.current_location_longitude,
+                    address: product.current_location_address
+                } : null,
+                status: product.status,
+                farmer: {
+                    username: product.farmer_username,
+                    name: product.farmer_name,
+                    organization: product.farmer_organization
+                },
+                retailPrice: product.retail_price,
+                verificationCount: product.verification_count,
+                lastVerified: product.last_verified
+            }));
+
+            res.status(201).json(response);
+        } catch(err) {
+            console.error('Error:', err.message);
+            return res.status(401).json({error: 'Cannot get All Products page.'});
+        }
     }
 }
 

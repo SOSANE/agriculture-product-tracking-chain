@@ -18,6 +18,7 @@ import {UserRole} from "./types";
 import ManageAccounts from "./pages/admin/ManageAccounts.tsx";
 import AddProduct from "./pages/farmer/AddProduct.tsx";
 import {Profile} from "./pages/shared/Profile.tsx";
+import Products from "./pages/shared/Products.tsx";
 
 const AuthWrapper = () => {
     const { user, loading } = useUserProfile();
@@ -82,7 +83,8 @@ function App() {
                 <Route path="/" element={<Homepage />} />
                 <Route path="/login" element={<Auth />} />
                 <Route path="/verify" element={<VerifyProduct />} />
-                <Route path="/products/:id" element={<ProductDetail />}/> {/* TODO: wrap route */}
+                <Route path="/products/:id" element={<ProductDetail />}/>
+                <Route path="/products" element={<Products />}/>
                 <Route path="/profile" element={<Profile />}/>
 
                 {/* Protected Routes */}
