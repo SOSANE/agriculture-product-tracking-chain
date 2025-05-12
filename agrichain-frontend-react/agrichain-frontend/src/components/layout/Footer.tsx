@@ -51,11 +51,6 @@ const Footer: React.FC = () => {
                                     Verify Products
                                 </Link>
                             </li>
-                            <li>
-                                <Link to="/analytics" className="text-neutral-300 hover:text-white transition-colors">
-                                    Analytics
-                                </Link>
-                            </li>
                         </ul>
                     </div>
 
