@@ -10,17 +10,17 @@ Designing blockchain model for agriculture product tracking involves using the i
 **NOTES: May 2025**
 - implement next: concentrate all contract services in ```/agrichain-smartcontract```. finish implementing all smart contracts services (ex. transfer ownership)
 
-<h2 style= "text-align:center; text-decoration: underline"> App showcase </h2>
-<h5 style= "text-align:center; text-decoration: underline"> Home page </h5>
+<h2 align="center"> App showcase </h2>
+<h5 align="center"> Home page </h5>
 
 ![AgrichainHomepage](./assets/agrichain-homepage.png)
-<h5 style= "text-align:center; text-decoration: underline"> Authentification page </h5>
+<h5 align="center"> Authentification page </h5>
 
 ![AgrichainAuthentification](./assets/agrichain-authentication.png)
-<h5 style= "text-align:center; text-decoration: underline"> Dashboard </h5>
+<h5 align="center"> Dashboard </h5>
 
 ![AgrichainAnalytics](./assets/agrichain-farmer-dashboard.png)
-<h5 style= "text-align:center; text-decoration: underline"> Product details (ProductID: 1) </h5>
+<h5 align="center"> Product details (ProductID: 1) </h5>
 
 ![AgrichainAnalytics](./assets/agrichain-farmer-productdetail.png)
 
@@ -95,7 +95,7 @@ CONTRACT_ADDRESS=your_deployed_address
 ADMIN_PRIVATE_KEY=your_private_admin_key
 BLOCKCHAIN_PROVIDER_URL=http://localhost:8545
 ```
-**PS. ``CONTRACT_ADDRESS`` and ``ADMIN_PRIVATE_KEY`` parameters can be obtained by starting a node and executing the initial script to deploy the contract in [3. Start contract](#3-start-contract). But to start the contract, the [Frontend side](#2-start-frontend) & [Backend side](#1-start-backend) need to start. For now, both parameters can stay the way they are.**
+**PS. ``CONTRACT_ADDRESS`` and ``ADMIN_PRIVATE_KEY`` parameters can be obtained by starting a node and executing the initial script to deploy the contract in [3. Start contract](#3-start-contract). For now, both parameters can stay the way they are.**
 ### 4. Database Setup
 1. **Initialize the database:**
 
@@ -111,8 +111,8 @@ psql -U postgres -d agrichain -f ./agrichain-database/commands/schema.sql
 ### 5. Frontend Setup
 **Edit .env**:
 ```dotenv
-ADMIN_PRIVATE_KEY=your_private_admin_key    # Can be obtained after starting hardhat node
-CONTRACT_ADDRESS=your_deployed_address      # Contract address can be obtained by running scripts/deploy.js
+VITE_ADMIN_PRIVATE_KEY=your_private_admin_key    # Can be obtained after starting hardhat node
+VITE_CONTRACT_ADDRESS=your_deployed_address      # Contract address can be obtained by running scripts/deploy.js
 VITE_BLOCKCHAIN_PROVIDER_URL=http://localhost:8545
 ```
 **PS. Same message as in [3. Backend Setup](#3-backend-setup).**
@@ -156,7 +156,7 @@ npx hardhat run scripts/deploy.js --network localhost # Execute initial scripts 
 - For testing purposes (transactions), import 1-3 account to Metamask wallet using any of the hardhat private keys by adding a **personal network with the following parameters:**
   - **Local network**: ``http://localhost:8545/``
   - **Chain ID**: ``1337``
-  - **Currency symbole**: ``ETH``
+  - **Currency symbol**: ``ETH``
 - One of the imported accounts' private key can be used for the ``ADMIN_PRIVATE_KEY``
 - ``CONTRACT_ADDRESS`` & ``ADMIN_PRIVATE_KEY``'s values can now be replaced in the ``.env`` files.
 - *May* need to [restart the system](#running-the-system) because some parameters changed.
