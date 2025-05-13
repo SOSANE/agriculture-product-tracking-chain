@@ -10,19 +10,17 @@ Designing blockchain model for agriculture product tracking involves using the i
 **NOTES: May 2025**
 - implement next: concentrate all contract services in ```/agrichain-smartcontract```. finish implementing all smart contracts services (ex. transfer ownership)
 
-<h5 align="center"> Home page </h5>
+<h2 style= "text-align:center; text-decoration: underline"> App showcase </h2>
+<h5 style= "text-align:center; text-decoration: underline"> Home page </h5>
 
 ![AgrichainHomepage](./assets/agrichain-homepage.png)
-
-<h5 align="center"> Authentification page </h5>
+<h5 style= "text-align:center; text-decoration: underline"> Authentification page </h5>
 
 ![AgrichainAuthentification](./assets/agrichain-authentication.png)
-
-<h5 align="center"> Dashboard </h5>
+<h5 style= "text-align:center; text-decoration: underline"> Dashboard </h5>
 
 ![AgrichainAnalytics](./assets/agrichain-farmer-dashboard.png)
-
-<h5 align="center"> Product details (ProductID: 1) </h5>
+<h5 style= "text-align:center; text-decoration: underline"> Product details (ProductID: 1) </h5>
 
 ![AgrichainAnalytics](./assets/agrichain-farmer-productdetail.png)
 
@@ -113,8 +111,8 @@ psql -U postgres -d agrichain -f ./agrichain-database/commands/schema.sql
 ### 5. Frontend Setup
 **Edit .env**:
 ```dotenv
-ADMIN_PRIVATE_KEY=your_private_admin_key # Can be obtained after starting hardhat node
-CONTRACT_ADDRESS=your_deployed_address   # Contract address can be obtained by running scripts/deploy.js
+ADMIN_PRIVATE_KEY=your_private_admin_key    # Can be obtained after starting hardhat node
+CONTRACT_ADDRESS=your_deployed_address      # Contract address can be obtained by running scripts/deploy.js
 VITE_BLOCKCHAIN_PROVIDER_URL=http://localhost:8545
 ```
 **PS. Same message as in [3. Backend Setup](#3-backend-setup).**
