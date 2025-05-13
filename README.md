@@ -1,15 +1,14 @@
 # *AgriChain* : Product Tracking and Identification in the Supply Chain Using Blockchain Technology
+<h5 align="center"> A decentralized solution for tracking agricultural products through their lifecycle using blockchain technology. </h5>
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-A decentralized solution for tracking agricultural products through their lifecycle using blockchain technology.
+The product tracking and identification in the supply chain that uses blockchain technology, the ethereum network, smart contracts and QR codes to provide transparency and security and promote decentralisation.
 
 Designing blockchain model for agriculture product tracking involves using the inherent characteristics of blockchain - decentralisation, immutability and transparency - to track agricultural products through every stage of their lifecycle. This include everything from production, processing, transportation, and distribution, to retail.
 
-The product tracking and identification in the supply chain that uses blockchain technology, the ethereum network, smart contracts and QR codes to provide transparency and security and promote decentralisation.
-
 **NOTES: May 2025**
-- implement next : concentrate all contract services in /agrichain-smartcontract. finish implementing all smart contracts services (ex. transfer ownership)
+- implement next: concentrate all contract services in ```/agrichain-smartcontract```. finish implementing all smart contracts services (ex. transfer ownership)
 
 <h5 align="center"> Home page </h5>
 
@@ -70,7 +69,7 @@ cd agriculture-product-tracking-chain
 ### 2. Contract Setup
 1. **Create a [MetaMask](https://portfolio.metamask.io/)** wallet if you do not own one.
 2. **Download the [Metamask's browser extension](https://metamask.io/download)** and connect your wallet.
-3. Run the following lines in project folder :
+3. Run the following lines in project folder:
 ```bash
 cd ./agrichain-smartcontract
 npm install
@@ -100,27 +99,27 @@ BLOCKCHAIN_PROVIDER_URL=http://localhost:8545
 ```
 **PS. ``CONTRACT_ADDRESS`` and ``ADMIN_PRIVATE_KEY`` parameters can be obtained by starting a node and executing the initial script to deploy the contract in [3. Start contract](#3-start-contract). But to start the contract, the [Frontend side](#2-start-frontend) & [Backend side](#1-start-backend) need to start. For now, both parameters can stay the way they are.**
 ### 4. Database Setup
-1. Initialize the database:
+1. **Initialize the database:**
 
 First, run ``agrichain-database/init.sql`` file to create database.
 
-2. Execute ``./agrichain-database/commands/schema.sql`` in ``agrichain`` table :
+2. **Execute ``./agrichain-database/commands/schema.sql`` in ``agrichain`` table:**
 
-Then, run the following line in project folder :
+Then, run the following line in project folder:
 ```bash
 psql -U postgres -d agrichain -f ./agrichain-database/commands/schema.sql
 ```
 
 ### 5. Frontend Setup
-**Edit .env** :
+**Edit .env**:
 ```dotenv
 ADMIN_PRIVATE_KEY=your_private_admin_key # Can be obtained after starting hardhat node
 CONTRACT_ADDRESS=your_deployed_address   # Contract address can be obtained by running scripts/deploy.js
 VITE_BLOCKCHAIN_PROVIDER_URL=http://localhost:8545
 ```
-**PS. Same message as in [3. Backend Setup](#3-backend-setup)**
+**PS. Same message as in [3. Backend Setup](#3-backend-setup).**
 
-Run in project folder :
+Run in project folder:
 ```bash
 cd ./agrichain-frontend-react/agrichain-frontend
 npm install
@@ -128,15 +127,15 @@ npm run build
 ```
 
 ## Running the System
-Run the application in different terminals
+Run each step  in different terminals.
 ### 1. Start Backend:
-Run in project folder :
+Run in project folder:
 ```bash
 cd ./agrichain-backend
 npm start
 ```
 ### 2. Start Frontend:
-Run in project folder :
+Run in project folder:
 ```bash
 cd ./agrichain-frontend-react/agrichain-frontend
 npm run dev
@@ -145,29 +144,29 @@ npm run dev
 - ``CONTRACT_ADDRESS`` can now be obtained after running ``scripts/deploy.js``.
 - ``ADMIN_PRIVATE_KEY`` can now be obtained after starting the hardhat node.
 
-To do that, run the following lines in project folder :
+To do that, run the following lines in project folder:
 ```bash
 cd ./agrichain-smartcontract
 npx hardhat node                                      # Start node
 ```
-In a second terminal :
+In a second terminal:
 ```bash
 cd ./agrichain-smartcontract
 npx hardhat run scripts/deploy.js --network localhost # Execute initial scripts and deploy contract
 ```
-- Hardhat gives 20 accounts with their private keys, each account have a wallet with 10000 ETH (Testnet). **PS. All hardhat accounts and their private keys are PUBLIC INFORMATION. For example, account #0's address is always``0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266``** → ***[More on Harhat docs](https://hardhat.org/hardhat-network/docs/overview)***
-- For testing purposes (transactions), import 1-3 account to personal Metamask wallet using any of the hardhat private keys with :
-  - **Local network** :``http://localhost:8545/``
-  - **Chain ID** :  ``1337``
-  - **Currency symbole** : ``ETH``
-- One of the imported accounts can be used for the ``ADMIN_PRIVATE_KEY``.
+- Hardhat gives 20 accounts with their private keys, each account have a wallet with 10000 ETH (Testnet). **PS. All hardhat accounts and their private keys are PUBLIC INFORMATION. For example, account #0's address is always``0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266``** → ***[Read more on Harhat (docs)](https://hardhat.org/hardhat-network/docs/overview)***
+- For testing purposes (transactions), import 1-3 account to Metamask wallet using any of the hardhat private keys by adding a **personal network with the following parameters:**
+  - **Local network**: ``http://localhost:8545/``
+  - **Chain ID**: ``1337``
+  - **Currency symbole**: ``ETH``
+- One of the imported accounts' private key can be used for the ``ADMIN_PRIVATE_KEY``
 - ``CONTRACT_ADDRESS`` & ``ADMIN_PRIVATE_KEY``'s values can now be replaced in the ``.env`` files.
-- May need to [restart the system](#running-the-system) because of the new parameters added.
+- *May* need to [restart the system](#running-the-system) because some parameters changed.
 
-***Application can now be accessed on : http://localhost:5173***
+***Application can now be accessed on: http://localhost:5173***
 
 ## Test Accounts
-Several accounts pre-made for testing purposes :
+Several accounts pre-made for testing purposes:
 
 | Role        | Username     | Password      |
 |-------------|--------------|---------------|
