@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { generateBatchId, generateProductId, generateQrData } = require('../../utils/generator');
-const { registerProduct } = require('../../services/contractServices');
+const { registerProduct, verifyProduct } = require('../../services/contractServices');
 const ProductModel = require('./model');
 
 const ProductController = {
@@ -333,6 +333,9 @@ const ProductController = {
 
             const address = await ProductModel.getCurrentLocation(req.session.user.username);
 
+            console.log('product query result: ', product);
+            console.log('address query result: ', address);
+
             const registerTransaction = await registerProduct({
                 id: productId,
                 name: product.name,
@@ -344,14 +347,13 @@ const ProductController = {
                 initialLocation: address
             });
 
+            console.log('registerTransaction result: ', registerTransaction);
+
             if (!registerTransaction) {
                 return res.status(400).json({error: 'Could not register this product in the blockchain.'});
             }
 
-            res.status(201).json({
-                ...product,
-                qrData: product.qrData
-            });
+            res.status(201).json(product);
         } catch(err) {
             console.error('Error:', err.message);
             return res.status(401).json({error: 'Cannot register product.'});
@@ -403,6 +405,24 @@ const ProductController = {
         } catch(err) {
             console.error('Error:', err.message);
             return res.status(401).json({error: 'Cannot get All Products page.'});
+        }
+    },
+
+    async verifyProduct(req, res) {
+        try {
+            const product = await ProductModel.verifyProduct(req.params.id);
+            const tx = await verifyProduct(req.params.id);
+
+            if (!product) {
+                return res.status(401).json({error: 'Could not verify this product.'});
+            }
+            if (!tx) {
+                return res.status(401).json({error: 'Could not verify this product in the blockchain.'});
+            }
+            res.status(201).json(product);
+        } catch(err) {
+            console.error('Error:', err.message);
+            return res.status(401).json({error: 'Cannot verify this product.'});
         }
     }
 }

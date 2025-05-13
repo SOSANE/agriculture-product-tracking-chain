@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS supplychain.product (
     type VARCHAR(50),
     image_url TEXT,
     batch_id VARCHAR(50),
-    qr_code VARCHAR(50),
+    qr_code VARCHAR(100),
     created_at TIMESTAMP WITH TIME ZONE,
     current_location_id VARCHAR(50) REFERENCES supplychain.location(id),
     status product_status,

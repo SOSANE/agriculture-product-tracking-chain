@@ -271,8 +271,6 @@ const ProductModel = {
         return rows[0];
     },
 
-    // TODO: fix varying(50) from qrData
-
     // Register product function
     async registerProduct(productData) {
         const {
@@ -349,6 +347,20 @@ const ProductModel = {
             WHERE p.username = $1
         `;
         const {rows} = await db.query(query, [username]);
+        return rows.length > 0 ? rows[0] : null;
+    },
+
+    async verifyProduct(productId) {
+        const query = `
+        UPDATE supplychain.product p
+        SET p.verification_count = p.verification_count + 1, p.last_verified = CURRENT_TIMESTAMP;
+        WHERE p.id = $1
+        `;
+
+        let rows;
+        if(await this.existsByProductId(productId)) {
+            rows = await db.query(query, [productId]);
+        }
         return rows.length > 0 ? rows[0] : null;
     }
 }

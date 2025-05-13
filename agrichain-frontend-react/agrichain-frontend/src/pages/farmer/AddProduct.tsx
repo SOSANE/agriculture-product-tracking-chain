@@ -46,7 +46,12 @@ const AddProduct: React.FC = () => {
                 }
             }
 
-            setQrImage(await generateQrImage(response.data.qrData));
+            // TODO: undefined because of smart contracts implementation (hardhat.config not in /backend), concentrate all contract services in /smart-contract instead
+            console.log('Response:', response);
+            // console.log('Data inputted: ', response.data);
+            // console.log('QrData ', response.qrData);
+
+            setQrImage(await generateQrImage(response.qrData));
 
             if(!qrImage) {
                 console.error('Failed to generate QR image'); // debug log

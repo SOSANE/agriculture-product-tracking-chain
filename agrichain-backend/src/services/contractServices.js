@@ -41,9 +41,17 @@ const requestCertificate = async (productId, stepId) => {
     return tx;
 };
 
+// Verify product
+const verifyProduct = async (productId) => {
+    const tx = await contract.verifyProduct(productId);
+    await tx.wait();
+    return tx;
+}
+
 module.exports = {
     initializeContract,
     registerProduct,
     addSupplyChainStep,
-    requestCertificate
+    requestCertificate,
+    verifyProduct
 };

@@ -7,8 +7,8 @@ export const addProduct = async (
     productImage: string,
     productStatus: ProductStatus,
     farmerUsername: string,
-    productTemperature: string,
-    productHumidity: string
+    productTemperature: string | null,
+    productHumidity: string | null
 ): Promise<any> => {
     try {
         const response = await fetch("/api/register-product", {
@@ -27,7 +27,13 @@ export const addProduct = async (
             })
         });
 
+
+        console.log('PRODUCT SERVICE, response inputted: ', response);
+
         const data = await response.json();
+
+        console.log('Data inputted: ', data); // undefined
+        console.log('QrData ', data.qrData);
 
         if (!response.ok) {
             console.error('Backend error details:', data);
@@ -57,13 +63,13 @@ export const getProductById  = async (productId: string): Promise<any> => {
             credentials: "include"
         });
 
-        const data = await response.json();
         if (!response.ok) {
-            console.error('Backend error details:', data);
-            throw new Error(data.message);
+            console.error('Backend error details:', response);
+            throw new Error(`Failed to fetch product (Status: ${response.status})`);
         }
 
-        return {data};
+        const data = await response.json();
+        return data;
     } catch (err) {
         console.error('Full error context:', {
             err,
