@@ -1,13 +1,41 @@
 import React from 'react';
-import { Package, PackagePlus, Shield, ShieldCheck, UserCog, UserPlus, Users } from 'lucide-react';
-import {Link} from "react-router-dom";
+import { Package, PackagePlus, Shield, ShieldCheck, UserPlus, Users } from 'lucide-react';
 import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
 import {useUserProfile} from "../../hooks/useUserProfile.ts";
 import {useCertificates} from "../../hooks/useCertificates.ts";
+import NavigationCard from "../../components/NavigationCard.tsx";
 
 const AdministratorDashboard: React.FC = () => {
     const { user } = useUserProfile();
     const { certificates, certificatesLoading } = useCertificates();
+
+    const buttons = [{
+        icon: Users,
+        link: "/users",
+        text: "Manage Users",
+        class: "btn btn-primary w-full justify-start"
+    }, {
+        icon: Package,
+        link: "/manage-products",
+        text: "Manage Products",
+        class: "btn btn-accent w-full justify-start"
+    }, {
+        icon: ShieldCheck,
+        link: "/manage-certificates",
+        text: "Manage Certificates",
+        class: "btn btn-secondary w-full justify-start"
+    }, {
+        icon: UserPlus,
+        link: "/add-account",
+        text: "Add New Account",
+        class: "btn btn-outline w-full justify-start"
+    }, {
+        icon: PackagePlus,
+        link: "/add-product",
+        text: "Add New Product",
+        class: "btn btn-outline w-full justify-start"
+    }];
+
     return (
         <DashboardLayout>
             <div className="container mx-auto px-4 py-8">
@@ -74,41 +102,7 @@ const AdministratorDashboard: React.FC = () => {
                             </div>
                     </div>
 
-                    <div>
-                        <div className="card" style={{ height: 'fit-content' }}>
-                            <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-xl font-semibold">Quick Actions</h2>
-                                <UserCog className="h-6 w-6 text-primary" />
-                            </div>
-
-                            <div className="space-y-4">
-                                <Link to="/users" className="btn btn-primary w-full justify-start">
-                                    <Users className="h-5 w-5 mr-2" />
-                                    Manage Users
-                                </Link>
-
-                                <Link to="/manage-products" className="btn btn-accent w-full justify-start">
-                                    <Package className="h-5 w-5 mr-2" />
-                                    Manage Products
-                                </Link>
-
-                                <Link to="/manage-certificates" className="btn btn-secondary w-full justify-start">
-                                    <ShieldCheck className="h-5 w-5 mr-2" />
-                                    Manage Certificates
-                                </Link>
-
-                                <Link to="/add-account" className="btn btn-outline w-full justify-start">
-                                    <UserPlus className="h-5 w-5 mr-2" />
-                                    Add New Account
-                                </Link>
-
-                                <Link to="/add-product" className="btn btn-outline w-full justify-start">
-                                    <PackagePlus className="h-5 w-5 mr-2" />
-                                    Add New Product
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
+                    <NavigationCard buttons={buttons} isAdmin={true} />
                 </section>
             </div>
         </DashboardLayout>

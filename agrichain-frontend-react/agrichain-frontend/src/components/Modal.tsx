@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
 
-const Modal = ({ title, paragraph, confirmText, cancelText, onConfirm, onCancel }: ModalProps) => {
+const Modal = ({ title, paragraph, confirmText, cancelText, onConfirm, onCancel }: { title: string, paragraph: string, confirmText: string, cancelText: string, onConfirm: () => void, onCancel: () => void }) => {
     useEffect(() => {
         document.body.style.overflow = 'hidden';
         return () => {

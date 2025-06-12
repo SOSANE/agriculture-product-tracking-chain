@@ -1,11 +1,24 @@
 import React from 'react';
-import {ClipboardList, Package, PackagePlus, ShoppingBag} from 'lucide-react';
-import {Link} from "react-router-dom";
+import {Package, PackagePlus, ShoppingBag} from 'lucide-react';
 import {useUserProfile} from "../../hooks/useUserProfile.ts";
 import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
+import NavigationCard from "../../components/NavigationCard.tsx"
 
 const RetailerDashboard: React.FC = () => {
     const { user } = useUserProfile();
+
+    const buttons = [{
+        icon: PackagePlus,
+        link: "/add-product",
+        text: "Add New Product",
+        class: "btn btn-primary w-full justify-start"
+    }, {
+        icon: Package,
+        link: "/manage-products",
+        text: "Manage My Products",
+        class: "btn btn-accent w-full justify-start"
+    }];
+
     return (
         <DashboardLayout>
             <div className="container mx-auto px-4 py-8">
@@ -34,26 +47,7 @@ const RetailerDashboard: React.FC = () => {
                         </div>
                     </div>
 
-                    <div>
-                        <div className="card h-full">
-                            <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-xl font-semibold">Quick Actions</h2>
-                                <ClipboardList className="h-6 w-6 text-primary" />
-                            </div>
-
-                            <div className="space-y-4">
-                                <Link to="/add-product" className="btn btn-primary w-full justify-start">
-                                    <PackagePlus className="h-5 w-5 mr-2" />
-                                    Add New Product
-                                </Link>
-
-                                <Link to="/manage-products" className="btn btn-accent w-full justify-start">
-                                    <Package className="h-5 w-5 mr-2" />
-                                    Manage My Products
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
+                    <NavigationCard buttons={buttons} isAdmin={false} />
                 </section>
             </div>
         </DashboardLayout>

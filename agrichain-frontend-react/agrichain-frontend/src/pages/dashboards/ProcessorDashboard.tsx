@@ -1,11 +1,29 @@
 import React from 'react';
-import {ClipboardList, Factory, Package, QrCode, ShieldCheck } from 'lucide-react';
-import {Link} from "react-router-dom";
+import { Factory, Package, QrCode, ShieldCheck } from 'lucide-react';
 import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
 import {useUserProfile} from "../../hooks/useUserProfile.ts";
+import NavigationCard from "../../components/NavigationCard.tsx";
 
 const ProcessorDashboard: React.FC = () => {
     const { user } = useUserProfile();
+
+    const buttons = [{
+        icon: QrCode,
+        link: "/verify",
+        text: "Scan New Product",
+        class: "btn btn-primary w-full justify-start"
+    }, {
+        icon: Package,
+        link: "/products-details",
+        text: "Update Product Details",
+        class: "btn btn-accent w-full justify-start"
+    }, {
+        icon: ShieldCheck,
+        link: "/send-request",
+        text: "Send Certification Request",
+        class: "btn btn-secondary w-full justify-start"
+    }];
+
     return (
         <DashboardLayout>
             <div className="container mx-auto px-4 py-8">
@@ -34,31 +52,7 @@ const ProcessorDashboard: React.FC = () => {
                         </div>
                     </div>
 
-                    <div>
-                        <div className="card h-full">
-                            <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-xl font-semibold">Quick Actions</h2>
-                                <ClipboardList className="h-6 w-6 text-primary" />
-                            </div>
-
-                            <div className="space-y-4">
-                                <Link to="/verify" className="btn btn-primary w-full justify-start">
-                                    <QrCode className="h-5 w-5 mr-2" />
-                                    Scan New Product
-                                </Link>
-
-                                <Link to="/products-details" className="btn btn-accent w-full justify-start">
-                                    <Package className="h-5 w-5 mr-2" />
-                                    Update Product Details
-                                </Link>
-
-                                <Link to="/send-request" className="btn btn-secondary w-full justify-start">
-                                    <ShieldCheck className="h-5 w-5 mr-2" />
-                                    Send Certification Request
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
+                    <NavigationCard buttons={buttons} isAdmin={false} />
                 </section>
             </div>
         </DashboardLayout>
