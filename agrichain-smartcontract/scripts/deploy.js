@@ -1,17 +1,16 @@
-const hre = require("hardhat");
+const {ethers} = require("hardhat");
 
-const main = async () => {
-    const accounts = await hre.ethers.getSigners();
-
-    const Contract = await hre.ethers.getContractFactory("Agrichain");
-    const agrichainContract = await Contract.deploy();
-
-    console.log("Contract deployed by:", accounts[0].address);
-    console.log("-----------------")
-    console.log("Contract address:", await agrichainContract.getAddress());
+async function main() {
+    const Agrichain = await ethers.getContractFactory("Agrichain");
+    console.log("Deploying Agrichain Contract...");
+    const agrichain = await Agrichain.deploy();
+    await agrichain.waitForDeployment();
+    console.log("Agrichain deployed to: ", await agrichain.getAddress());
 }
 
-main().catch((error) => {
-    console.error(error);
-    process.exitCode = 1;
-});
+main()
+    .then(() => process.exit(0))
+    .catch(error => {
+        console.error(error);
+        process.exit(1);
+    });

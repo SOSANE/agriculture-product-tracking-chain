@@ -1,7 +1,11 @@
 require('dotenv').config();
 const { generateBatchId, generateProductId, generateQrData } = require('../../utils/generator');
-const { registerProduct, verifyProduct } = require('../../services/contractServices');
+// const { registerProduct, verifyProduct } = require('../../services/contractServices');
+// const { ProductContract } = require('../../../../agrichain-smartcontract/scripts/contractService');
+const {agrichain}  = require('../../AgrichainInterface');
 const ProductModel = require('./model');
+
+// const agrichain = createAgrichainContract();
 
 const ProductController = {
     async getProducts (req, res) {
@@ -304,7 +308,7 @@ const ProductController = {
         }
     },
 
-    // TODO: reflect changes in .sol
+    // TODO: Delete commented out code
     async registerProduct(req, res) {
         if (!req.session.user) {
             return res.status(401).json({error: 'Unauthorized'});
@@ -336,16 +340,28 @@ const ProductController = {
             console.log('product query result: ', product);
             console.log('address query result: ', address);
 
-            const registerTransaction = await registerProduct({
-                id: productId,
-                name: product.name,
-                description: product.description,
-                productType: product.productType,
-                imageUrl: product.imageUrl,
-                batchId: batchId,
-                qrCode: qrCode,
-                initialLocation: address
-            });
+            // const registerTransaction = await agrichain.registerProductContract({
+            //     id: productId,
+            //     name: product.name,
+            //     description: product.description,
+            //     productType: product.productType,
+            //     imageUrl: product.imageUrl,
+            //     batchId: batchId,
+            //     qrCode: qrCode,
+            //     initialLocation: address
+            // });
+
+            const registerTransaction = await agrichain.callContractFunction(
+                'registerProduct',
+                productId,
+                product.name,
+                product.description,
+                product.productType,
+                product.imageUrl,
+                batchId,
+                qrCode,
+                address
+            );
 
             console.log('registerTransaction result: ', registerTransaction);
 
@@ -408,17 +424,19 @@ const ProductController = {
         }
     },
 
+    // TODO: Delete commented out code
     async verifyProduct(req, res) {
         try {
             const product = await ProductModel.verifyProduct(req.params.id);
-            const tx = await verifyProduct(req.params.id);
+
+            // const tx = await agrichain.verifyProductContract(req.params.id);
 
             if (!product) {
                 return res.status(401).json({error: 'Could not verify this product.'});
             }
-            if (!tx) {
-                return res.status(401).json({error: 'Could not verify this product in the blockchain.'});
-            }
+            // if (!tx) {
+            //     return res.status(401).json({error: 'Could not verify this product in the blockchain.'});
+            // }
             res.status(201).json(product);
         } catch(err) {
             console.error('Error:', err.message);

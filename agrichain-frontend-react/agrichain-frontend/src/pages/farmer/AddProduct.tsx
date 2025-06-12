@@ -1,12 +1,12 @@
 import React, {useState} from "react";
-import {useUserProfile} from "../../hooks/useUserProfile.ts";
+// import {useUserProfile} from "../../hooks/useUserProfile.ts";
 import {Link} from "react-router-dom";
-import {ProductStatus} from "../../types";
-import {addProduct} from "../../services/productService.ts";
+// import {ProductStatus} from "../../types";
+// import {addProduct} from "../../services/productService.ts";
 import {ArrowLeft} from "lucide-react";
 
 const AddProduct: React.FC = () => {
-    const { user } = useUserProfile();
+    // const { user } = useUserProfile();
     const [qrImage, setQrImage] = useState<string | null>(null);
 
     const [formData, setFormData] = useState({
@@ -25,39 +25,39 @@ const AddProduct: React.FC = () => {
 
         try {
 
-            const response = await addProduct(
-                formData.name,
-                formData.description,
-                formData.type,
-                formData.imageUrl,
-                formData.status as ProductStatus,
-                user?.username as string,
-                formData.temperature,
-                formData.humidity
-            );
+            const response = await fetch('http://localhost:5000/api/register-product', {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                credentials: 'include',
+                body: JSON.stringify({
+                    name: formData.name,
+                    description: formData.description,
+                    type: formData.type,
+                    imageUrl: formData.imageUrl,
+                    status: formData.status,
+                    temperature: formData.temperature || null,
+                    humidity: formData.humidity || null,
+                }),
+            });
 
-            if (response.success) {
-                const verifyResponse = await fetch('http://localhost:5000/auth/verify-session', {
-                    credentials: 'include'
-                });
+            const data = await response.json();
 
-                if (!verifyResponse.ok) {
-                    throw new Error('Session verification failed');
-                }
+            if (!response.ok) {
+                console.error('Backend error details:', data);
+                throw new Error(data.message || `HTTP error! status: ${response.status}`);
             }
 
-            // TODO: undefined because of smart contracts implementation (hardhat.config not in /backend), concentrate all contract services in /smart-contract instead
-            console.log('Response:', response);
-            // console.log('Data inputted: ', response.data);
-            // console.log('QrData ', response.qrData);
+            // TODO: Complete smart contract implementation
+            console.log('AddProduct.tsx Data inputted: ', data); // undefined
+            console.log('AddProduct.tsx QrData ', data.qrData);
 
-            setQrImage(await generateQrImage(response.qrData));
+            setQrImage(await generateQrImage(data.qrData));
 
             if(!qrImage) {
                 console.error('Failed to generate QR image'); // debug log
                 throw new Error('Failed to generate QR image');
             }
-            downloadQrCode(response.data.productId, qrImage);
+            downloadQrCode(data.productId, qrImage);
 
         } catch (err) {
             console.error('Full error context:', {

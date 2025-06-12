@@ -7,6 +7,10 @@ const cors = require('cors');
 
 const app = express();
 
+process.on("unhandledRejection", (reason, promise) => {
+    console.error("Unhandled Rejection:", reason);
+});
+
 const userRoutes = require('./domains/user');
 const productRoutes = require('./domains/product');
 

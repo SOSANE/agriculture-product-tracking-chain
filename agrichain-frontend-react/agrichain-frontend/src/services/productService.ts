@@ -15,16 +15,7 @@ export const addProduct = async (
             method: "PUT",
             headers: {"Content-Type": "application/json"},
             credentials: "include",
-            body: JSON.stringify({
-                name: productName,
-                description: productDescription,
-                type: productType,
-                imageUrl: productImage,
-                status: productStatus,
-                farmerUsername,
-                temperature: productTemperature,
-                humidity: productHumidity
-            })
+            body: JSON.stringify({ productName, productDescription, productType, productImage, productStatus, farmerUsername, productTemperature, productHumidity }),
         });
 
 
@@ -68,8 +59,7 @@ export const getProductById  = async (productId: string): Promise<any> => {
             throw new Error(`Failed to fetch product (Status: ${response.status})`);
         }
 
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (err) {
         console.error('Full error context:', {
             err,
