@@ -8,7 +8,9 @@ The product tracking and identification in the supply chain that uses blockchain
 Designing blockchain model for agriculture product tracking involves using the inherent characteristics of blockchain - decentralisation, immutability and transparency - to track agricultural products through every stage of their lifecycle. This include everything from production, processing, transportation, and distribution, to retail.
 
 **NOTES: June 2025**
-- implement next: concentrate all contract services in ```/agrichain-smartcontract```. finish implementing all smart contracts services (ex. transfer ownership)
+- implement next: 
+  - complete implementation of all smart contract functions in  `/agrichain-backend`'s controllers.
+  - Frontend refactoring to limit repeated code.
 
 <h2 align="center"> App showcase </h2>
 <h5 align="center"> Home page </h5>
