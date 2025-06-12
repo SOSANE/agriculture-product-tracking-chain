@@ -76,7 +76,7 @@ const Navbar: React.FC<NavbarProps> = ({user}) => {
 
                                 {isProfileOpen && (
                                     <div
-                                        className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 animate-fade-in">
+                                        className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 justify-items-stretch animate-fade-in">
                                         <div className="px-4 py-2 border-b">
                                             <p className="text-sm font-medium">{user.name}</p>
                                             <p className="text-xs text-neutral-500 capitalize">{user.role}</p>
@@ -87,7 +87,7 @@ const Navbar: React.FC<NavbarProps> = ({user}) => {
                                             Profile
                                         </Link>
                                         <Link to="/settings"
-                                              className="flex items-center px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100">
+                                              className="flex items-center px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100" >
                                             <Settings className="h-4 w-4 mr-2"/>
                                             Settings
                                         </Link>

@@ -5,6 +5,7 @@ import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
 import {useUserProfile} from "../../hooks/useUserProfile.ts";
 import {useProducts} from "../../hooks/useProducts.ts";
 import NavigationCard from "../../components/NavigationCard";
+import Header from "../../components/Header";
 
 const FarmerDashboard: React.FC = () => {
     const {user} = useUserProfile();
@@ -30,20 +31,8 @@ const FarmerDashboard: React.FC = () => {
     return (
         <DashboardLayout>
             <div className="container mx-auto px-4 py-8">
-                <header className="mb-8">
-                    <h1 className="text-3xl font-semibold mb-2">
-                        {user ? `${user.name}'s Dashboard` : 'Farmer Dashboard'}
-                    </h1>
-                    <p className="text-neutral-600">
-                        {user ? `Welcome back, ${user.name}! Manage your agricultural products as a farmer` : 'Manage your agricultural products'}
-                    </p>
-                    {user && (
-                        <div className="mt-2 text-sm text-neutral-500">
-                            Logged in as {user.role} ({user.email || 'no email'})
-                        </div>
-                    )}
-                </header>
-
+                <Header user={user} altHeader='Farmer Dashboard' text='Manage your agricultural products as a farmer'
+                        altText='Manage your agricultural products'/>
                 <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
                     <div className="lg:col-span-2">
                         <div className="card" style={{height: 'fit-content', minHeight: '100%'}}>
@@ -119,7 +108,7 @@ const FarmerDashboard: React.FC = () => {
                     </div>
 
 
-                    <NavigationCard buttons={buttons} isAdmin={false} />
+                    <NavigationCard buttons={buttons} isAdmin={false}/>
 
                 </section>
             </div>

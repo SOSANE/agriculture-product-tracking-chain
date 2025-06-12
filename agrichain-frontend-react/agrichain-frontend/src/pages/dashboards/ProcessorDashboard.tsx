@@ -1,11 +1,12 @@
 import React from 'react';
-import { Factory, Package, QrCode, ShieldCheck } from 'lucide-react';
+import {Factory, Package, QrCode, ShieldCheck} from 'lucide-react';
 import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
 import {useUserProfile} from "../../hooks/useUserProfile.ts";
 import NavigationCard from "../../components/NavigationCard.tsx";
+import Header from "../../components/Header";
 
 const ProcessorDashboard: React.FC = () => {
-    const { user } = useUserProfile();
+    const {user} = useUserProfile();
 
     const buttons = [{
         icon: QrCode,
@@ -27,32 +28,20 @@ const ProcessorDashboard: React.FC = () => {
     return (
         <DashboardLayout>
             <div className="container mx-auto px-4 py-8">
-                <header className="mb-8">
-                    <h1 className="text-3xl font-semibold mb-2">
-                        {user ? `${user.name}'s Dashboard` : 'Processor Dashboard'}
-                    </h1>
-                    <p className="text-neutral-600">
-                        {user ? `Welcome back, ${user.name}! Track processing operations as a processor` : 'Track processing operations'}
-                    </p>
-                    {user && (
-                        <div className="mt-2 text-sm text-neutral-500">
-                            Logged in as {user.role} ({user.email || 'no email'})
-                        </div>
-                    )}
-                </header>
-
+                <Header user={user} altHeader='Processor Dashboard' text='Track processing operations as a processor'
+                        altText='Track processing operations'/>
                 <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
                     <div className="lg:col-span-2">
-                        <div className="card" style={{ height: 'fit-content', minHeight: '100%' }}>
+                        <div className="card" style={{height: 'fit-content', minHeight: '100%'}}>
                             <div className="flex justify-between items-center mb-6">
                                 <h2 className="text-xl font-semibold">Processing Queue</h2>
-                                <Factory className="h-6 w-6 text-primary" />
+                                <Factory className="h-6 w-6 text-primary"/>
                             </div>
                             <p className="text-neutral-600">No items in processing queue</p>
                         </div>
                     </div>
 
-                    <NavigationCard buttons={buttons} isAdmin={false} />
+                    <NavigationCard buttons={buttons} isAdmin={false}/>
                 </section>
             </div>
         </DashboardLayout>

@@ -3,6 +3,7 @@ import {Package, QrCode, ShieldCheck, Truck} from 'lucide-react';
 import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
 import {useUserProfile} from "../../hooks/useUserProfile.ts";
 import NavigationCard from "../../components/NavigationCard.tsx";
+import Header from "../../components/Header.tsx";
 
 const DistributorDashboard: React.FC = () => {
     const {user} = useUserProfile();
@@ -27,20 +28,7 @@ const DistributorDashboard: React.FC = () => {
     return (
         <DashboardLayout>
             <div className="container mx-auto px-4 py-8">
-                <header className="mb-8">
-                    <h1 className="text-3xl font-semibold mb-2">
-                        {user ? `${user.name}'s Dashboard` : 'Distributor Dashboard'}
-                    </h1>
-                    <p className="text-neutral-600">
-                        {user ? `Welcome back, ${user.name}! Manage product distribution as a distributor` : 'Manage product distribution'}
-                    </p>
-                    {user && (
-                        <div className="mt-2 text-sm text-neutral-500">
-                            Logged in as {user.role} ({user.email || 'no email'})
-                        </div>
-                    )}
-                </header>
-
+                <Header user={user} altHeader='Distributor Dashboard' text='Manage product distribution as a distributor' altText='Manage product distribution' />
                 <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
                     <div className="lg:col-span-2">
                         <div className="card" style={{height: 'fit-content', minHeight: '100%'}}>
@@ -51,7 +39,6 @@ const DistributorDashboard: React.FC = () => {
                             <p className="text-neutral-600">No active shipments</p>
                         </div>
                     </div>
-
                     <NavigationCard buttons={buttons} isAdmin={false} />
                 </section>
             </div>
