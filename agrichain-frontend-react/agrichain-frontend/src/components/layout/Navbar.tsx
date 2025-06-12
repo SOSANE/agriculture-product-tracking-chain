@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { Menu, X, Bell, Search, User as UserIcon, LogOut, Home, QrCode, Box, Shield, Settings } from 'lucide-react';
 import {Link} from 'react-router-dom';
 import {User} from '../../types'
-import LogoutConfirmation from '../../pages/shared/LogoutConfirmation';
+import LogoutModal from '../../pages/shared/LogoutModal.tsx';
 import {logoutUser} from '../../services/authService';
 
 interface NavbarProps {
@@ -101,7 +101,7 @@ const Navbar: React.FC<NavbarProps> = ({user}) => {
                                     </div>
                                 )}
                                 {showLogoutConfirm && (
-                                    <LogoutConfirmation
+                                    <LogoutModal
                                         onConfirm={handleLogout}
                                         onCancel={toggleLogoutConfirmation}
                                     />
@@ -196,7 +196,7 @@ const Navbar: React.FC<NavbarProps> = ({user}) => {
                                 </button>
                             </div>
                             {showLogoutConfirm && (
-                                <LogoutConfirmation
+                                <LogoutModal
                                     onConfirm={handleLogout}
                                     onCancel={toggleLogoutConfirmation}
                                 />
