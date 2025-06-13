@@ -13,23 +13,18 @@ const VerifyProduct: React.FC = () => {
     const [error, setError] = useState<string | undefined>(undefined);
     const [loading, setLoading] = useState(false);
 
-    const handleScan = async (qrData: string) => {
+    const handleScan = async (qrData: any) => {
         setIsScanning(false);
         setLoading(true);
 
         try {
             if (qrData) {
-                const data = qrData.split('|');
+                const data = qrData[0].rawValue.split('|');
                 const contractAddress = data[0];
 
                 if (contractAddress === import.meta.env.VITE_CONTRACT_ADDRESS) {
                     setLoading(false);
-
-                    const response = await getProductById(qrData[1]);
-                    if (!response) {
-                        console.error('Failed to fetch product');
-                        throw Error('Failed to fetch product');
-                    }
+                    const response = await getProductById(data[1]);
 
                     if (!response?.id) {
                         setError('No product found with this ID. Please check and try again.');
@@ -37,12 +32,13 @@ const VerifyProduct: React.FC = () => {
                         throw new Error('Failed to fetch product');
                     }
 
-                    const verify = await fetch(`api/verify-product/${response.id}`);
+                    const verify = await fetch(`http://localhost:5000/api/verify-product/${response.id}`);
                     if (!verify) {
                         setError('Could not verify product.');
                         setVerifiedProduct(null);
                         throw new Error('Failed to verify product.');
                     }
+                    setVerifiedProduct(response);
                 }
             }
         } catch (err) {
@@ -71,7 +67,7 @@ const VerifyProduct: React.FC = () => {
                 throw new Error('Failed to fetch product');
             }
 
-            const verify = await fetch(`api/verify-product/${response.id}`);
+            const verify = await fetch(`http://localhost:5000/api/verify-product/${response.id}`);
             if (!verify) {
                 setError('Could not verify product.');
                 setVerifiedProduct(null);

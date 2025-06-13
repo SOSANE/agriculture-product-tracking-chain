@@ -413,7 +413,7 @@ const ProductController = {
         }
     },
 
-    // TODO: Delete commented out code
+    // TODO: Fix increment
     async verifyProduct(req, res) {
         try {
             const product = await ProductModel.verifyProduct(req.params.id);
