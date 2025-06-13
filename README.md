@@ -9,7 +9,7 @@ Designing blockchain model for agriculture product tracking involves using the i
 
 **NOTES: June 2025**
 - implement next: 
-  - complete implementation of all smart contract functions in  `/agrichain-backend`'s controllers.
+  - move qrImage creation function in  `/agrichain-backend` instead for easier verification
   - Frontend refactoring to limit repeated code.
 
 <h2 align="center"> App showcase </h2>
