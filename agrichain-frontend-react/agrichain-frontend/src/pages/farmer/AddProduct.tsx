@@ -19,12 +19,12 @@ const AddProduct: React.FC = () => {
         humidity: ''
     });
 
+    // TODO: Move QR image creation in backend instead (?) for easier verification implementation
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         console.log('Form submitted:', formData);
 
         try {
-
             const response = await fetch('http://localhost:5000/api/register-product', {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
@@ -47,17 +47,19 @@ const AddProduct: React.FC = () => {
                 throw new Error(data.message || `HTTP error! status: ${response.status}`);
             }
 
-            // TODO: Complete smart contract implementation
-            console.log('AddProduct.tsx Data inputted: ', data); // undefined
+            console.log('AddProduct.tsx Data inputted: ', data); // debug log
             console.log('AddProduct.tsx QrData ', data.qrData);
 
-            setQrImage(await generateQrImage(data.qrData));
+            const qrData = await generateQrImage(data.qrData);
+            console.log('QR Data to be set as QR Image: ', qrData);
 
-            if(!qrImage) {
+            if(!qrData) {
                 console.error('Failed to generate QR image'); // debug log
                 throw new Error('Failed to generate QR image');
             }
-            downloadQrCode(data.productId, qrImage);
+            setQrImage(qrData);
+            console.log('QR Image: ', qrImage);
+            downloadQrCode(data.id, qrData);
 
         } catch (err) {
             console.error('Full error context:', {

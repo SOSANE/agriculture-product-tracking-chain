@@ -2,7 +2,7 @@ require('dotenv').config();
 const { generateBatchId, generateProductId, generateQrData } = require('../../utils/generator');
 // const { registerProduct, verifyProduct } = require('../../services/contractServices');
 // const { ProductContract } = require('../../../../agrichain-smartcontract/scripts/contractService');
-const {agrichain}  = require('../../AgrichainInterface');
+const {callContractFunction}  = require('../../AgrichainInterface');
 const ProductModel = require('./model');
 
 // const agrichain = createAgrichainContract();
@@ -308,7 +308,7 @@ const ProductController = {
         }
     },
 
-    // TODO: Delete commented out code
+    // TODO: Create QR image in backend instead (?) for easier verification implementation
     async registerProduct(req, res) {
         if (!req.session.user) {
             return res.status(401).json({error: 'Unauthorized'});
@@ -337,33 +337,22 @@ const ProductController = {
 
             const address = await ProductModel.getCurrentLocation(req.session.user.username);
 
-            console.log('product query result: ', product);
-            console.log('address query result: ', address);
+            console.log('product query result: ', product); // debug log
+            console.log('address query result: ', address); // debug log
 
-            // const registerTransaction = await agrichain.registerProductContract({
-            //     id: productId,
-            //     name: product.name,
-            //     description: product.description,
-            //     productType: product.productType,
-            //     imageUrl: product.imageUrl,
-            //     batchId: batchId,
-            //     qrCode: qrCode,
-            //     initialLocation: address
-            // });
-
-            const registerTransaction = await agrichain.callContractFunction(
+            const registerTransaction = await callContractFunction(
                 'registerProduct',
                 productId,
                 product.name,
                 product.description,
-                product.productType,
-                product.imageUrl,
+                product.type,
+                product.image_url,
                 batchId,
                 qrCode,
-                address
+                address.address
             );
 
-            console.log('registerTransaction result: ', registerTransaction);
+            console.log('registerTransaction result: ', registerTransaction); // debug log
 
             if (!registerTransaction) {
                 return res.status(400).json({error: 'Could not register this product in the blockchain.'});
