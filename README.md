@@ -11,7 +11,7 @@ Designing blockchain model for agriculture product tracking involves using the i
 - implement next: 
   - Frontend refactoring to limit repeated code.
   - add test.js in `agrichain-smartcontract/scripts`
-  - modify `VerifyProduct.tsx` to accept batchID
+  - fix `transferownership` in `agrichain-smartcontract`
 
 <h2 align="center"> App showcase </h2>
 <h5 align="center"> Home page </h5>

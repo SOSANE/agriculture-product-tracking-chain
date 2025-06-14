@@ -4,7 +4,7 @@ import QRScanner from '../components/verification/QRScanner';
 import VerificationResult from '../components/verification/VerificationResult';
 import {Product} from '../types';
 import Footer from "../components/layout/Footer.tsx";
-import {getProductById} from "../services/productService.ts";
+import {getProductById, verifyProduct} from "../services/productService.ts";
 
 const VerifyProduct: React.FC = () => {
     const [isScanning, setIsScanning] = useState(false);
@@ -66,9 +66,8 @@ const VerifyProduct: React.FC = () => {
                 setVerifiedProduct(null);
                 throw new Error('Failed to fetch product');
             }
-
-            const verify = await fetch(`http://localhost:5000/api/verify-product/${response.id}`);
-            if (!verify) {
+            const verify = await verifyProduct(response.id);
+            if (!verify.ok) {
                 setError('Could not verify product.');
                 setVerifiedProduct(null);
                 throw new Error('Failed to verify product.');

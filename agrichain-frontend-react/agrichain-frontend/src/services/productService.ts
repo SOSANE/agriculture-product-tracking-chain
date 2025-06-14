@@ -1,5 +1,6 @@
 import {ProductStatus} from "../types";
 
+// TODO: remove addProduct
 export const addProduct = async (
     productName: string,
     productDescription: string,
@@ -55,8 +56,8 @@ export const getProductById  = async (productId: string): Promise<any> => {
         });
 
         if (!response.ok) {
-            console.error('Backend error details:', response);
-            throw new Error(`Failed to fetch product (Status: ${response.status})`);
+            console.error('[getProductById] Backend error details:', response);
+            throw new Error(`[getProductById] - Failed to fetch product (Status: ${response.status})`);
         }
 
         return await response.json();
@@ -65,6 +66,30 @@ export const getProductById  = async (productId: string): Promise<any> => {
             err,
             timestamp: new Date().toISOString(),
             endpoint: `/api/products/${productId}`
+        });
+        return {
+            success: false,
+            message: err instanceof Error ? err.message : 'Network request failed'
+        }
+    }
+};
+
+export const verifyProduct = async (productId: string): Promise<any> => {
+    try {
+        const response = await fetch(`/api/verify-product/${productId}`, {
+            method: "POST",
+            credentials: "include",
+        });
+        if (!response.ok) {
+            console.error('[verifyProduct] Backend error details:', response);
+            throw new Error(`[verifyProduct] - Failed to verify verify product (Status: ${response.status})`);
+        }
+        return response;
+    } catch (err) {
+        console.error('Full error context:', {
+            err,
+            timestamp: new Date().toISOString(),
+            endpoint: `/api/verify-product/${productId}`
         });
         return {
             success: false,

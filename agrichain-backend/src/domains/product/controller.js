@@ -154,17 +154,21 @@ const ProductController = {
         }
 
         try {
-            const productId = req.params.id;
+            const id = req.params.id;
 
             // console.log('Product id: ', productId); // debug log
 
-            const product = await ProductModel.findByProductId(productId);
+            let product = await ProductModel.findByProductId(id);
             // console.log('Product found', product); // debug log
 
             if (!product) {
-                return res.status(404).json({ error: 'Product not found' });
+                product = await ProductModel.findByBatchId(id);
+                if (!product) {
+                    return res.status(404).json({ error: 'Product not found' });
+                }
             }
 
+            const productId = product.id;
             const certificates = await ProductModel.getCertificatesByProductId(productId);
             const supplychain = await ProductModel.getSupplychainByProductId(productId);
 
@@ -415,20 +419,25 @@ const ProductController = {
         }
     },
 
-    // TODO: Fix increment
     async verifyProduct(req, res) {
         try {
-            const product = await ProductModel.verifyProduct(req.params.id);
-
+            const id = req.params.id;
+            let product = await ProductModel.findByProductId(id);
             // const tx = await agrichain.verifyProductContract(req.params.id);
 
             if (!product) {
-                return res.status(401).json({error: 'Could not verify this product.'});
+                product = await ProductModel.findByBatchId(id);
+                if (!product) {
+                    return res.status(401).json({error: 'Could not verify this product.'});
+                }
             }
+            const productId = product.id;
+            const verifiedProduct = await ProductModel.verifyProduct(productId);
+            console.log(verifiedProduct);
             // if (!tx) {
             //     return res.status(401).json({error: 'Could not verify this product in the blockchain.'});
             // }
-            res.status(201).json(product);
+            res.status(201).json(verifiedProduct);
         } catch(err) {
             console.error('Error:', err.message);
             return res.status(401).json({error: 'Cannot verify this product.'});
