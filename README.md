@@ -9,12 +9,9 @@ Designing blockchain model for agriculture product tracking involves using the i
 
 **NOTES: June 2025**
 - implement next: 
-  - move qrImage creation function in  `/agrichain-backend` instead for easier verification.
   - Frontend refactoring to limit repeated code.
   - add test.js in `agrichain-smartcontract/scripts`
-  - modify `ProductDetail.tsx` to display qr image and transactions history
   - modify `VerifyProduct.tsx` to accept batchID
-  - modify models (qrimage column in addition to qrdata)
 
 <h2 align="center"> App showcase </h2>
 <h5 align="center"> Home page </h5>

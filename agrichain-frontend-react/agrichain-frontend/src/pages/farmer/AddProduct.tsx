@@ -1,14 +1,10 @@
 import React, {useState} from "react";
-// import {useUserProfile} from "../../hooks/useUserProfile.ts";
 import {Link} from "react-router-dom";
-// import {ProductStatus} from "../../types";
-// import {addProduct} from "../../services/productService.ts";
 import {ArrowLeft} from "lucide-react";
+import {downloadQrCode} from "../../services/productService.ts";
 
 const AddProduct: React.FC = () => {
-    // const { user } = useUserProfile();
     const [qrImage, setQrImage] = useState<string | null>(null);
-
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -19,10 +15,9 @@ const AddProduct: React.FC = () => {
         humidity: ''
     });
 
-    // TODO: Move QR image creation in backend instead (?) for easier verification implementation
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Form submitted:', formData);
+        console.log('Form submitted:', formData); // debug log
 
         try {
             const response = await fetch('http://localhost:5000/api/register-product', {
@@ -48,13 +43,13 @@ const AddProduct: React.FC = () => {
             }
 
             console.log('AddProduct.tsx Data inputted: ', data); // debug log
-            console.log('AddProduct.tsx QrData ', data.qrData);
+            console.log('AddProduct.tsx qr_code data ', data.qr_code); // debug log
+            // console.log('AddProduct.tsx qr_image data ', data.qr_image);
 
-            const qrData = await generateQrImage(data.qrData);
-            console.log('QR Data to be set as QR Image: ', qrData);
+            const qrData = data.qr_image;
+            console.log('QR Data to be set as QR Image: ', qrData); // debug log
 
             if(!qrData) {
-                console.error('Failed to generate QR image'); // debug log
                 throw new Error('Failed to generate QR image');
             }
             setQrImage(qrData);
@@ -76,25 +71,6 @@ const AddProduct: React.FC = () => {
             ...prev,
             [name]: value
         }));
-    };
-
-    const generateQrImage = async (qrData: string) => {
-        const QRCode = await import('qrcode');
-        return new Promise<string>((resolve) => {
-            QRCode.toDataURL(qrData, (err, url) => {
-                if (err) throw err;
-                resolve(url);
-            });
-        });
-    };
-
-    const downloadQrCode = (productId: string, imageUrl: string) => {
-        const link = document.createElement('a');
-        link.href = imageUrl;
-        link.download = `QR_${productId}.png`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
     };
 
     let isSubmitting;

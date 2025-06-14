@@ -32,4 +32,10 @@ function generateQrData(contractAddress, productId) {
     return `${contractAddress}|${productId}`;
 }
 
-module.exports = { generateProductId, generateBatchId, generateQrData };
+// Generate the QrImage from Data
+async function generateQrURL(qrData) {
+    const QRCode = await import('qrcode')
+    return QRCode.default.toDataURL(qrData);
+}
+
+module.exports = { generateProductId, generateBatchId, generateQrData, generateQrURL };

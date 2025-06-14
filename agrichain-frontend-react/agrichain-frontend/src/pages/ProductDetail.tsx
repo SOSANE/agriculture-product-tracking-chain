@@ -4,6 +4,7 @@ import { CheckCircle, Info, Download, Share2, ArrowLeft, MapPin, Calendar, User,
 import SupplyChainTimeline from '../components/product/SupplyChainTimeline';
 import { Product } from '../types';
 import { DashboardLayout } from "../components/layout/DashboardLayout";
+import {downloadQrCode} from "../services/productService.ts";
 
 const ProductDetail: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'timeline' | 'certificates' | 'details'>('timeline');
@@ -11,6 +12,8 @@ const ProductDetail: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const { id } = useParams<{ id: string }>();
+
+    const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
 
     useEffect(() => {
         console.log('Fetching product with ID:', id); // Debug log
@@ -161,8 +164,7 @@ const ProductDetail: React.FC = () => {
                                 <div className="text-center p-4 bg-neutral-50 rounded-lg">
                                     <DollarSign className="h-5 w-5 mx-auto mb-2 text-primary" />
                                     <h4 className="text-sm font-medium mb-1">Retail Price</h4>
-                                    {/*<p className="text-xs text-neutral-500">${product.retailPrice?.toFixed(2)}</p>*/}
-                                    <p className="text-xs text-neutral-500">${product.retailPrice}</p>
+                                    <p className="text-xs text-neutral-500">{product.retailPrice ? '$'+product.retailPrice : 'N/A'}</p>
                                 </div>
                             </div>
 
@@ -294,7 +296,7 @@ const ProductDetail: React.FC = () => {
 
                                                 <div>
                                                     <h4 className="text-sm font-medium text-neutral-500">Retail Price</h4>
-                                                    <p>${product.retailPrice}</p>
+                                                    <p>{product.retailPrice ? '$'+product.retailPrice : 'N/A'}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -344,8 +346,7 @@ const ProductDetail: React.FC = () => {
                             </div>
 
                             <div className="bg-white border border-neutral-200 rounded-lg p-4 flex justify-center">
-                                <img
-                                    src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg"
+                                <img src={product.qrImage}
                                     alt="Product QR Code"
                                     className="h-40 w-40"
                                 />
@@ -355,7 +356,7 @@ const ProductDetail: React.FC = () => {
                                 Scan to verify authenticity
                             </p>
 
-                            <button className="btn btn-outline w-full mt-4">
+                            <button onClick={() => downloadQrCode(product.id, product.qrImage)} className="btn btn-outline w-full mt-4">
                                 <Download className="h-4 w-4 mr-1" />
                                 Download QR Code
                             </button>
@@ -384,7 +385,7 @@ const ProductDetail: React.FC = () => {
 
                                 <div>
                                     <h4 className="text-sm font-medium text-neutral-500">Smart Contract</h4>
-                                    <p className="text-sm text-neutral-800 break-all font-mono">0x7D5b23a11aF58EE560427B571ddA74b52F2Da77E</p>
+                                    <p className="text-sm text-neutral-800 break-all font-mono">{contractAddress ?? 'N/A'}</p>
                                 </div>
                             </div>
 

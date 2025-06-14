@@ -60,6 +60,7 @@ export interface Product {
     imageUrl?: string;
     batchId: string;
     qrCode: string;
+    qrImage: string;
     createdAt: string;
     currentLocation: Location;
     certificates: Certificate[];

@@ -71,4 +71,13 @@ export const getProductById  = async (productId: string): Promise<any> => {
             message: err instanceof Error ? err.message : 'Network request failed'
         }
     }
-}
+};
+
+export const downloadQrCode = (productId: string, imageUrl: string) => {
+    const link = document.createElement('a');
+    link.href = imageUrl;
+    link.download = `QR_${productId}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};

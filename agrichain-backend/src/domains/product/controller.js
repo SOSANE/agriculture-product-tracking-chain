@@ -1,11 +1,7 @@
 require('dotenv').config();
-const { generateBatchId, generateProductId, generateQrData } = require('../../utils/generator');
-// const { registerProduct, verifyProduct } = require('../../services/contractServices');
-// const { ProductContract } = require('../../../../agrichain-smartcontract/scripts/contractService');
+const { generateBatchId, generateProductId, generateQrData, generateQrURL } = require('../../utils/generator');
 const {callContractFunction}  = require('../../AgrichainInterface');
 const ProductModel = require('./model');
-
-// const agrichain = createAgrichainContract();
 
 const ProductController = {
     async getProducts (req, res) {
@@ -123,6 +119,7 @@ const ProductController = {
                 imageUrl: product.image_url,
                 batchId: product.batch_id,
                 qrCode: product.qr_code,
+                qrImage: product.qr_image,
                 createdAt: product.created_at,
                 currentLocation: product.current_location_id ? {
                     id: product.current_location_id,
@@ -221,6 +218,7 @@ const ProductController = {
                 imageUrl: product.image_url,
                 batchId: product.batch_id,
                 qrCode: product.qr_code,
+                qrImage: product.qr_image,
                 createdAt: product.created_at,
                 currentLocation: product.current_location_id ? {
                     id: product.current_location_id,
@@ -308,7 +306,7 @@ const ProductController = {
         }
     },
 
-    // TODO: Create QR image in backend instead (?) for easier verification implementation
+
     async registerProduct(req, res) {
         if (!req.session.user) {
             return res.status(401).json({error: 'Unauthorized'});
@@ -318,11 +316,14 @@ const ProductController = {
             const productId = generateProductId();
             const batchId = generateBatchId(req.body.name, req.body.type);
             const qrCode = generateQrData(process.env.CONTRACT_ADDRESS, productId);
+            const qrImage = await generateQrURL(qrCode);
 
+            // console.log('Controller, qrImage value: ', qrImage); // debug log
             const productData = {
                 productId,
                 batchId,
                 qrCode,
+                qrImage,
                 name: req.body.name,
                 description: req.body.description,
                 type: req.body.type,
@@ -337,8 +338,8 @@ const ProductController = {
 
             const address = await ProductModel.getCurrentLocation(req.session.user.username);
 
-            console.log('product query result: ', product); // debug log
-            console.log('address query result: ', address); // debug log
+            // console.log('product query result: ', product); // debug log
+            // console.log('address query result: ', address); // debug log
 
             const registerTransaction = await callContractFunction(
                 'registerProduct',
@@ -387,6 +388,7 @@ const ProductController = {
                 imageUrl: product.image_url,
                 batchId: product.batch_id,
                 qrCode: product.qr_code,
+                qrImage: product.qr_image,
                 createdAt: product.created_at,
                 currentLocation: product.current_location_id ? {
                     id: product.current_location_id,

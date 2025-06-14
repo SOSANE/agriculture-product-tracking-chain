@@ -277,6 +277,7 @@ const ProductModel = {
             productId,
             batchId,
             qrCode,
+            qrImage,
             name,
             description,
             type,
@@ -301,14 +302,14 @@ const ProductModel = {
         ),
         product_insert AS (
             INSERT INTO supplychain.product(
-                id, name, description, type, image_url, batch_id, qr_code,
+                id, name, description, type, image_url, batch_id, qr_code, qr_image,
                 created_at, current_location_id, status, farmer_username,
                 farmer_name, farmer_organization, retail_price,
                 verification_count, last_verified
             )
             SELECT 
-                $1, $2, $3, $4, $5, $7, $8,
-                CURRENT_TIMESTAMP, pi.location_id, $9, pi.username,
+                $1, $2, $3, $4, $5, $7, $8, $9,
+                CURRENT_TIMESTAMP, pi.location_id, $10, pi.username,
                 pi.name, pi.organization, NULL,
                 0, NULL
             FROM profile_info pi
@@ -322,21 +323,18 @@ const ProductModel = {
                 location_id, temperature, humidity, verified
             )
             SELECT 
-                'step1', $1, CURRENT_TIMESTAMP, $9::product_status, $3,
+                'step1', $1, CURRENT_TIMESTAMP, $10::product_status, $3,
                 pi.username, pi.name, 'farmer', pi.organization,
-                pi.location_id, NULLIF($10, '')::DECIMAL(5, 2), NULLIF($11, '')::DECIMAL(5, 2), TRUE
+                pi.location_id, NULLIF($11, '')::DECIMAL(5, 2), NULLIF($12, '')::DECIMAL(5, 2), TRUE
             FROM profile_info pi
             RETURNING *
         )
         SELECT * FROM product_insert;
         `;
 
-        const { rows } = await db.query(query, [productId, name, description, type, imageUrl, farmerUsername, batchId, qrCode, status, temperature, humidity]);
+        const { rows } = await db.query(query, [productId, name, description, type, imageUrl, farmerUsername, batchId, qrCode, qrImage, status, temperature, humidity]);
 
-        return {
-            ...rows[0],
-            qrData: qrCode
-        };
+        return rows[0];
     },
 
     async getCurrentLocation(username) {
