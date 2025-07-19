@@ -28,6 +28,7 @@ Designing blockchain model for agriculture product tracking involves using the i
 - [Features](#features)
 - [Project Structure](#project-structure)
 - [Prerequisites](#prerequisites)
+- [Docker Configuration (in work)](#docker-configuration-in-work)
 - [Setup Guide](#setup-guide)
 - [Running the System](#running-the-system)
 - [Test Accounts](#test-accounts)
@@ -56,6 +57,14 @@ agriculture-product-tracking-chain/
 - Hardhat 2.23.0+
 - Ethers/Ethers.js
 - Solidity
+- Docker (in work)
+
+## Docker Configuration (in work)
+1. Navigate to root project
+2. Run 
+```sh
+docker compose up --build
+```
 
 ## Setup Guide
 ### 1. Clone Repository
@@ -182,13 +191,6 @@ Several accounts pre-made for testing purposes:
 | Distributor | distributor2 | distribute321 |
 | Retailer    | retailer1    | retail123     |
 
-
-## Docker configuration (in work)
-1. Navigate to root project
-2. Run 
-```sh
-docker compose up --build
-```
 
 ## Licence
 MIT © 2025 AgriChain
