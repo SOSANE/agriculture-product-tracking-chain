@@ -26,12 +26,7 @@ services:
       ports: "5000:5000"
     contract:
       build: ./agrichain-smartcontract
-      volumes: 
-        - ./agrichain-smartcontract/contracts/:/agrichain-smartcontract/contracts/
-        - ./agrichain-smartcontract/scripts/:/agrichain-smartcontract/scripts/
-        - ./agrichain-smartcontract/hardhat.config.js:/agrichain-smartcontract/hardhat.config.js
-        - ./agrichain-smartcontract/package.json:/agrichain-smartcontract/package.json
-        - ./agrichain-smartcontract/package-lock.json:/agrichain-smartcontract/package-lock.json
+      volumes: ./agrichain-smartcontract/:/agrichain-smartcontract/
       env_file: ./agrichain-smartcontract/.env
       working_dir: ./agrichain-smartcontract
       ports: "8545:8545"
