@@ -185,5 +185,13 @@ Several accounts pre-made for testing purposes:
 | Distributor | distributor2 | distribute321 |
 | Retailer    | retailer1    | retail123     |
 
+
+## Docker configuration (in work)
+1. Navigate to root project
+2. Run 
+```sh
+docker compose up --build
+```
+
 ## Licence
 MIT © 2025 AgriChain
