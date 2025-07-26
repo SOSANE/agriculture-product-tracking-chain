@@ -1,7 +1,11 @@
-# *AgriChain* : Product Tracking and Identification in the Supply Chain Using Blockchain Technology
+<h1 align="center"><i>AgriChain</i> : Product Tracking and Identification in the Supply Chain Using Blockchain Technology </h1>
+
 <h5 align="center"> A decentralized solution for tracking agricultural products through their lifecycle using blockchain technology. </h5>
 
+<div align="center">
+
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+<div>
 
 The product tracking and identification in the supply chain that uses blockchain technology, the ethereum network, smart contracts and QR codes to provide transparency and security and promote decentralisation.
 
