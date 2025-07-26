@@ -12,7 +12,7 @@ export const addProduct = async (
     productHumidity: string | null
 ): Promise<any> => {
     try {
-        const response = await fetch("/api/register-product", {
+        const response = await fetch("http://localhost:5000/api/register-product", {
             method: "PUT",
             headers: {"Content-Type": "application/json"},
             credentials: "include",
@@ -51,7 +51,7 @@ export const addProduct = async (
 
 export const getProductById  = async (productId: string): Promise<any> => {
     try {
-        const response = await fetch(`/api/products/${productId}`, {
+        const response = await fetch(`http://localhost:5000/api/products/${productId}`, {
             credentials: "include"
         });
 
@@ -76,7 +76,7 @@ export const getProductById  = async (productId: string): Promise<any> => {
 
 export const verifyProduct = async (productId: string): Promise<any> => {
     try {
-        const response = await fetch(`/api/verify-product/${productId}`, {
+        const response = await fetch(`http://localhost:5000/api/verify-product/${productId}`, {
             method: "POST",
             credentials: "include",
         });

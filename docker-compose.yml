@@ -39,11 +39,9 @@ services:
     contract:
       build: 
         context: ./agrichain-smartcontract
-        dockerfile: Dockerfile
       volumes: 
         - ./agrichain-smartcontract/:/agrichain-smartcontract
         - /agrichain-smartcontract/node_modules
-      env_file: ./agrichain-smartcontract/.env
       working_dir: /agrichain-smartcontract
       ports: 
         - 8545:8545

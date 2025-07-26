@@ -18,7 +18,7 @@ export const registerAccount = async (
     role: UserRole
 ): Promise<AddAccountResponse> => {
     try {
-        const response = await fetch("/api/add-user", {
+        const response = await fetch("http://localhost:5000/api/add-user", {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             credentials: "include",

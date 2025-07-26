@@ -71,7 +71,7 @@ const ManageAccounts: React.FC = () => {
         const loadUsers = async () => {
             try {
                 setUsersLoading(true);
-                const response = await fetch(`/api/users`, {
+                const response = await fetch(`http://localhost:5000//api/users`, {
                     credentials: 'include'
                 });
 

@@ -11,7 +11,7 @@ export const Products: React.FC = () => {
     useEffect(() => {
         const loadProducts = async () => {
             try {
-                const response = await fetch(`/api/all-products`, {
+                const response = await fetch(`http://localhost:5000/api/all-products`, {
                     credentials: 'include'
                 });
 

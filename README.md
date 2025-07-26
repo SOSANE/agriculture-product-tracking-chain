@@ -1,11 +1,19 @@
-# *AgriChain* : Product Tracking and Identification in the Supply Chain Using Blockchain Technology
+<h1 align="center"><i>AgriChain</i> : Product Tracking and Identification in the Supply Chain Using Blockchain Technology <br> <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWJveC1pY29uIGx1Y2lkZS1ib3giPjxwYXRoIGQ9Ik0yMSA4YTIgMiAwIDAgMC0xLTEuNzNsLTctNGEyIDIgMCAwIDAtMiAwbC03IDRBMiAyIDAgMCAwIDMgOHY4YTIgMiAwIDAgMCAxIDEuNzNsNyA0YTIgMiAwIDAgMCAyIDBsNy00QTIgMiAwIDAgMCAyMSAxNloiLz48cGF0aCBkPSJtMy4zIDcgOC43IDUgOC43LTUiLz48cGF0aCBkPSJNMTIgMjJWMTIiLz48L3N2Zz4=" alt="Agrichain block logo" /></h1>
+
+
+    
+
 <h5 align="center"> A decentralized solution for tracking agricultural products through their lifecycle using blockchain technology. </h5>
 
+<div style="text-align: center;">
+
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+</div>
 
 The product tracking and identification in the supply chain that uses blockchain technology, the ethereum network, smart contracts and QR codes to provide transparency and security and promote decentralisation.
 
 Designing blockchain model for agriculture product tracking involves using the inherent characteristics of blockchain - decentralisation, immutability and transparency - to track agricultural products through every stage of their lifecycle. This include everything from production, processing, transportation, and distribution, to retail.
+
 
 
 [Consult old README.md to see legacy setup guide](./README.old.md)
@@ -15,7 +23,7 @@ Designing blockchain model for agriculture product tracking involves using the i
 - [Project Structure](#project-structure)
 - [Prerequisites](#prerequisites)
 - [Setup Guide](#setup-guide)
-- [Running the System with Docker](#running-the-system-with-docker)
+- [Running the system with Docker](#running-the-system-with-docker)
 - [Test Accounts](#test-accounts)
 - [License](#licence)
 
@@ -24,6 +32,7 @@ Designing blockchain model for agriculture product tracking involves using the i
 - Product traceability with **blockchain verification** using the **Ethereum network** via **Hardhat** and **smart contracts**.
 - **PostgreSQL** used for database backend.
 - **React** frontend dashboard for the web interface.
+- **Docker** for easy build & testing of the application.
 
 ## Project Structure
 ```
@@ -36,7 +45,7 @@ agriculture-product-tracking-chain/
 
 ## Prerequisites
 - **Docker**
-- **Metamask** wallet
+- **Metamask wallet**
 
 ## Setup Guide
 ### 1. Clone Repository
@@ -45,59 +54,43 @@ git clone https://github.com/SOSANE/agriculture-product-tracking-chain
 cd agriculture-product-tracking-chain
 ```
 
-### 2. MetaMask Setup
+
+### 2. Environment variables changes
+**First edit the `.env.*` files.**
+
+`agrichain-backend/.env.backend`
+```dotenv
+...
+SESSION_SECRET=your_session_secret # Some session secret code, can be anything
+SESSION_MAX_AGE=86400000
+...
+```
+
+Rename all of the `.env.*` files (`.env.db`, `.env.frontend` & `.env.backend`) to `.env`.
+
+### 3. MetaMask Setup
 1. **Create a [MetaMask](https://portfolio.metamask.io/)** wallet if you do not own one.
 2. **Download the [Metamask's browser extension](https://metamask.io/download)** and connect your wallet.
 
 <br>
 
-- Hardhat gives 20 accounts with their private keys, each account have a wallet with 10000 ETH (Testnet). **PS. All hardhat accounts and their private keys are PUBLIC INFORMATION. For example, account #0's address is always``0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266``** → ***[Read more on Harhat (docs)](https://hardhat.org/hardhat-network/docs/overview)***
-- For testing purposes (transactions), import 1-3 account to Metamask wallet using any of the hardhat private keys by adding a **personal network with the following parameters:**
+- Hardhat gives 20 accounts with their private keys, each account have a wallet with 10000 ETH (Testnet). **PS. All hardhat accounts and their private keys are PUBLIC INFORMATION. For example, account #0's address is always ``0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266`` & ``0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80`` is the private key** → ***[Read more on Harhat (docs)](https://hardhat.org/hardhat-network/docs/overview)***
+- For testing purposes (transactions), import a few accounts including **account #0** to **Metamask wallet** using any of the hardhat private keys by adding a **personal network with the following parameters:**
   - **Local network**: ``http://localhost:8545/``
   - **Chain ID**: ``1337``
   - **Currency symbol**: ``ETH``
-- One of the imported accounts' private key can be used for the ``ADMIN_PRIVATE_KEY``
-- ``CONTRACT_ADDRESS`` & ``ADMIN_PRIVATE_KEY``'s values can now be replaced in the ``.env`` files.
-### 3. Environment variables changes
-Edit the `.env.*` files
+- ``ADMIN_PRIVATE_KEY`` variable is associated to account #0 **private key**.
 
-`agrichain-backend/.env.backend`
-```dotenv
-PORT=5000
-DB_USER=your_postgres_username
-DB_HOST=localhost
-DB_NAME=agrichain
-DB_PASSWORD=your_postgres_password
-DB_PORT=5432
-CORS_ORIGIN=http://localhost:5173
-SESSION_SECRET=your_session_secret
-CONTRACT_ADDRESS=your_deployed_address
-ADMIN_PRIVATE_KEY=your_private_admin_key
-BLOCKCHAIN_PROVIDER_URL=http://localhost:8545
-```
-`agrichain-frontend/.env.frontend`
-```dotenv
-VITE_ADMIN_PRIVATE_KEY=your_private_admin_key    # Can be obtained after starting hardhat node
-VITE_CONTRACT_ADDRESS=your_deployed_address      # Contract address can be obtained by running scripts/deploy.js
-VITE_BLOCKCHAIN_PROVIDER_URL=http://localhost:8545
-```
-`agrichain-smartcontract/.env.contract`
-```dotenv
-CONTRACT_ADDRESS=your_deployed_address
-BLOCKCHAIN_PROVIDER_URL=http://localhost:8545
-ADMIN_PRIVATE_KEY=your_private_admin_key
-```
 
-Rename all of the `.env.*` files (`.env.db`, `.env.contract`, etc.) to `.env`
 ## Running the System with Docker
 1. Navigate to root project
 2. **Run the following command**
-```sh
+```shell
 docker compose up --build
 ```
-**After build, access the application on http://localhost:5173**
+**After build & start, access the application on http://localhost:5173.**
 
-Log in using the [test accounts](#test-accounts)
+Log in using the [test accounts](#test-accounts).
 
 ## Test Accounts
 Several accounts pre-made for testing purposes:
