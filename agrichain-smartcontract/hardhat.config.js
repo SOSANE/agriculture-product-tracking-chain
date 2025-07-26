@@ -2,6 +2,7 @@
 require("@nomicfoundation/hardhat-toolbox");
 require("@nomicfoundation/hardhat-ethers");
 module.exports = {
+  defaultNetwork: 'hardhat',
   solidity: {
     version: "0.8.28",
     settings: {
@@ -14,10 +15,11 @@ module.exports = {
   },
   networks: {
     hardhat: {
-      chainId: 1337
+      chainId: 1337,
     },
     localhost: {
-      url: "http://127.0.0.1:8545"
+      chainId: 1337,
+      url: "http://0.0.0.0:8545"
     }
   }
 };

@@ -1,11 +1,13 @@
 FROM node:22-alpine3.21
 ENV TZ America/Toronto
 
-RUN mkdir /agrichain-smartcontract
 WORKDIR /agrichain-smartcontract
+COPY package*.json /agrichain-smartcontract/
 
+RUN npm install
 ADD . /agrichain-smartcontract/
 
-CMD ["/bin/sh", "entrypoint.sh"]
+RUN npx hardhat compile
+CMD ["npx", "hardhat", "node"]
 
 EXPOSE 8545
