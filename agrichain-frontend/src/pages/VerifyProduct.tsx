@@ -32,7 +32,7 @@ const VerifyProduct: React.FC = () => {
                         throw new Error('Failed to fetch product');
                     }
 
-                    const verify = await fetch(`http://localhost:5000/api/verify-product/${response.id}`);
+                    const verify = await fetch(`/api/verify-product/${response.id}`);
                     if (!verify) {
                         setError('Could not verify product.');
                         setVerifiedProduct(null);

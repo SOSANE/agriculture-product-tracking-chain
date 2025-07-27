@@ -23,7 +23,7 @@ export const useProducts = () => {
             setProductsLoading(true);
             setProductsError(null);
 
-            const url = 'http://localhost:5000/api/products';
+            const url = '/api/products';
 
             const response = await fetch(url, {
                 credentials: 'include'

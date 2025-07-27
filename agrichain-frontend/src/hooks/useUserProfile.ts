@@ -9,7 +9,7 @@ export const useUserProfile = () => {
     useEffect(() => {
         const loadProfile = async () => {
             try {
-                const verifyResponse = await fetch('http://localhost:5000/auth/verify-session', {
+                const verifyResponse = await fetch('/auth/verify-session', {
                     credentials: 'include'
                 });
 
@@ -23,7 +23,7 @@ export const useUserProfile = () => {
                     throw new Error(verifyData.message || 'Session invalid');
                 }
 
-                const profileResponse = await fetch('http://localhost:5000/api/profile', {
+                const profileResponse = await fetch('/api/profile', {
                     credentials: 'include'
                 });
 

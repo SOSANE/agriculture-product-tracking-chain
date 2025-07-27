@@ -74,12 +74,14 @@ Rename all of the `.env.*` files (`.env.db`, `.env.frontend` & `.env.backend`) t
 
 <br>
 
+<h4 align="center">Hardhat accounts</h4>
+
 - Hardhat gives 20 accounts with their private keys, each account have a wallet with 10000 ETH (Testnet). **PS. All hardhat accounts and their private keys are PUBLIC INFORMATION. For example, account #0's address is always ``0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266`` & ``0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80`` is the private key** → ***[Read more on Harhat (docs)](https://hardhat.org/hardhat-network/docs/overview)***
-- For testing purposes (transactions), import a few accounts including **account #0** to **Metamask wallet** using any of the hardhat private keys by adding a **personal network with the following parameters:**
-  - **Local network**: ``http://localhost:8545/``
+- For testing purposes (`transactions`), import a few Hardhat accounts including **account #0** to **Metamask wallet** using their private keys by adding a **personal network with the following parameters:**
+  - **Local network (default RPC URL)**: ``http://localhost:8545/``
   - **Chain ID**: ``1337``
   - **Currency symbol**: ``ETH``
-- ``ADMIN_PRIVATE_KEY`` variable is associated to account #0 **private key**.
+- ``ADMIN_PRIVATE_KEY`` variable is associated to **account #0 private key**.
 
 
 ## Running the System with Docker
@@ -88,7 +90,7 @@ Rename all of the `.env.*` files (`.env.db`, `.env.frontend` & `.env.backend`) t
 ```shell
 docker compose up --build
 ```
-**After build & start, access the application on http://localhost:5173.**
+**After build & start is completed, access the application on http://localhost:81.**
 
 Log in using the [test accounts](#test-accounts).
 

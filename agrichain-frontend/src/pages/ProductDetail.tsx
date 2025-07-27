@@ -20,7 +20,7 @@ const ProductDetail: React.FC = () => {
         const fetchProduct = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`http://localhost:5000//api/products/${id}`, {
+                const response = await fetch(`/api/products/${id}`, {
                     credentials: 'include'
                 });
 
