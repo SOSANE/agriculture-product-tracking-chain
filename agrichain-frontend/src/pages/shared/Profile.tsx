@@ -43,7 +43,7 @@ export const Profile: React.FC = () => {
         setIsSubmitting(true);
 
         try {
-            const response = await fetch('http://localhost:5000/api/profile/edit', {
+            const response = await fetch('/api/profile/edit', {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 credentials: 'include',

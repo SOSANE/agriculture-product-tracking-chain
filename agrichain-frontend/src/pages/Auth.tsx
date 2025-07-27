@@ -32,7 +32,7 @@ const Auth: React.FC<AuthProps> = () => {
             );
 
             if (response.success) {
-                const verifyResponse = await fetch('http://localhost:5000/auth/verify-session', {
+                const verifyResponse = await fetch('/auth/verify-session', {
                     credentials: 'include'
                 });
 
@@ -64,7 +64,7 @@ const Auth: React.FC<AuthProps> = () => {
             }
 
             await new Promise(resolve => setTimeout(resolve, 1000));
-            const verifyResponse = await fetch('http://localhost:5000/auth/verify-session', {
+            const verifyResponse = await fetch('/auth/verify-session', {
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',

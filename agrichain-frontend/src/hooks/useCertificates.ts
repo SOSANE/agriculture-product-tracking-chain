@@ -21,7 +21,7 @@ export const useCertificates = () => {
         try {
             setCertificatesLoading(true);
 
-            const url = 'http://localhost:5000/api/certificates';
+            const url = '/api/certificates';
 
             const response = await fetch(url, {
                 credentials: 'include'

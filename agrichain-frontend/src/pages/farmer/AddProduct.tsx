@@ -20,7 +20,7 @@ const AddProduct: React.FC = () => {
         console.log('Form submitted:', formData); // debug log
 
         try {
-            const response = await fetch('http://localhost:5000/api/register-product', {
+            const response = await fetch('/api/register-product', {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 credentials: 'include',
