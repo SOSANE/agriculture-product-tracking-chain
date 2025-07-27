@@ -6,6 +6,7 @@ interface Window {
 interface ImportMetaEnv {
     readonly VITE_CONTRACT_ADDRESS: string;
     readonly VITE_BLOCKCHAIN_PROVIDER_URL: string;
+    readonly PROXY: string;
 }
 
 interface ImportMeta {

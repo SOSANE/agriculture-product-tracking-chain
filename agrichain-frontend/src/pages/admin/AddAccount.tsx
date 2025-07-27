@@ -35,7 +35,7 @@ const AddAccount: React.FC = () => {
             );
 
             if (response.success) {
-                const verifyResponse = await fetch('http://localhost:5000/auth/verify-session', {
+                const verifyResponse = await fetch('/auth/verify-session', {
                     credentials: 'include'
                 });
 

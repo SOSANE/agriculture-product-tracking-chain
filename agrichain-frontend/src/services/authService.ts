@@ -12,7 +12,7 @@ export const authenticateWithCredentials = async (
     password: string
 ): Promise<AuthResponse> => {
     try {
-        const response = await fetch(`http://localhost:5000/api/login`, {
+        const response = await fetch(`/api/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
@@ -44,7 +44,7 @@ export const authenticateWithCredentials = async (
 
 export const fetchUserProfile = async (): Promise<User> => {
     try {
-        const response = await fetch(`http://localhost:5000/api/profile`, {
+        const response = await fetch(`/api/profile`, {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -65,7 +65,7 @@ export const fetchUserProfile = async (): Promise<User> => {
 
 export const logoutUser = async () => {
     try {
-        const response = await fetch('http://localhost:5000/api/logout', {
+        const response = await fetch('/api/logout', {
             method: 'POST',
             credentials: 'include'
         });
