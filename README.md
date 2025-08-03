@@ -39,8 +39,9 @@ Designing blockchain model for agriculture product tracking involves using the i
 agriculture-product-tracking-chain/
 ├── agrichain-backend/
 ├── agrichain-database/
-├── agrichain-frontend-react/
+├── agrichain-frontend/
 └── agrichain-smartcontract/
+└── nginx/
 ```
 
 ## Prerequisites
@@ -57,16 +58,7 @@ cd agriculture-product-tracking-chain
 
 ### 2. Environment variables changes
 **First edit the `.env.*` files.**
-
-`agrichain-backend/.env.backend`
-```dotenv
-...
-SESSION_SECRET=your_session_secret # Some session secret code, can be anything
-SESSION_MAX_AGE=86400000
-...
-```
-
-Rename all of the `.env.*` files (`.env.db`, `.env.frontend` & `.env.backend`) to `.env`.
+- Rename all of the `.env.*` files (`.env.db`, `.env.frontend` & `.env.backend`) to `.env`.
 
 ### 3. MetaMask Setup
 1. **Create a [MetaMask](https://portfolio.metamask.io/)** wallet if you do not own one.
