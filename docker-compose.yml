@@ -22,7 +22,15 @@ services:
         - ./frontend:/home/node
       build: 
         context: ./frontend
-      env_file: ./frontend/.env
+      environment:
+        # URLs
+        - REACT_APP_API_URL=http://localhost:5000
+        - REACT_APP_ENV=development
+        # Smart contract
+        - VITE_CONTRACT_ADDRESS=0x5FbDB2315678afecb367f032d93F642f64180aa3
+        - VITE_BLOCKCHAIN_PROVIDER_URL=http://contract:8545
+        # when using nginx + Docker, vite proxy false
+        - PROXY=false
       working_dir: /home/node
     backend:
       build: 
@@ -30,7 +38,27 @@ services:
       volumes: 
         - ./backend/:/backend
         - /backend/node_modules
-      env_file: ./backend/.env
+      environment:
+        # Application
+        - PORT=5000
+        - NODE_ENV=development
+        # Database
+        - DB_USER=postgres
+        - DB_HOST=agrichain_db
+        - DB_NAME=agrichain
+        - DB_PASSWORD=postgres
+        - DB_PORT=5432
+        # Session
+        - SESSION_SECRET=MySuperSecretSessionSecret1@!11
+        - SESSION_MAX_AGE=86400000
+        # CORS
+        - CORS_ORIGIN=http://localhost:5173/
+        # Smart contract
+        - CONTRACT_ADDRESS=0x5FbDB2315678afecb367f032d93F642f64180aa3
+        - BLOCKCHAIN_PROVIDER_URL=http://contract:8545
+        # This is private key #0 from Hardhat's provided accounts. 
+        # Those keys are PUBLIC. See https://hardhat.org/hardhat-network/docs/overview
+        - ADMIN_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
       working_dir: /backend
       depends_on:
         db:

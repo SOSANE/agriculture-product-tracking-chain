@@ -24,6 +24,7 @@ Designing blockchain model for agriculture product tracking involves using the i
 - [Prerequisites](#prerequisites)
 - [Setup Guide](#setup-guide)
 - [Running the system with Docker](#running-the-system-with-docker)
+- [Hardhat Accounts](#hardhat-accounts)
 - [Test Accounts](#test-accounts)
 - [License](#licence)
 
@@ -57,18 +58,24 @@ git clone https://github.com/SOSANE/agriculture-product-tracking-chain
 cd agriculture-product-tracking-chain
 ```
 
-
-### 2. Environment variables changes
-**First edit the `.env.*` files.**
-- Rename all of the `.env.*` files (`.env.frontend` & `.env.backend`) to `.env`.
-
-### 3. MetaMask Setup
+### 2. MetaMask Setup
 1. **Create a [MetaMask](https://portfolio.metamask.io/)** wallet if you do not own one.
 2. **Download the [Metamask's browser extension](https://metamask.io/download)** and connect your wallet.
 
 <br>
 
-<h4 align="center">Hardhat accounts</h4>
+
+
+
+## Running the system with Docker
+1. Navigate to root project
+2. **Run the following command**
+```shell
+docker compose up --build
+```
+**After build & start is completed, access the application on http://localhost:5173.**
+
+## Add Hardhat accounts to MetaMask Wallet
 
 - Hardhat gives 20 accounts with their private keys, each account have a wallet with 10000 ETH (Testnet). **PS. All hardhat accounts and their private keys are PUBLIC INFORMATION. For example, account #0's address is always ``0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266`` & ``0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80`` is the private key** → ***[Read more on Harhat (docs)](https://hardhat.org/hardhat-network/docs/overview)***
 - For testing purposes (`transactions`), import a few Hardhat accounts including **account #0** to **Metamask wallet** using their private keys by adding a **personal network with the following parameters:**
@@ -77,14 +84,6 @@ cd agriculture-product-tracking-chain
   - **Currency symbol**: ``ETH``
 - ``ADMIN_PRIVATE_KEY`` variable is associated to **account #0 private key**.
 
-
-## Running the System with Docker
-1. Navigate to root project
-2. **Run the following command**
-```shell
-docker compose up --build
-```
-**After build & start is completed, access the application on http://localhost:5173.**
 
 Log in using the [test accounts](#test-accounts).
 
