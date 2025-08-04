@@ -1,11 +1,11 @@
 FROM node:22-alpine3.21
 ENV TZ America/Toronto
 
-WORKDIR /agrichain-backend
-COPY package*.json /agrichain-backend/
+WORKDIR /backend
+COPY package*.json /backend/
 
 RUN npm install
-ADD . /agrichain-backend/
+ADD . /backend/
 
 CMD ["/bin/sh", "entrypoint.sh"]
 EXPOSE 5000

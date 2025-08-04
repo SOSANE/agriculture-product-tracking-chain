@@ -33,20 +33,22 @@ Designing blockchain model for agriculture product tracking involves using the i
 - **PostgreSQL** used for database backend.
 - **React** frontend dashboard for the web interface.
 - **Docker** for easy build & testing of the application.
+- **Nginx** as a reverse proxy.
 
 ## Project Structure
 ```
 agriculture-product-tracking-chain/
-├── agrichain-backend/
-├── agrichain-database/
-├── agrichain-frontend/
-└── agrichain-smartcontract/
-└── nginx/
+├── backend/
+├── database/
+├── frontend/
+├── nginx/
+└── smartcontract/
 ```
 
 ## Prerequisites
-- **Docker**
-- **Metamask wallet**
+- Docker
+- MetaMask
+- Git
 
 ## Setup Guide
 ### 1. Clone Repository
@@ -82,7 +84,7 @@ cd agriculture-product-tracking-chain
 ```shell
 docker compose up --build
 ```
-**After build & start is completed, access the application on http://localhost:81.**
+**After build & start is completed, access the application on http://localhost:5173.**
 
 Log in using the [test accounts](#test-accounts).
 
