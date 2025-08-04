@@ -3,12 +3,15 @@ services:
       restart: always
       container_name: agrichain_db
       image: postgres:13.21-alpine3.21
-      env_file: ./agrichain-database/.env
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_DB=agrichain
       ports: 
-        - 5432:5432
+        - 5433:5432
       volumes:
         - postgres_data:/var/lib/postgresql/data
-        - ./agrichain-database/commands/:/docker-entrypoint-initdb.d/
+        - ./database/commands/:/docker-entrypoint-initdb.d/
       healthcheck:
         test: ["CMD-SHELL", "pg_isready -U postgres"]
         interval: 5s
@@ -16,21 +19,47 @@ services:
         retries: 5
     frontend:
       volumes:
-        - ./agrichain-frontend:/home/node
+        - ./frontend:/home/node
       build: 
-        context: ./agrichain-frontend
-      env_file: ./agrichain-frontend/.env
+        context: ./frontend
+      environment:
+        # URLs
+        - REACT_APP_API_URL=http://localhost:5000
+        - REACT_APP_ENV=development
+        # Smart contract
+        - VITE_CONTRACT_ADDRESS=0x5FbDB2315678afecb367f032d93F642f64180aa3
+        - VITE_BLOCKCHAIN_PROVIDER_URL=http://contract:8545
+        # when using nginx + Docker, vite proxy false
+        - PROXY=false
       working_dir: /home/node
-      ports:
-        - 5173:5173
     backend:
       build: 
-        context: ./agrichain-backend
+        context: ./backend
       volumes: 
-        - ./agrichain-backend/:/agrichain-backend
-        - /agrichain-backend/node_modules
-      env_file: ./agrichain-backend/.env
-      working_dir: /agrichain-backend
+        - ./backend/:/backend
+        - /backend/node_modules
+      environment:
+        # Application
+        - PORT=5000
+        - NODE_ENV=development
+        # Database
+        - DB_USER=postgres
+        - DB_HOST=agrichain_db
+        - DB_NAME=agrichain
+        - DB_PASSWORD=postgres
+        - DB_PORT=5432
+        # Session
+        - SESSION_SECRET=MySuperSecretSessionSecret1@!11
+        - SESSION_MAX_AGE=86400000
+        # CORS
+        - CORS_ORIGIN=http://localhost:5173/
+        # Smart contract
+        - CONTRACT_ADDRESS=0x5FbDB2315678afecb367f032d93F642f64180aa3
+        - BLOCKCHAIN_PROVIDER_URL=http://contract:8545
+        # This is private key #0 from Hardhat's provided accounts. 
+        # Those keys are PUBLIC. See https://hardhat.org/hardhat-network/docs/overview
+        - ADMIN_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+      working_dir: /backend
       depends_on:
         db:
           condition: service_healthy
@@ -38,16 +67,16 @@ services:
         - 5000:5000
     contract:
       build: 
-        context: ./agrichain-smartcontract
+        context: ./smartcontract
       volumes: 
-        - ./agrichain-smartcontract/:/agrichain-smartcontract
-        - /agrichain-smartcontract/node_modules
-      working_dir: /agrichain-smartcontract
+        - ./smartcontract/:/smartcontract
+        - /smartcontract/node_modules
+      working_dir: /smartcontract
       ports: 
         - 8545:8545
     deploy:
       build:
-        context: ./agrichain-smartcontract
+        context: ./smartcontract
       depends_on:
         - contract
       command: ["npx", "hardhat", "run", "scripts/deploy.js"]
@@ -59,7 +88,7 @@ services:
       depends_on:
         - backend
       ports:
-        - 81:8080
+        - 5173:8080
 
 volumes:
   postgres_data:
