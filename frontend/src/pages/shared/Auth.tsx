@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 // useParams
 import { Wallet, AlertCircle, UserLock, SquareAsterisk } from 'lucide-react';
 // import { UserRole } from '../types';
-import { authenticateWithCredentials } from '../services/authService';
+import { authenticateWithCredentials } from '../../services/authService';
 // import {BrowserProvider, Contract} from "ethers";
 
 type AuthProps = object

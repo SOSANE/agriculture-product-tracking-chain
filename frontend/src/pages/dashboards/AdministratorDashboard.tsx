@@ -3,8 +3,8 @@ import {Package, PackagePlus, Shield, ShieldCheck, UserPlus, Users} from 'lucide
 import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
 import {useUserProfile} from "../../hooks/useUserProfile.ts";
 import {useCertificates} from "../../hooks/useCertificates.ts";
-import NavigationCard from "../../components/NavigationCard.tsx";
-import Header from "../../components/Header";
+import NavigationCard from "../../components/layout/NavigationCard.tsx";
+import Header from "../../components/layout/Header";
 
 const AdministratorDashboard: React.FC = () => {
     const {user} = useUserProfile();

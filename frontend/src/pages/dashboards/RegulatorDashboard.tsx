@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 import {useUserProfile} from "../../hooks/useUserProfile.ts";
 import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
 import {useCertificates} from "../../hooks/useCertificates.ts";
-import Header from "../../components/Header";
+import Header from "../../components/layout/Header";
 
 const RegulatorDashboard: React.FC = () => {
     const {user} = useUserProfile();

@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import {QrCode, Search} from 'lucide-react';
-import QRScanner from '../components/verification/QRScanner';
-import VerificationResult from '../components/verification/VerificationResult';
-import {Product} from '../types';
-import Footer from "../components/layout/Footer.tsx";
-import {getProductById, verifyProduct} from "../services/productService.ts";
+import QRScanner from '../../components/verification/QRScanner.tsx';
+import VerificationResult from '../../components/verification/VerificationResult.tsx';
+import {Product} from '../../types/index.ts';
+import Footer from "../../components/layout/Footer.tsx";
+import {getProductById, verifyProduct} from "../../services/productService.ts";
 
 const VerifyProduct: React.FC = () => {
     const [isScanning, setIsScanning] = useState(false);
@@ -13,6 +13,7 @@ const VerifyProduct: React.FC = () => {
     const [error, setError] = useState<string | undefined>(undefined);
     const [loading, setLoading] = useState(false);
 
+    // TODO: qrData specify to string/null
     const handleScan = async (qrData: any) => {
         setIsScanning(false);
         setLoading(true);
