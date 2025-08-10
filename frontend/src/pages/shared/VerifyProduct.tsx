@@ -5,6 +5,7 @@ import VerificationResult from '../../components/verification/VerificationResult
 import {Product} from '../../types/index.ts';
 import Footer from "../../components/layout/Footer.tsx";
 import {getProductById, verifyProduct} from "../../services/productService.ts";
+import { IDetectedBarcode } from '@yudiel/react-qr-scanner';
 
 const VerifyProduct: React.FC = () => {
     const [isScanning, setIsScanning] = useState(false);
@@ -13,8 +14,7 @@ const VerifyProduct: React.FC = () => {
     const [error, setError] = useState<string | undefined>(undefined);
     const [loading, setLoading] = useState(false);
 
-    // TODO: qrData specify to string/null
-    const handleScan = async (qrData: any) => {
+    const handleScan = async (qrData: IDetectedBarcode[]) => {
         setIsScanning(false);
         setLoading(true);
 
@@ -33,7 +33,7 @@ const VerifyProduct: React.FC = () => {
                         throw new Error('Failed to fetch product');
                     }
 
-                    const verify = await fetch(`/api/verify-product/${response.id}`);
+                    const verify = await verifyProduct(response.id);
                     if (!verify) {
                         setError('Could not verify product.');
                         setVerifiedProduct(null);
@@ -68,7 +68,7 @@ const VerifyProduct: React.FC = () => {
                 throw new Error('Failed to fetch product');
             }
             const verify = await verifyProduct(response.id);
-            if (!verify.ok) {
+            if (!verify) {
                 setError('Could not verify product.');
                 setVerifiedProduct(null);
                 throw new Error('Failed to verify product.');

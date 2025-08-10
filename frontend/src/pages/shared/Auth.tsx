@@ -59,7 +59,6 @@ const Auth: React.FC<AuthProps> = () => {
         try {
 
             if(!window.ethereum) {
-                console.error('MetaMask not Connected');
                 throw new Error('Please insure you have MetaMask installed.');
             }
 

@@ -1,8 +1,8 @@
-const db = require('../../config/db');
+const db = require("../../config/db");
 
 const ProductModel = {
-    async findByProductId(id) {
-        const query = `
+  async findByProductId(id) {
+    const query = `
             SELECT p.*,
                    l.id            as current_location_id,
                    l.name          as current_location_name,
@@ -17,12 +17,12 @@ const ProductModel = {
             WHERE p.id = $1
         `;
 
-        const {rows} = await db.query(query, [id]);
-        return rows.length > 0 ? rows[0] : null;
-    },
+    const { rows } = await db.query(query, [id]);
+    return rows.length > 0 ? rows[0] : null;
+  },
 
-    async findByBatchId(batchId) {
-        const query = `
+  async findByBatchId(batchId) {
+    const query = `
             SELECT p.*,
                    l.id            as current_location_id,
                    l.name          as current_location_name,
@@ -37,22 +37,22 @@ const ProductModel = {
             WHERE p.batch_id = $1
         `;
 
-        const {rows} = await db.query(query, [batchId]);
-        return rows.length > 0 ? rows[0] : null;
-    },
+    const { rows } = await db.query(query, [batchId]);
+    return rows.length > 0 ? rows[0] : null;
+  },
 
-    async existsByProductId(id) {
-        const {rows} = await db.query('SELECT * FROM supplychain.product WHERE id = $1', [id]);
-        return rows.length > 0;
-    },
+  async existsByProductId(id) {
+    const { rows } = await db.query("SELECT * FROM supplychain.product WHERE id = $1", [id]);
+    return rows.length > 0;
+  },
 
-    async findByName(name) {
-        const {rows} = await db.query('SELECT * FROM supplychain.product WHERE name = $1', [name]);
-        return rows.length > 0 ? rows[0] : null;
-    },
+  async findByName(name) {
+    const { rows } = await db.query("SELECT * FROM supplychain.product WHERE name = $1", [name]);
+    return rows.length > 0 ? rows[0] : null;
+  },
 
-    async getAllProducts() {
-        const query = `
+  async getAllProducts() {
+    const query = `
             SELECT p.*,
                    l.id            as current_location_id,
                    l.name          as current_location_name,
@@ -66,12 +66,12 @@ const ProductModel = {
                      LEFT JOIN supplychain.profile pr ON p.farmer_username = pr.username
             ORDER BY p.created_at DESC
         `;
-        const {rows} = await db.query(query);
-        return rows;
-    },
+    const { rows } = await db.query(query);
+    return rows;
+  },
 
-    async getCertificatesByProductId(productId) {
-        const query = `
+  async getCertificatesByProductId(productId) {
+    const query = `
             SELECT c.id,
                    c.name,
                    p.name as issued_by,
@@ -83,12 +83,12 @@ const ProductModel = {
                      JOIN supplychain.product_certificate pc ON c.id = pc.certificate_id
             WHERE pc.product_id = $1
         `;
-        const {rows} = await db.query(query, [productId]);
-        return rows;
-    },
+    const { rows } = await db.query(query, [productId]);
+    return rows;
+  },
 
-    async getSupplychainByProductId(productId) {
-        const query = `
+  async getSupplychainByProductId(productId) {
+    const query = `
             SELECT sc.id,
                    sc.product_id,
                    sc.timestamp,
@@ -113,12 +113,12 @@ const ProductModel = {
             WHERE sc.product_id = $1
             ORDER BY sc.timestamp ASC
         `;
-        const {rows} = await db.query(query, [productId]);
-        return rows;
-    },
+    const { rows } = await db.query(query, [productId]);
+    return rows;
+  },
 
-    async getCertificatesByStepIdAndProductId(stepId, productId) {
-        const query = `
+  async getCertificatesByStepIdAndProductId(stepId, productId) {
+    const query = `
             SELECT c.id,
                    c.name,
                    p.name as issued_by,
@@ -131,12 +131,12 @@ const ProductModel = {
             WHERE scc.supply_chain_id = $1
               AND scc.product_id = $2
         `;
-        const {rows} = await db.query(query, [stepId, productId]);
-        return rows;
-    },
+    const { rows } = await db.query(query, [stepId, productId]);
+    return rows;
+  },
 
-    async getProductsByUsername(username) {
-        const query = `
+  async getProductsByUsername(username) {
+    const query = `
             SELECT p.*,
                    l.id            as current_location_id,
                    l.name          as current_location_name,
@@ -162,12 +162,12 @@ const ProductModel = {
                             AND c.issued_by = $1)
             ORDER BY p.created_at DESC
         `;
-        const {rows} = await db.query(query, [username]);
-        return rows;
-    },
+    const { rows } = await db.query(query, [username]);
+    return rows;
+  },
 
-    async getCertificatesByProductIds(productIds) {
-        const query = `
+  async getCertificatesByProductIds(productIds) {
+    const query = `
             SELECT pc.product_id,
                    c.id,
                    c.name,
@@ -180,12 +180,12 @@ const ProductModel = {
                      JOIN supplychain.product_certificate pc ON c.id = pc.certificate_id
             WHERE pc.product_id = ANY ($1)
         `;
-        const {rows} = await db.query(query, [productIds]);
-        return rows;
-    },
+    const { rows } = await db.query(query, [productIds]);
+    return rows;
+  },
 
-    async getSupplychainStepsByProductIds(productIds) {
-        const query = `
+  async getSupplychainStepsByProductIds(productIds) {
+    const query = `
             SELECT sc.id,
                    sc.product_id,
                    sc.timestamp,
@@ -210,12 +210,12 @@ const ProductModel = {
             WHERE sc.product_id = ANY ($1)
             ORDER BY sc.timestamp ASC
         `;
-        const {rows} = await db.query(query, [productIds]);
-        return rows;
-    },
+    const { rows } = await db.query(query, [productIds]);
+    return rows;
+  },
 
-    async getCertificatesBySupplychainStepIds(stepIds) {
-        const query = `
+  async getCertificatesBySupplychainStepIds(stepIds) {
+    const query = `
             SELECT scc.supply_chain_id,
                    scc.product_id,
                    c.id,
@@ -229,13 +229,13 @@ const ProductModel = {
                      JOIN supplychain.supply_chain_certificate scc ON c.id = scc.certificate_id
             WHERE scc.supply_chain_id = ANY ($1)
         `;
-        const {rows} = await db.query(query, [stepIds]);
-        return rows;
-    },
+    const { rows } = await db.query(query, [stepIds]);
+    return rows;
+  },
 
-    // See all certificates (admin)
-    async getAllCertificates() {
-        const query = `
+  // See all certificates (admin)
+  async getAllCertificates() {
+    const query = `
             SELECT c.id,
                    c.name,
                    p.name as issued_by,
@@ -247,13 +247,13 @@ const ProductModel = {
             ORDER BY c.issued_date DESC
         `;
 
-        const rows = await db.query(query);
-        return rows;
-    },
+    const rows = await db.query(query);
+    return rows;
+  },
 
-    // See certificates issued for a regulator
-    async getCertificatesByUsername(username) {
-        const query = `
+  // See certificates issued for a regulator
+  async getCertificatesByUsername(username) {
+    const query = `
             SELECT c.id,
                    c.name,
                    p.name as issued_by,
@@ -266,12 +266,12 @@ const ProductModel = {
             ORDER BY c.issued_date DESC
         `;
 
-        const rows = await db.query(query, [username]);
-        return rows;
-    },
+    const rows = await db.query(query, [username]);
+    return rows;
+  },
 
-    async getCertificateById(certificateId) {
-        const query = `
+  async getCertificateById(certificateId) {
+    const query = `
             SELECT c.id,
                    c.name,
                    p.name as issued_by,
@@ -283,29 +283,29 @@ const ProductModel = {
             WHERE c.id = $1
         `;
 
-        const {rows} = await db.query(query, [certificateId]);
-        return rows[0];
-    },
+    const { rows } = await db.query(query, [certificateId]);
+    return rows[0];
+  },
 
-    // Register product function
-    async registerProduct(productData) {
-        const {
-            productId,
-            batchId,
-            qrCode,
-            qrImage,
-            name,
-            description,
-            type,
-            imageUrl,
-            status,
-            farmerUsername,
-            temperature = null,
-            humidity = null
-        } = productData;
+  // Register product function
+  async registerProduct(productData) {
+    const {
+      productId,
+      batchId,
+      qrCode,
+      qrImage,
+      name,
+      description,
+      type,
+      imageUrl,
+      status,
+      farmerUsername,
+      temperature = null,
+      humidity = null
+    } = productData;
 
-        // Query
-        const query = `
+    // Query
+    const query = `
             WITH profile_info AS (SELECT p.username,
                                          p.name,
                                          p.organization,
@@ -357,33 +357,65 @@ const ProductModel = {
             FROM product_insert;
         `;
 
-        const {rows} = await db.query(query, [productId, name, description, type, imageUrl, farmerUsername, batchId, qrCode, qrImage, status, temperature, humidity]);
+    const { rows } = await db.query(query, [
+      productId,
+      name,
+      description,
+      type,
+      imageUrl,
+      farmerUsername,
+      batchId,
+      qrCode,
+      qrImage,
+      status,
+      temperature,
+      humidity
+    ]);
 
-        return rows[0];
-    },
+    return rows[0];
+  },
 
-    async getCurrentLocation(username) {
-        const query = `
+  async getCurrentLocation(username) {
+    const query = `
             SELECT l.*
             FROM supplychain.location l
                      JOIN supplychain.profile p ON l.address = p.address
             WHERE p.username = $1
         `;
-        const {rows} = await db.query(query, [username]);
-        return rows.length > 0 ? rows[0] : null;
-    },
+    const { rows } = await db.query(query, [username]);
+    return rows.length > 0 ? rows[0] : null;
+  },
 
-    async verifyProduct(productId) {
-        const query = `
+  async verifyProduct(productId) {
+    const functionQuery = `
+            CREATE OR REPLACE FUNCTION update_last_verified()
+            RETURNS TRIGGER AS $$
+            BEGIN
+                NEW.last_verified = CURRENT_TIMESTAMP;
+                RETURN NEW;
+            END;
+            $$ LANGUAGE plpgsql;
+            `;
+    const createTriggerQuery = `
+            DROP TRIGGER IF EXISTS update_timestamp
+            ON supplychain.product;
+
+            CREATE TRIGGER update_timestamp
+            BEFORE UPDATE ON supplychain.product
+            FOR EACH ROW
+            EXECUTE FUNCTION update_last_verified();
+            `;
+    const query = `
             UPDATE supplychain.product
-            SET verification_count = verification_count + 1,
-                last_verified      = CURRENT_TIMESTAMP
-            WHERE id = $1
+            SET verification_count = verification_count + 1
+            WHERE id = $1;
         `;
-
-        const {rows} = await db.query(query, [productId]);
-        return rows[0];
-    }
-}
+    await db.query(functionQuery);
+    await db.query(createTriggerQuery);
+    
+    const result = await db.query(query, [productId]);
+    return result.rowCount;
+  }
+};
 
 module.exports = ProductModel;

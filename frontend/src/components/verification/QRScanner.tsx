@@ -1,9 +1,9 @@
 import React from 'react';
 import { X } from 'lucide-react';
-import { Scanner  } from '@yudiel/react-qr-scanner';
+import { Scanner, IDetectedBarcode } from '@yudiel/react-qr-scanner';
 
 interface QRScannerProps {
-    onScan: (data: string | any) => void;
+    onScan: (data: IDetectedBarcode[]) => void;
     onClose: () => void;
 }
 
