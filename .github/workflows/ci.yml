@@ -24,4 +24,4 @@ jobs:
               run: |
                 docker exec -t agrichain_frontend bash
                 npm run lint
-                npm run format
+                npx prettier --check .
