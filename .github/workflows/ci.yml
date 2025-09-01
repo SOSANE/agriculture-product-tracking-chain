@@ -19,6 +19,7 @@ jobs:
             - name: Build images
               run: |
                 docker compose up --build -d
+                sleep 30
             
             - name: linting and formatting
               run: |
