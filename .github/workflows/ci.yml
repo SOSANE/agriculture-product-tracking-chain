@@ -22,6 +22,4 @@ jobs:
             
             - name: linting and formatting
               run: |
-                docker exec -t agrichain_frontend bash;
-                npm run lint;
-                npx prettier --check .;
+                docker exec agrichain_frontend bash -c "npm run lint;  npx prettier --check ."
