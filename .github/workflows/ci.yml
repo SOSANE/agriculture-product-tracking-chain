@@ -22,6 +22,6 @@ jobs:
             
             - name: linting and formatting
               run: |
-                docker exec -it agrichain_frontend bash
+                docker exec -it agrichain_frontend-1 bash
                 npm run lint
                 npm run format
