@@ -46,6 +46,7 @@ export interface SupplyChainStep {
     location: Location;
     temperature?: number;
     humidity?: number;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     metadata?: Record<string, any>;
     certificates?: Certificate[];
     verified: boolean;
