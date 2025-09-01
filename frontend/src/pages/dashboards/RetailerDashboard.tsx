@@ -2,8 +2,8 @@ import React from 'react';
 import {Package, PackagePlus, ShoppingBag} from 'lucide-react';
 import {useUserProfile} from "../../hooks/useUserProfile.ts";
 import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
-import NavigationCard from "../../components/NavigationCard.tsx"
-import Header from "../../components/Header";
+import NavigationCard from "../../components/layout/NavigationCard.tsx"
+import Header from "../../components/layout/Header";
 
 const RetailerDashboard: React.FC = () => {
     const {user} = useUserProfile();

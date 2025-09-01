@@ -17,8 +17,7 @@ async function callContractFunction(functionName, ...args) {
         const tx = await Agrichain[functionName](...args);
         return await tx.wait();
     } catch (err) {
-        console.error(`[Contract Call Error] ${functionName}:`, err.message);
-        throw err;
+        return null;
     }
 }
 

@@ -34,7 +34,6 @@ export const useUserProfile = () => {
                 setUser(await profileResponse.json());
             } catch (err) {
                 setError(err instanceof Error ? err : new Error('Failed to load profile'));
-                console.error('Profile load error:', err);
             } finally {
                 setLoading(false);
             }

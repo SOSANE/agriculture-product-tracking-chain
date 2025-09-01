@@ -2,8 +2,8 @@ import React from 'react';
 import {Factory, Package, QrCode, ShieldCheck} from 'lucide-react';
 import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
 import {useUserProfile} from "../../hooks/useUserProfile.ts";
-import NavigationCard from "../../components/NavigationCard.tsx";
-import Header from "../../components/Header";
+import NavigationCard from "../../components/layout/NavigationCard.tsx";
+import Header from "../../components/layout/Header";
 
 const ProcessorDashboard: React.FC = () => {
     const {user} = useUserProfile();

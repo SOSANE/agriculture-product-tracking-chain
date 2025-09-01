@@ -1,4 +1,4 @@
-import Modal from '../../components/Modal.tsx';
+import Modal from '../../components/layout/Modal.tsx';
 
 const LogoutModal = ({onConfirm, onCancel}: {onConfirm: () => void, onCancel: () => void}) => {
     return (

@@ -1,4 +1,4 @@
-import { User } from "../types"
+import { User } from "../../types"
 
 const Header = ({user, altHeader, text, altText}: {user: User | null, altHeader: string, text: string, altText: string}) => {
     return (

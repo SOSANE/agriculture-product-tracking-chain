@@ -4,7 +4,6 @@ import {ArrowLeft} from "lucide-react";
 import {downloadQrCode} from "../../services/productService.ts";
 
 const AddProduct: React.FC = () => {
-    const [qrImage, setQrImage] = useState<string | null>(null);
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -17,7 +16,6 @@ const AddProduct: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Form submitted:', formData); // debug log
 
         try {
             const response = await fetch('/api/register-product', {
@@ -38,22 +36,13 @@ const AddProduct: React.FC = () => {
             const data = await response.json();
 
             if (!response.ok) {
-                console.error('Backend error details:', data);
                 throw new Error(data.message || `HTTP error! status: ${response.status}`);
             }
 
-            console.log('AddProduct.tsx Data inputted: ', data); // debug log
-            console.log('AddProduct.tsx qr_code data ', data.qr_code); // debug log
-            // console.log('AddProduct.tsx qr_image data ', data.qr_image);
-
             const qrData = data.qr_image;
-            console.log('QR Data to be set as QR Image: ', qrData); // debug log
-
             if(!qrData) {
                 throw new Error('Failed to generate QR image');
             }
-            setQrImage(qrData);
-            console.log('QR Image: ', qrImage);
             downloadQrCode(data.id, qrData);
 
         } catch (err) {

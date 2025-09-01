@@ -53,7 +53,6 @@ export const Profile: React.FC = () => {
             const data = await response.json();
 
             if (!response.ok) {
-                console.error('Backend error details:', data);
                 throw new Error(data.message || `HTTP error! status: ${response.status}`);
             }
 

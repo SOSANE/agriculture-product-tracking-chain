@@ -24,17 +24,11 @@ export const authenticateWithCredentials = async (
         const data = await response.json();
 
         if (!response.ok) {
-            console.error('Backend error details:', data);
             throw new Error(data.message || `HTTP error! status: ${response.status}`);
         }
 
         return data;
     } catch (error) {
-        console.error('Full error context:', {
-            error,
-            timestamp: new Date().toISOString(),
-            endpoint: `/api/login`
-        });
         return {
             success: false,
             message: error instanceof Error ? error.message : 'Network request failed'

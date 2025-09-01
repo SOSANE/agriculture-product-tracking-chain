@@ -28,17 +28,11 @@ export const registerAccount = async (
         const data = await response.json();
 
         if (!response.ok) {
-            console.error('Backend error details:', data);
             throw new Error(data.message || `HTTP error! status: ${response.status}`);
         }
 
         return data;
     } catch (err) {
-        console.error('Full error context:', {
-            err,
-            timestamp: new Date().toISOString(),
-            endpoint: `/api/add-user`
-        });
         return {
             success: false,
             message: err instanceof Error ? err.message : 'Network request failed'

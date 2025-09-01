@@ -4,8 +4,8 @@ import {Link} from "react-router-dom";
 import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
 import {useUserProfile} from "../../hooks/useUserProfile.ts";
 import {useProducts} from "../../hooks/useProducts.ts";
-import NavigationCard from "../../components/NavigationCard";
-import Header from "../../components/Header";
+import NavigationCard from "../../components/layout/NavigationCard.tsx";
+import Header from "../../components/layout/Header";
 
 const FarmerDashboard: React.FC = () => {
     const {user} = useUserProfile();

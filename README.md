@@ -24,7 +24,7 @@ Designing blockchain model for agriculture product tracking involves using the i
 - [Prerequisites](#prerequisites)
 - [Setup Guide](#setup-guide)
 - [Running the system with Docker](#running-the-system-with-docker)
-- [Hardhat Accounts](#hardhat-accounts)
+- [Hardhat Accounts](#add-hardhat-accounts-to-metamask-wallet)
 - [Test Accounts](#test-accounts)
 - [License](#licence)
 

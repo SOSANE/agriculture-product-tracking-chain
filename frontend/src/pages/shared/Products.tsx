@@ -1,72 +1,65 @@
-import React, {useEffect, useState} from "react";
-import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
-import {Link} from "react-router-dom";
-import {Product} from "../../types";
-import {Leaf} from "lucide-react";
-
+import React from "react";
+import { DashboardLayout } from "../../components/layout/DashboardLayout.tsx";
+import { Link } from "react-router-dom";
+import { Leaf } from "lucide-react";
+import { useAllProducts } from "../../hooks/useProducts.ts";
+import { LoadingComponent, ErrorComponent, NoDataComponent } from "../../helpers/ProductUtils.tsx";
 
 export const Products: React.FC = () => {
-    const [products, setProducts] = useState<Product[]>([]);
+  const { products, productsLoading, productsError } = useAllProducts();
 
-    useEffect(() => {
-        const loadProducts = async () => {
-            try {
-                const response = await fetch(`/api/all-products`, {
-                    credentials: 'include'
-                });
+  if (productsLoading) {
+    return <LoadingComponent />;
+  }
 
-                if (!response.ok) throw new Error('Failed to fetch users');
+  if (productsError) {
+    return <ErrorComponent error={productsError} />;
+  }
 
-                const data = await response.json();
-                setProducts(data);
-            } catch (err) {
-                console.error('Error fetching users:', err);
-            }
-        };
-        loadProducts();
-    })
-    return (
-        <DashboardLayout>
-            <div className="flex flex-col min-h-screen">
-                <div className="container mx-auto px-4 py-8">
-                    <div className="max-w-3xl mx-auto">
-                        <header className="text-center mb-10">
-                            <h1 className="text-3xl font-semibold mb-2">Available products on the blockchain</h1>
-                            <p className="text-neutral-600 max-w-xl mx-auto">
-                                View the details for any product registered to the blockchain as a user.
-                            </p>
-                        </header>
+  if (!products) {
+    return <NoDataComponent noDataMessage="Products not found." />;
+  }
 
-                        <section>
-                            <div className="card h-full flex flex-col divide-y divide-gray-200">
-                                <div className="flex justify-between items-center mb-6">
-                                    <h2 className="text-xl font-semibold">Recent activity</h2>
-                                    <Leaf className="h-6 w-6 text-primary" />
-                                </div>
-                                {products.length > 0 && (
-                                    products.map((product) => (
-                                        <div key={product.id} className="space-y-2">
-                                            <Link to={`/products/${product.id}`} className="block">
-                                                <div className="flex items-start gap-4 p-3 rounded-lg hover:bg-neutral-50 transition-colors">
-                                                    <div>
-                                                        <p className="font-medium">{product.name}</p>
-                                                        <p className="text-sm text-neutral-600">{product.description}</p>
-                                                        <p className="text-xs text-neutral-500">{product.type}</p>
-                                                        <p className="text-xs text-neutral-500">{product.farmer.name}</p>
-                                                    </div>
-                                                </div>
-                                            </Link>
-                                        </div>
-                                    ))
-                                )}
+  return (
+    <DashboardLayout>
+      <div className="flex flex-col min-h-screen">
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-3xl mx-auto">
+            <header className="text-center mb-10">
+              <h1 className="text-3xl font-semibold mb-2">Available products on the blockchain</h1>
+              <p className="text-neutral-600 max-w-xl mx-auto">
+                View the details for any product registered to the blockchain as a user.
+              </p>
+            </header>
 
-                            </div>
-                        </section>
-                    </div>
+            <section>
+              <div className="card h-full flex flex-col divide-y divide-gray-200">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-xl font-semibold">Recent activity</h2>
+                  <Leaf className="h-6 w-6 text-primary" />
                 </div>
-            </div>
-        </DashboardLayout>
-    )
+                {products.length > 0 &&
+                  products.map(product => (
+                    <div key={product.id} className="space-y-2">
+                      <Link to={`/products/${product.id}`} className="block">
+                        <div className="flex items-start gap-4 p-3 rounded-lg hover:bg-neutral-50 transition-colors">
+                          <div>
+                            <p className="font-medium">{product.name}</p>
+                            <p className="text-sm text-neutral-600">{product.description}</p>
+                            <p className="text-xs text-neutral-500">{product.type}</p>
+                            <p className="text-xs text-neutral-500">{product.farmer.name}</p>
+                          </div>
+                        </div>
+                      </Link>
+                    </div>
+                  ))}
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </DashboardLayout>
+  );
 };
 
 export default Products;

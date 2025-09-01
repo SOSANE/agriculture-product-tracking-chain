@@ -2,8 +2,8 @@ import React from 'react';
 import {Package, QrCode, ShieldCheck, Truck} from 'lucide-react';
 import {DashboardLayout} from "../../components/layout/DashboardLayout.tsx";
 import {useUserProfile} from "../../hooks/useUserProfile.ts";
-import NavigationCard from "../../components/NavigationCard.tsx";
-import Header from "../../components/Header.tsx";
+import NavigationCard from "../../components/layout/NavigationCard.tsx";
+import Header from "../../components/layout/Header.tsx";
 
 const DistributorDashboard: React.FC = () => {
     const {user} = useUserProfile();

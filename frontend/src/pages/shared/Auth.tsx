@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 // useParams
 import { Wallet, AlertCircle, UserLock, SquareAsterisk } from 'lucide-react';
 // import { UserRole } from '../types';
-import { authenticateWithCredentials } from '../services/authService';
+import { authenticateWithCredentials } from '../../services/authService';
 // import {BrowserProvider, Contract} from "ethers";
 
 type AuthProps = object
@@ -59,7 +59,6 @@ const Auth: React.FC<AuthProps> = () => {
         try {
 
             if(!window.ethereum) {
-                console.error('MetaMask not Connected');
                 throw new Error('Please insure you have MetaMask installed.');
             }
 
