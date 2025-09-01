@@ -4,6 +4,7 @@ on:
     push:
         branches:
             - main
+            - add_workflows
     pull_request:
         branches:
             - main
@@ -18,5 +19,9 @@ jobs:
             - name: Build images
               run: |
                 docker compose up --build -d
-
             
+            - name: linting and formatting
+              run: |
+                docker exec -it agrichain_frontend bash
+                npm run lint
+                npm run format
