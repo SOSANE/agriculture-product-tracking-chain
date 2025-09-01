@@ -2,12 +2,11 @@ name: Build Agrichain
 
 on:
     push:
-        branches: ["add-workflows"]
-    #         - main
-    #         - add_workflows
-    # pull_request:
-    #     branches:
-    #         - main
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
 
 jobs:
     build:
