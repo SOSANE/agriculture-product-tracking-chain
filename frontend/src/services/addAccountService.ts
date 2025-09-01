@@ -1,41 +1,51 @@
-import {UserRole} from "../types";
+import { UserRole } from "../types";
 
 export interface AddAccountResponse {
-    success: boolean;
-    message?: string;
-    redirect?: string;
+  success: boolean;
+  message?: string;
+  redirect?: string;
 }
 
 export const registerAccount = async (
-    name: string,
-    username: string,
-    email: string,
-    password: string,
-    confirmPassword: string,
-    organization: string,
-    phone: string,
-    address: string,
-    role: UserRole
+  name: string,
+  username: string,
+  email: string,
+  password: string,
+  confirmPassword: string,
+  organization: string,
+  phone: string,
+  address: string,
+  role: UserRole,
 ): Promise<AddAccountResponse> => {
-    try {
-        const response = await fetch("/api/add-user", {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify({ username, name, email, password, confirmPassword, organization, phone, address, role }),
-        })
+  try {
+    const response = await fetch("/api/add-user", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        username,
+        name,
+        email,
+        password,
+        confirmPassword,
+        organization,
+        phone,
+        address,
+        role,
+      }),
+    });
 
-        const data = await response.json();
+    const data = await response.json();
 
-        if (!response.ok) {
-            throw new Error(data.message || `HTTP error! status: ${response.status}`);
-        }
-
-        return data;
-    } catch (err) {
-        return {
-            success: false,
-            message: err instanceof Error ? err.message : 'Network request failed'
-        };
+    if (!response.ok) {
+      throw new Error(data.message || `HTTP error! status: ${response.status}`);
     }
+
+    return data;
+  } catch (err) {
+    return {
+      success: false,
+      message: err instanceof Error ? err.message : "Network request failed",
+    };
+  }
 };

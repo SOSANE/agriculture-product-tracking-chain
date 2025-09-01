@@ -17,20 +17,23 @@ export const useProducts = () => {
 
         const url = "/api/products";
         const response = await fetch(url, {
-          credentials: "include"
+          credentials: "include",
         });
 
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
           throw new Error(
-            errorData.message + ` | Failed to fetch products: ${response.statusText}`
+            errorData.message +
+              ` | Failed to fetch products: ${response.statusText}`,
           );
         }
 
         const data = await response.json();
         setProducts(data);
       } catch (error) {
-        setProductsError(error instanceof Error ? error.message : "Failed to fetch products");
+        setProductsError(
+          error instanceof Error ? error.message : "Failed to fetch products",
+        );
         setProducts([]);
       } finally {
         setProductsLoading(false);
@@ -39,10 +42,9 @@ export const useProducts = () => {
 
     if (!user && !loading) {
       throw new Error("[NOT CONNECTED]: Connect as a user to fetch products.");
-    } else if (user){
-        fetchProducts();
+    } else if (user) {
+      fetchProducts();
     }
-    
   }, [user, loading]);
 
   return { products, productsLoading, productsError };
@@ -61,20 +63,22 @@ export const useProduct = (id: string | undefined) => {
         const url = `/api/products/${id}`;
 
         const response = await fetch(url, {
-          credentials: "include"
+          credentials: "include",
         });
 
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
           throw new Error(
-            errorData.message + ` | Failed to fetch product (Status: ${response.status})`
+            errorData.message +
+              ` | Failed to fetch product (Status: ${response.status})`,
           );
         }
 
         const data = await response.json();
         setProduct(data);
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : "Failed to load product";
+        const errorMessage =
+          err instanceof Error ? err.message : "Failed to load product";
         setError(errorMessage);
       } finally {
         setLoading(false);
@@ -84,7 +88,9 @@ export const useProduct = (id: string | undefined) => {
     if (id != undefined) {
       fetchProducts();
     } else {
-      throw new Error("[INVALID ARGUMENT]: Failed to fetch product, invalid product ID.");
+      throw new Error(
+        "[INVALID ARGUMENT]: Failed to fetch product, invalid product ID.",
+      );
     }
   }, [id]);
 
@@ -105,28 +111,32 @@ export const useAllProducts = () => {
         const url = "/api/all-products";
 
         const response = await fetch(url, {
-          credentials: "include"
+          credentials: "include",
         });
 
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.message + ` | Failed to fetch all products (Status: ${response.status})`);
+          throw new Error(
+            errorData.message +
+              ` | Failed to fetch all products (Status: ${response.status})`,
+          );
         }
 
         const data = await response.json();
         setProducts(data);
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : "Failed to load products";
+        const errorMessage =
+          err instanceof Error ? err.message : "Failed to load products";
         setProductsError(errorMessage);
       } finally {
         setProductsLoading(false);
       }
     };
-    
+
     if (!user && !loading) {
       throw new Error("[NOT CONNECTED]: Connect as a user to fetch products.");
-    } else if (user){
-        loadProducts();
+    } else if (user) {
+      loadProducts();
     }
   }, [user, loading]);
 

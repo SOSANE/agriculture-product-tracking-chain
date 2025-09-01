@@ -12,9 +12,9 @@ export default defineConfig(({ mode }) => {
         process.env.PROXY === "true"
           ? {
               "/api": "http://localhost:5000",
-              "/auth": "http://localhost:5000"
+              "/auth": "http://localhost:5000",
             }
-          : undefined
-    }
+          : undefined,
+    },
   };
 });

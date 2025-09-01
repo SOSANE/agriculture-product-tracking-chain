@@ -3,7 +3,11 @@ import { DashboardLayout } from "../../components/layout/DashboardLayout.tsx";
 import { Link } from "react-router-dom";
 import { Leaf } from "lucide-react";
 import { useAllProducts } from "../../hooks/useProducts.ts";
-import { LoadingComponent, ErrorComponent, NoDataComponent } from "../../helpers/ProductUtils.tsx";
+import {
+  LoadingComponent,
+  ErrorComponent,
+  NoDataComponent,
+} from "../../helpers/ProductUtils.tsx";
 
 export const Products: React.FC = () => {
   const { products, productsLoading, productsError } = useAllProducts();
@@ -26,9 +30,12 @@ export const Products: React.FC = () => {
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-3xl mx-auto">
             <header className="text-center mb-10">
-              <h1 className="text-3xl font-semibold mb-2">Available products on the blockchain</h1>
+              <h1 className="text-3xl font-semibold mb-2">
+                Available products on the blockchain
+              </h1>
               <p className="text-neutral-600 max-w-xl mx-auto">
-                View the details for any product registered to the blockchain as a user.
+                View the details for any product registered to the blockchain as
+                a user.
               </p>
             </header>
 
@@ -39,15 +46,21 @@ export const Products: React.FC = () => {
                   <Leaf className="h-6 w-6 text-primary" />
                 </div>
                 {products.length > 0 &&
-                  products.map(product => (
+                  products.map((product) => (
                     <div key={product.id} className="space-y-2">
                       <Link to={`/products/${product.id}`} className="block">
                         <div className="flex items-start gap-4 p-3 rounded-lg hover:bg-neutral-50 transition-colors">
                           <div>
                             <p className="font-medium">{product.name}</p>
-                            <p className="text-sm text-neutral-600">{product.description}</p>
-                            <p className="text-xs text-neutral-500">{product.type}</p>
-                            <p className="text-xs text-neutral-500">{product.farmer.name}</p>
+                            <p className="text-sm text-neutral-600">
+                              {product.description}
+                            </p>
+                            <p className="text-xs text-neutral-500">
+                              {product.type}
+                            </p>
+                            <p className="text-xs text-neutral-500">
+                              {product.farmer.name}
+                            </p>
                           </div>
                         </div>
                       </Link>

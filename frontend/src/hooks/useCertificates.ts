@@ -8,7 +8,9 @@ export const useCertificates = () => {
   const navigate = useNavigate();
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [certificatesLoading, setCertificatesLoading] = useState(true);
-  const [certificatesError, setCertificatesError] = useState<string | null>(null);
+  const [certificatesError, setCertificatesError] = useState<string | null>(
+    null,
+  );
 
   useEffect(() => {
     if (!loading && !user) {
@@ -25,7 +27,7 @@ export const useCertificates = () => {
       const url = "/api/certificates";
 
       const response = await fetch(url, {
-        credentials: "include"
+        credentials: "include",
       });
 
       if (!response.ok) throw new Error("Failed to fetch certificates.");
@@ -33,7 +35,8 @@ export const useCertificates = () => {
       const data = await response.json();
       setCertificates(data);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to fetch certificates.";
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to fetch certificates.";
       setCertificatesError(errorMessage);
     } finally {
       setCertificatesLoading(false);
